@@ -71,5 +71,3 @@ public class MerchantHistory extends BaseEntity implements Persistable<Long> {
  * BCDBA.SEQ_MPMMONIHST.NEXTVAL
  *
  */
-
-

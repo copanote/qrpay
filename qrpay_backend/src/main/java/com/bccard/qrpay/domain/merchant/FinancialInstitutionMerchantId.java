@@ -4,12 +4,11 @@ import com.bccard.qrpay.domain.common.code.FinancialInstitution;
 import com.bccard.qrpay.domain.common.converter.FinanceInstitutionConverter;
 import com.bccard.qrpay.domain.common.entity.BaseEntity;
 import jakarta.persistence.*;
+import java.io.Serializable;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.io.Serializable;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

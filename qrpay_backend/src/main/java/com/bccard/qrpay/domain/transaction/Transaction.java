@@ -12,13 +12,12 @@ import com.bccard.qrpay.domain.transaction.converter.AuthorizedConverter;
 import com.bccard.qrpay.domain.transaction.converter.PaymentStatusConverter;
 import com.bccard.qrpay.domain.transaction.converter.PosEntryModeConverter;
 import jakarta.persistence.*;
+import java.math.BigDecimal;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.domain.Persistable;
-
-import java.math.BigDecimal;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -36,7 +35,7 @@ public class Transaction extends BaseEntity implements Persistable<TransactionId
     private String affiliateTransactionId;
 
     @Column(name = "TRNS_ATON", length = 14)
-    private String dateOfTransaction; //TRNS_ATON
+    private String dateOfTransaction; // TRNS_ATON
 
     @Column(name = "ENC_PAN_NO", length = 100)
     private String encrypedPan;
@@ -61,11 +60,9 @@ public class Transaction extends BaseEntity implements Persistable<TransactionId
     @Convert(converter = AuthorizedConverter.class)
     private AuthorizeType authorizeType = AuthorizeType.UNKNOWN;
 
-
     @Column(name = "SVC_CLSS")
     @Convert(converter = ServiceTypeConverter.class)
     private ServiceType serviceType;
-
 
     @Column(name = "REQ_INST_CODE", length = 4)
     private String reqInstituteCode;
@@ -151,8 +148,7 @@ public class Transaction extends BaseEntity implements Persistable<TransactionId
 
     @Override
     public TransactionId getId() {
-        return TransactionId
-                .create()
+        return TransactionId.create()
                 .transactionId(transactionId)
                 .affiliateTransactionId(affiliateTransactionId)
                 .authorizeType(authorizeType)
@@ -160,7 +156,13 @@ public class Transaction extends BaseEntity implements Persistable<TransactionId
     }
 
     @Builder
-    public Transaction(String transactionId, String affiliateTransactionId, Merchant merchant, AuthorizeType authorizeType, ServiceType serviceType, PaymentStatus paymentStatus) {
+    public Transaction(
+            String transactionId,
+            String affiliateTransactionId,
+            Merchant merchant,
+            AuthorizeType authorizeType,
+            ServiceType serviceType,
+            PaymentStatus paymentStatus) {
         this.transactionId = transactionId;
         this.affiliateTransactionId = affiliateTransactionId;
         this.merchant = merchant;

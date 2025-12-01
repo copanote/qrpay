@@ -1,6 +1,5 @@
 package com.bccard.qrpay.auth.contoller;
 
-
 import com.bccard.qrpay.auth.contoller.dto.RequestLogin;
 import com.bccard.qrpay.auth.domain.CustomUserDetails;
 import com.bccard.qrpay.auth.domain.JwtToken;
@@ -17,7 +16,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-
 
 @Slf4j
 @RequiredArgsConstructor
@@ -41,7 +39,8 @@ public class AuthController {
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
 
         Member member = userDetails.qrpayMember();
-        JwtToken jwt = authService.createJwt(member.getMemberId(), member.getRole().toString());
+        JwtToken jwt =
+                authService.createJwt(member.getMemberId(), member.getRole().toString());
         log.info("{}", jwt.toString());
 
         return ResponseEntity.ok(jwt);
@@ -64,7 +63,7 @@ public class AuthController {
 
         log.info("{}", refreshToken);
         authService.logout(refreshToken.getRefreshToken());
-        //history
+        // history
 
         return ResponseEntity.ok().build();
     }

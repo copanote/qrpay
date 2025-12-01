@@ -4,7 +4,6 @@ import lombok.Getter;
 
 @Getter
 public enum PaymentStatus implements DatabaseCodeConvertable {
-
     APPROVED("15", "정상승인"),
 
     AUTHORIZE_REQUEST("10", "승인요청"),

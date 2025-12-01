@@ -1,18 +1,16 @@
 package com.bccard.qrpay.domain.device;
 
-
 import com.bccard.qrpay.domain.common.code.DeviceType;
 import com.bccard.qrpay.domain.device.repository.DeviceQueryRepository;
 import com.bccard.qrpay.domain.device.repository.DeviceRepository;
 import com.bccard.qrpay.domain.member.Member;
 import com.bccard.qrpay.domain.merchant.Merchant;
 import jakarta.persistence.EntityManager;
+import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 @SpringBootTest
 @Transactional
@@ -23,17 +21,14 @@ public class DeviceRepositoryTest {
 
     @Autowired
     DeviceRepository deviceRepository;
+
     @Autowired
     DeviceQueryRepository deviceQueryRepository;
-
 
     @Test
     void test_save() {
 
-        Merchant merchant = Merchant.createNewMerchant()
-                .merchantId("m999")
-                .build();
-
+        Merchant merchant = Merchant.createNewMerchant().merchantId("m999").build();
 
         Member member = Member.createNormalMember()
                 .memberId("999")
@@ -53,7 +48,6 @@ public class DeviceRepositoryTest {
                 .apiAccessTokenExpires(3600L)
                 .apiAccessExpireDate("date")
                 .build();
-
 
         Device newDevice = Device.createNewDevice()
                 .member(member)
@@ -76,15 +70,8 @@ public class DeviceRepositoryTest {
 
         Optional<Device> byMemberId = deviceQueryRepository.findByMemberId(member.getMemberId());
         byMemberId.ifPresent(device -> System.out.println(device.getMemberRole()));
-
     }
-
 
     @Test
-    void test_findByMemeberId() {
-
-
-    }
-
-
+    void test_findByMemeberId() {}
 }

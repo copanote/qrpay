@@ -63,7 +63,7 @@ public class Member extends BaseEntity implements Persistable<String> {
     private Boolean authCnclAbleYn;
 
     @Column(name = "AFFI_CO_ID", length = 40)
-    private String affiCoId; //BCQRCPAY
+    private String affiCoId; // BCQRCPAY
 
     @Column(name = "RCRU_PE_NO", length = 10)
     private String referrerId;
@@ -83,29 +83,28 @@ public class Member extends BaseEntity implements Persistable<String> {
 
     @Override
     public String toString() {
-        return "Member{" +
-                "memberId='" + memberId + '\'' +
-                ", loginId='" + loginId + '\'' +
-                ", hashedPassword='" + hashedPassword + '\'' +
-                ", role=" + role +
-                ", status=" + status +
-                ", lastLoginAt='" + lastLoginAt + '\'' +
-                ", passwordErrorCount=" + passwordErrorCount +
-                ", passwordErrorAt='" + passwordErrorAt + '\'' +
-                ", passwordChangedAt='" + passwordChangedAt + '\'' +
-                ", termsAgreeInfo='" + termsAgreeInfo + '\'' +
-                ", authCnclAbleYn=" + authCnclAbleYn +
-                ", affiCoId='" + affiCoId + '\'' +
-                ", referrerId='" + referrerId + '\'' +
-                ", termsAgreedAt='" + termsAgreedAt + '\'' +
-                ", email='" + email + '\'' +
-                ", withdrawalAt='" + withdrawalAt + '\'' +
-                ", device=" + device +
-                ", createdBy='" + createdBy + '\'' +
-                ", createdAt='" + createdAt + '\'' +
-                ", lastModifiedBy='" + lastModifiedBy + '\'' +
-                ", lastModifiedAt='" + lastModifiedAt + '\'' +
-                '}';
+        return "Member{" + "memberId='"
+                + memberId + '\'' + ", loginId='"
+                + loginId + '\'' + ", hashedPassword='"
+                + hashedPassword + '\'' + ", role="
+                + role + ", status="
+                + status + ", lastLoginAt='"
+                + lastLoginAt + '\'' + ", passwordErrorCount="
+                + passwordErrorCount + ", passwordErrorAt='"
+                + passwordErrorAt + '\'' + ", passwordChangedAt='"
+                + passwordChangedAt + '\'' + ", termsAgreeInfo='"
+                + termsAgreeInfo + '\'' + ", authCnclAbleYn="
+                + authCnclAbleYn + ", affiCoId='"
+                + affiCoId + '\'' + ", referrerId='"
+                + referrerId + '\'' + ", termsAgreedAt='"
+                + termsAgreedAt + '\'' + ", email='"
+                + email + '\'' + ", withdrawalAt='"
+                + withdrawalAt + '\'' + ", device="
+                + device + ", createdBy='"
+                + createdBy + '\'' + ", createdAt='"
+                + createdAt + '\'' + ", lastModifiedBy='"
+                + lastModifiedBy + '\'' + ", lastModifiedAt='"
+                + lastModifiedAt + '\'' + '}';
     }
 
     @Override
@@ -114,7 +113,14 @@ public class Member extends BaseEntity implements Persistable<String> {
     }
 
     @Builder(builderMethodName = "createMasterMemeber")
-    public Member(String memberId, Merchant merchant, String loginId, String hashedPassword, String termsAgreeInfo, String referrerId, String email) {
+    public Member(
+            String memberId,
+            Merchant merchant,
+            String loginId,
+            String hashedPassword,
+            String termsAgreeInfo,
+            String referrerId,
+            String email) {
         this.memberId = memberId;
         this.merchant = merchant;
         this.loginId = loginId;
@@ -122,7 +128,6 @@ public class Member extends BaseEntity implements Persistable<String> {
         this.termsAgreeInfo = termsAgreeInfo;
         this.referrerId = referrerId;
         this.email = email;
-
 
         this.role = MemberRole.MASTER;
         this.status = MemberStatus.ACTIVE;
@@ -148,8 +153,6 @@ public class Member extends BaseEntity implements Persistable<String> {
         passwordErrorAt = MpmDateTimeUtils.generateDtmNow(MpmDateTimeUtils.PATTERN_YEAR_TO_DATE);
         passwordErrorCount += 1;
     }
-
-
 }
 
 /**

@@ -12,7 +12,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.context.request.ServletWebRequest;
 
-
 @Slf4j
 @Controller
 public class CustomErrorController implements ErrorController {
@@ -29,7 +28,12 @@ public class CustomErrorController implements ErrorController {
         Throwable ex = errorAttributes.getError(new ServletWebRequest(request));
         HttpStatus httpStatus = getStatus(request);
 
-        log.info("path={}, ex={}, exMsg={}, httpStatus={} ", path, ex.getClass().getSimpleName(), ex.getMessage(), httpStatus);
+        log.info(
+                "path={}, ex={}, exMsg={}, httpStatus={} ",
+                path,
+                ex.getClass().getSimpleName(),
+                ex.getMessage(),
+                httpStatus);
         if (path != null && path.startsWith("/view")) {
             int status = httpStatus.value();
 
@@ -62,5 +66,4 @@ public class CustomErrorController implements ErrorController {
             }
         }
     }
-
 }

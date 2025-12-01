@@ -1,6 +1,5 @@
 package com.bccard.qrpay.domain.mpmqr;
 
-
 import com.bccard.qrpay.domain.merchant.Merchant;
 import com.bccard.qrpay.domain.merchant.repository.MerchantQueryRepository;
 import com.copanote.emvmpm.data.EmvMpmDataObject;
@@ -9,17 +8,16 @@ import com.copanote.emvmpm.data.EmvMpmNodeFactory;
 import com.copanote.emvmpm.definition.EmvMpmDefinition;
 import com.copanote.emvmpm.definition.packager.EmvMpmPackager;
 import com.copanote.emvmpm.parser.EmvMpmParser;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import javax.xml.parsers.ParserConfigurationException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Transactional;
 import org.xml.sax.SAXException;
-
-import javax.xml.parsers.ParserConfigurationException;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 @SpringBootTest
 @Transactional
@@ -32,17 +30,17 @@ public class EmvMpmTest {
     @Autowired
     private EmvMpmService emvMpmService;
 
-
     @Test
     void test() throws ParserConfigurationException, IOException, SAXException {
 
-//        //GIVEN
-        String qrData = "0102110002011531260004102600041071479286900000026310014D410000001401005091000058325204581253034105802KR5925OSULROWOOKOPI TEUUINTAUEO6013SEOUL JUNG-GU610504548625603091000058320515MQ202000004761806080000000007080000000164310002ko0112오슬로우커피 트윈타워점0205서울 중구6304C38C";
+        //        //GIVEN
+        String qrData =
+                "0102110002011531260004102600041071479286900000026310014D410000001401005091000058325204581253034105802KR5925OSULROWOOKOPI TEUUINTAUEO6013SEOUL JUNG-GU610504548625603091000058320515MQ202000004761806080000000007080000000164310002ko0112오슬로우커피 트윈타워점0205서울 중구6304C38C";
         EmvMpmPackager emp = new EmvMpmPackager();
         emp.setEmvMpmPackager("emvmpm_bc.xml");
         EmvMpmDefinition emd = emp.create();
 
-        //WHEN
+        // WHEN
         EmvMpmNode actualNode = EmvMpmParser.parse(qrData, emd);
 
         System.out.println(actualNode);
@@ -99,8 +97,5 @@ public class EmvMpmTest {
         EmvMpmNode testqrrefid = emvMpmService.createEmvMpmVer15(emd, merchant, "TESTQRREFID");
         System.out.println(testqrrefid.toString());
         System.out.println(testqrrefid.toQrCodeData());
-
     }
-
-
 }

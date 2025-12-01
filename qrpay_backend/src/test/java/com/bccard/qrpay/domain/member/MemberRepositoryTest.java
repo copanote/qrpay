@@ -1,5 +1,7 @@
 package com.bccard.qrpay.domain.member;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import com.bccard.qrpay.domain.common.code.*;
 import com.bccard.qrpay.domain.member.repository.MemberQueryRepository;
 import com.bccard.qrpay.domain.member.repository.MemberRepository;
@@ -9,21 +11,16 @@ import com.bccard.qrpay.domain.merchant.repository.FinancialInstitutionMerchantR
 import com.bccard.qrpay.domain.merchant.repository.MerchantQueryRepository;
 import com.bccard.qrpay.domain.merchant.repository.MerchantRepository;
 import jakarta.persistence.EntityManager;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.assertThat;
-
-
 @SpringBootTest
 @Transactional
 public class MemberRepositoryTest {
-
 
     @Autowired
     EntityManager em;
@@ -33,7 +30,6 @@ public class MemberRepositoryTest {
 
     @Autowired
     MemberQueryRepository memberQueryRepository;
-
 
     @Autowired
     private MerchantRepository merchantRepository;
@@ -87,7 +83,6 @@ public class MemberRepositoryTest {
         financeInstitutionMerchantRepository.save(lotteMerchant);
     }
 
-
     @Test
     void test_createSequence() {
         long seq = memberQueryRepository.getNextSequenceValue();
@@ -130,9 +125,7 @@ public class MemberRepositoryTest {
                 .build();
         financeInstitutionMerchantRepository.save(bccardMerchant);
 
-
-//        Merchant merchant = merchantQueryRepository.findById("1");
-
+        //        Merchant merchant = merchantQueryRepository.findById("1");
 
         long seq = memberQueryRepository.getNextSequenceValue();
 
@@ -152,15 +145,11 @@ public class MemberRepositoryTest {
 
         System.out.println(newMember.getMerchant().getMerchantName());
 
-
         Optional<Member> selectedMember = memberQueryRepository.findById(newMember.getMemberId());
 
         System.out.println(selectedMember.get().getMerchant().getMerchantName());
 
-        System.out.println(selectedMember.get().getMerchant().getFiMerchants().get(0).getFiMerchantName());
-
-
+        System.out.println(
+                selectedMember.get().getMerchant().getFiMerchants().get(0).getFiMerchantName());
     }
-
-
 }

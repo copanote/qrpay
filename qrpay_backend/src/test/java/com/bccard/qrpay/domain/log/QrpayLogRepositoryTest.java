@@ -20,17 +20,15 @@ public class QrpayLogRepositoryTest {
     @Autowired
     QrpayLogQueryRepository qrpayLogQueryRepository;
 
-
     @Test
     void test_save() {
         qrpayLogRepository.save(QrpayLog.builder().build());
-//        qrpayLogRepository.save(QrpayLog.builder().build());
-//        qrpayLogRepository.save(QrpayLog.builder().build());
-//        qrpayLogRepository.save(QrpayLog.builder().build());
-//        qrpayLogRepository.save(QrpayLog.builder().build());
-//        qrpayLogRepository.save(QrpayLog.builder().build());
+        //        qrpayLogRepository.save(QrpayLog.builder().build());
+        //        qrpayLogRepository.save(QrpayLog.builder().build());
+        //        qrpayLogRepository.save(QrpayLog.builder().build());
+        //        qrpayLogRepository.save(QrpayLog.builder().build());
+        //        qrpayLogRepository.save(QrpayLog.builder().build());
 
         em.flush();
     }
-
 }

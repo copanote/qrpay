@@ -1,6 +1,5 @@
 package com.bccard.qrpay.auth.domain;
 
-
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;

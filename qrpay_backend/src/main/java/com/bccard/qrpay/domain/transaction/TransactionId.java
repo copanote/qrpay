@@ -4,10 +4,9 @@ import com.bccard.qrpay.domain.common.code.AuthorizeType;
 import com.bccard.qrpay.domain.transaction.converter.AuthorizedConverter;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
-import lombok.*;
-
 import java.io.Serial;
 import java.io.Serializable;
+import lombok.*;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -36,8 +35,6 @@ public class TransactionId implements Serializable {
         this.affiliateTransactionId = affiliateTransactionId;
         this.authorizeType = authorizeType;
     }
-
-
 }
 
 /**

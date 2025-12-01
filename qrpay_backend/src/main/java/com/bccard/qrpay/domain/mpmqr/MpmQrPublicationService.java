@@ -18,6 +18,4 @@ public class MpmQrPublicationService {
         String yyyyString = MpmDateTimeUtils.generateDtmNow(MpmDateTimeUtils.FORMATTER_yyyy);
         return "MQ" + yyyyString + paddedSeq;
     }
-
-
 }

@@ -55,8 +55,16 @@ public class MpmQrPublication extends BaseEntity implements Persistable<String> 
     }
 
     @Builder(builderMethodName = "createMpmqrPublication")
-    public MpmQrPublication(String qrReferenceId, Merchant merchant, Member member, PointOfInitMethod pim,
-                            Long amount, String qrData, String startedAt, String affiliateId, String affiliateRequestValue) {
+    public MpmQrPublication(
+            String qrReferenceId,
+            Merchant merchant,
+            Member member,
+            PointOfInitMethod pim,
+            Long amount,
+            String qrData,
+            String startedAt,
+            String affiliateId,
+            String affiliateRequestValue) {
         this.qrReferenceId = qrReferenceId;
         this.merchant = merchant;
         this.member = member;

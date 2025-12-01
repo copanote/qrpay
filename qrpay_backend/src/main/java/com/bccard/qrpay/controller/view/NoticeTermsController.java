@@ -1,6 +1,5 @@
 package com.bccard.qrpay.controller.view;
 
-
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,15 +31,13 @@ public class NoticeTermsController {
 
     @GetMapping("/settings/terms-service/permission")
     public String permission(Model model) {
-        //TODO AOS/IOS 판별
+        // TODO AOS/IOS 판별
         return "settings/terms/details/app-permission-aos";
     }
 
     @GetMapping("/settings/terms-service/cancel")
     public String cancel(Model model) {
-        //TODO AOS/IOS 판별
+        // TODO AOS/IOS 판별
         return "settings/terms/details/service-cancel";
     }
-
-
 }

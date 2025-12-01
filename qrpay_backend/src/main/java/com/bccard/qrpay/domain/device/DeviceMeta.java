@@ -41,8 +41,15 @@ public class DeviceMeta {
     private Boolean pushReceive;
 
     @Builder
-    public DeviceMeta(String deviceToken, DeviceType deviceType, String osName, String modelName,
-                      String deviceId, String appVersion, String devicePushToken, Boolean pushReceive) {
+    public DeviceMeta(
+            String deviceToken,
+            DeviceType deviceType,
+            String osName,
+            String modelName,
+            String deviceId,
+            String appVersion,
+            String devicePushToken,
+            Boolean pushReceive) {
         this.deviceToken = deviceToken;
         this.deviceType = deviceType;
         this.osName = osName;

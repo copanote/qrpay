@@ -1,14 +1,13 @@
 package com.bccard.qrpay.auth.domain;
 
 import com.bccard.qrpay.domain.member.Member;
+import java.util.Collection;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
-import java.util.Collection;
-import java.util.List;
 
 @Getter
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)

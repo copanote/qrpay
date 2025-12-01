@@ -12,12 +12,11 @@ import com.bccard.qrpay.exception.MemberException;
 import com.bccard.qrpay.exception.code.AuthErrorCode;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
+import java.time.Instant;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.Instant;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -40,7 +39,7 @@ public class AuthService {
             throw new AuthException(AuthErrorCode.INVALID_CREDENTIAL);
         }
 
-        //Todo:: auth policy
+        // Todo:: auth policy
         if (member.getPasswordErrorCount() > 3) {
             throw new AuthException(AuthErrorCode.ACCOUNT_LOCKED_POLICY);
         }
@@ -48,63 +47,57 @@ public class AuthService {
         String hashed = memberService.hashPassword(password);
         if (!member.getHashedPassword().equals(hashed)) {
             member.onPasswordFail();
-//            memberService.passwordFail(member.getMemberId());
+            //            memberService.passwordFail(member.getMemberId());
             throw new AuthException(AuthErrorCode.INVALID_CREDENTIAL);
         }
 
-        String at = jwtProvider.generateToken(member.getMemberId(), member.getRole().toString());
+        String at =
+                jwtProvider.generateToken(member.getMemberId(), member.getRole().toString());
         String rt = jwtProvider.generateRefreshToken(member.getMemberId());
-
 
         Instant now = Instant.now();
         RefreshToken newRefreshToken = RefreshToken.createNew()
                 .memberId(member.getMemberId())
                 .tokenHash(refreshTokenService.hashRefreshToken(rt))
                 .issuedAt(now.toEpochMilli())
-                .expiresAt(now.plusMillis(jwtProvider.getJwtProperties().getRefreshTokenExpiration()).toEpochMilli())
+                .expiresAt(now.plusMillis(jwtProvider.getJwtProperties().getRefreshTokenExpiration())
+                        .toEpochMilli())
                 .deviceId("")
                 .build();
 
         RefreshToken saved = refreshTokenRepository.save(newRefreshToken);
 
-        return JwtToken.builder()
-                .accessToken(at)
-                .refreshToken(rt)
-                .build();
+        return JwtToken.builder().accessToken(at).refreshToken(rt).build();
     }
 
     public JwtToken createJwt(String memberId, String role) {
         String at = jwtProvider.generateToken(memberId, role);
         String rt = jwtProvider.generateRefreshToken(memberId);
 
-
         Instant now = Instant.now();
         RefreshToken newRefreshToken = RefreshToken.createNew()
                 .memberId(memberId)
                 .tokenHash(refreshTokenService.hashRefreshToken(rt))
                 .issuedAt(now.toEpochMilli())
-                .expiresAt(now.plusMillis(jwtProvider.getJwtProperties().getRefreshTokenExpiration()).toEpochMilli())
+                .expiresAt(now.plusMillis(jwtProvider.getJwtProperties().getRefreshTokenExpiration())
+                        .toEpochMilli())
                 .deviceId("")
                 .build();
 
         RefreshToken saved = refreshTokenRepository.save(newRefreshToken);
 
-        return JwtToken.builder()
-                .accessToken(at)
-                .refreshToken(rt)
-                .build();
+        return JwtToken.builder().accessToken(at).refreshToken(rt).build();
     }
 
     public void logout(String refreshToken) {
         refreshTokenService.revoke(refreshToken, "USER_LOGOUT");
-        //TODO accesstoken balcklist
+        // TODO accesstoken balcklist
     }
 
     public void revoke(String refreshToken) {
         refreshTokenService.revoke(refreshToken, "ADMIN_REVOKE");
-        //TODO accesstoken balcklist
+        // TODO accesstoken balcklist
     }
-
 
     public JwtToken refresh(String refreshToken) {
         Jws<Claims> claimsJws;
@@ -131,12 +124,13 @@ public class AuthService {
             throw new AuthException(e, AuthErrorCode.INVALID_CREDENTIAL);
         }
 
-        String at = jwtProvider.generateToken(member.getMemberId(), member.getRole().toString());
+        String at =
+                jwtProvider.generateToken(member.getMemberId(), member.getRole().toString());
         rt.refresh();
 
         return JwtToken.builder()
                 .accessToken(at)
-//                .refreshToken(refreshToken)
+                //                .refreshToken(refreshToken)
                 .build();
     }
 }

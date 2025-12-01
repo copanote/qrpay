@@ -1,19 +1,18 @@
 package com.bccard.qrpay.domain.mpmqr.repository;
 
-
 import com.bccard.qrpay.domain.mpmqr.MpmQrPublication;
 import com.bccard.qrpay.domain.mpmqr.QMpmQrPublication;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import org.springframework.stereotype.Repository;
-
 import java.util.Optional;
+import org.springframework.stereotype.Repository;
 
 @Repository
 public class MpmQrPublicationQueryRepository {
     @PersistenceContext
     private EntityManager entityManager;
+
     private final JPAQueryFactory queryFactory;
 
     public MpmQrPublicationQueryRepository(EntityManager em) {
@@ -28,7 +27,6 @@ public class MpmQrPublicationQueryRepository {
         return ((Number) result).longValue();
     }
 
-
     public Optional<MpmQrPublication> findById(String qrReferenceId) {
         MpmQrPublication m = queryFactory
                 .selectFrom(mpmQrPublication)
@@ -36,6 +34,4 @@ public class MpmQrPublicationQueryRepository {
                 .fetchFirst();
         return Optional.ofNullable(m);
     }
-
-
 }

@@ -5,20 +5,17 @@ public class DiagnosticsHistory {
     private Long id;
     private String trndTraceNo;
 
-    private String rnmMlscTime; //송신밀리세컨시간
-    private String recpMlscTime; //수신밀리세컨시간
+    private String rnmMlscTime; // 송신밀리세컨시간
+    private String recpMlscTime; // 수신밀리세컨시간
 
-    private String pstcProcMlscTime; //전문처리밀리세컨시간
+    private String pstcProcMlscTime; // 전문처리밀리세컨시간
 
-    private String sysClss; //시스템구분코드
+    private String sysClss; // 시스템구분코드
 
     private String url;
-    private String procClss; //처리구분코드
-    private String rspnCode; //응답코드
-    
-
+    private String procClss; // 처리구분코드
+    private String rspnCode; // 응답코드
 }
-
 
 /**
  * MPM 모니터링 이력

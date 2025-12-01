@@ -7,18 +7,16 @@ import com.copanote.emvmpm.data.EmvMpmDataObject;
 import com.copanote.emvmpm.data.EmvMpmNode;
 import com.copanote.emvmpm.data.EmvMpmNodeFactory;
 import com.copanote.emvmpm.definition.EmvMpmDefinition;
+import java.util.Arrays;
+import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * MpmQr Service
  * - Mpm Emv Qr 생성
  */
-
 @Service
 public class EmvMpmService {
 
@@ -44,7 +42,6 @@ public class EmvMpmService {
         return "";
     }
 
-
     public EmvMpmNode createEmvMpmVer15(EmvMpmDefinition def, Merchant m, String qrRefId) {
         /*
          * ID 00 Payload Format Indicator
@@ -54,8 +51,7 @@ public class EmvMpmService {
         /*
          * ID 01 Point of Initiation Method
          */
-        EmvMpmNode id01_PointOfInitiationMethod = EmvMpmNodeFactory.createPrimitive("01", "11"); //11 고정형, 12 변동형
-
+        EmvMpmNode id01_PointOfInitiationMethod = EmvMpmNodeFactory.createPrimitive("01", "11"); // 11 고정형, 12 변동형
 
         /*
          * ID 15 Merchant Account Information Primitive
@@ -71,12 +67,13 @@ public class EmvMpmService {
         String mai = BCCARD_IIN + BCCARD_IIN + StringUtils.leftPad(bcMerchantNo, 9, "0");
         EmvMpmNode id15_MerchantAccountInfo = EmvMpmNodeFactory.createPrimitive("15", mai);
 
-
         /*
          * ID 26 Merchant Account Information Template
          */
-        EmvMpmNode id26_maiTemplate = EmvMpmNodeFactory.createTemplate("26",
-                Arrays.asList(EmvMpmNodeFactory.createPrimitive("00", BCCARD_AID),
+        EmvMpmNode id26_maiTemplate = EmvMpmNodeFactory.createTemplate(
+                "26",
+                Arrays.asList(
+                        EmvMpmNodeFactory.createPrimitive("00", BCCARD_AID),
                         EmvMpmNodeFactory.createPrimitive("05", StringUtils.leftPad(m.getMerchantId(), 9, "0"))));
 
         /*
@@ -92,7 +89,7 @@ public class EmvMpmService {
         /*
          * ID 54 Transaction Amount  Primitive
          */
-        EmvMpmNode id54_Amount = EmvMpmNodeFactory.createPrimitive("54", "");  //up to fim
+        EmvMpmNode id54_Amount = EmvMpmNodeFactory.createPrimitive("54", ""); // up to fim
 
         /*
          * ID 58 Country Code  Primitive
@@ -102,49 +99,70 @@ public class EmvMpmService {
         /*
          * ID 59 Merchant Name Primitive
          */
-        EmvMpmNode id59_MerchantEngName = EmvMpmNodeFactory.createPrimitive("59", StringUtils.truncate(m.getMerchantEnglishName(), def.find("/59").get().getMaxlength()));
+        EmvMpmNode id59_MerchantEngName = EmvMpmNodeFactory.createPrimitive(
+                "59",
+                StringUtils.truncate(
+                        m.getMerchantEnglishName(), def.find("/59").get().getMaxlength()));
 
         /*
          *  ID 60  Merchant City Primitive
          */
-        EmvMpmNode id60_MerchantEngCity = EmvMpmNodeFactory.createPrimitive("60", StringUtils.truncate(StringUtils.defaultIfBlank(m.getCityEnglishName(), "SEOUL"), def.find("/60").get().getMaxlength()));
+        EmvMpmNode id60_MerchantEngCity = EmvMpmNodeFactory.createPrimitive(
+                "60",
+                StringUtils.truncate(
+                        StringUtils.defaultIfBlank(m.getCityEnglishName(), "SEOUL"),
+                        def.find("/60").get().getMaxlength()));
 
         /*
          * ID 61  Postal Code Primitive
          */
-        EmvMpmNode id61_PostalCode = EmvMpmNodeFactory.createPrimitive("61", StringUtils.truncate(StringUtils.defaultIfBlank(m.getMerchantZipCode(), ""), def.find("/61").get().getMaxlength()));
+        EmvMpmNode id61_PostalCode = EmvMpmNodeFactory.createPrimitive(
+                "61",
+                StringUtils.truncate(
+                        StringUtils.defaultIfBlank(m.getMerchantZipCode(), ""),
+                        def.find("/61").get().getMaxlength()));
 
         /*
          * ID 62  Additional Data Field Template
          */
 
-        EmvMpmNode id62_50_BcLocalTemplate =
-                EmvMpmNodeFactory.createTemplate("50",
-                        Arrays.asList(EmvMpmNodeFactory.createPrimitive("00", BCCARD_AID),
-                                EmvMpmNodeFactory.createPrimitive("01", ""),  // 00 일시불, 01-99 할부
-                                EmvMpmNodeFactory.createPrimitive("02", ""),  // MEMBERSHIP A1: TOP Point
-                                EmvMpmNodeFactory.createPrimitive("03", m.getMerchantStatus().getDbCode()))); //mer State
+        EmvMpmNode id62_50_BcLocalTemplate = EmvMpmNodeFactory.createTemplate(
+                "50",
+                Arrays.asList(
+                        EmvMpmNodeFactory.createPrimitive("00", BCCARD_AID),
+                        EmvMpmNodeFactory.createPrimitive("01", ""), // 00 일시불, 01-99 할부
+                        EmvMpmNodeFactory.createPrimitive("02", ""), // MEMBERSHIP A1: TOP Point
+                        EmvMpmNodeFactory.createPrimitive(
+                                "03", m.getMerchantStatus().getDbCode()))); // mer State
 
-        EmvMpmNode id62_AdditionalDataFieldTemplate =
-                EmvMpmNodeFactory.createTemplate("62",
-                        Arrays.asList(EmvMpmNodeFactory.createPrimitive("03", StringUtils.leftPad(m.getMerchantId(), 9, '0')),  //Store ID
-                                EmvMpmNodeFactory.createPrimitive("05", StringUtils.defaultIfBlank(qrRefId, "")),  //Reference Id
-                                //EmvMpmNodeFactory.createPrimitive("06", StringUtils.leftPad("", 8, '0')),  //Customer ID
-                                EmvMpmNodeFactory.createPrimitive("07", TERMINAL_ID), // terminal id
-                                id62_50_BcLocalTemplate));
+        EmvMpmNode id62_AdditionalDataFieldTemplate = EmvMpmNodeFactory.createTemplate(
+                "62",
+                Arrays.asList(
+                        EmvMpmNodeFactory.createPrimitive(
+                                "03", StringUtils.leftPad(m.getMerchantId(), 9, '0')), // Store ID
+                        EmvMpmNodeFactory.createPrimitive(
+                                "05", StringUtils.defaultIfBlank(qrRefId, "")), // Reference Id
+                        // EmvMpmNodeFactory.createPrimitive("06", StringUtils.leftPad("", 8, '0')),  //Customer ID
+                        EmvMpmNodeFactory.createPrimitive("07", TERMINAL_ID), // terminal id
+                        id62_50_BcLocalTemplate));
 
         /*
          * ID 64 Merchant Information Language Template
          */
         String krMerchantName = StringUtils.defaultIfBlank(m.getMerchantName(), "");
         String krCityName = StringUtils.defaultIfBlank(m.getCityName(), "서울");
-        EmvMpmNode id64_MerchantInfomationLanguageTemplate =
-                EmvMpmNodeFactory.createTemplate("64",
-                        Arrays.asList(EmvMpmNodeFactory.createPrimitive("00", KOREA_COUNTY_CODE),
-                                EmvMpmNodeFactory.createPrimitive("01", StringUtils.truncate(krMerchantName, def.find("/64/01").get().getMaxlength())),
-                                EmvMpmNodeFactory.createPrimitive("02", StringUtils.truncate(krMerchantName, def.find("/64/02").get().getMaxlength()))
-                        ));
-
+        EmvMpmNode id64_MerchantInfomationLanguageTemplate = EmvMpmNodeFactory.createTemplate(
+                "64",
+                Arrays.asList(
+                        EmvMpmNodeFactory.createPrimitive("00", KOREA_COUNTY_CODE),
+                        EmvMpmNodeFactory.createPrimitive(
+                                "01",
+                                StringUtils.truncate(
+                                        krMerchantName, def.find("/64/01").get().getMaxlength())),
+                        EmvMpmNodeFactory.createPrimitive(
+                                "02",
+                                StringUtils.truncate(
+                                        krMerchantName, def.find("/64/02").get().getMaxlength()))));
 
         EmvMpmNode root = EmvMpmNodeFactory.root();
         root.add(id00_PayloadFormatIndicator);
@@ -161,9 +179,9 @@ public class EmvMpmService {
         root.add(id62_50_BcLocalTemplate);
         root.add(id62_AdditionalDataFieldTemplate);
         root.add(id64_MerchantInfomationLanguageTemplate);
-        root.markCrc(); //ID 63 Cyclic Redundancy Check Primitive
+        root.markCrc(); // ID 63 Cyclic Redundancy Check Primitive
 
-        //Construct Tree.
+        // Construct Tree.
         return root;
     }
 }

@@ -6,7 +6,6 @@ import com.google.zxing.client.j2se.MatrixToImageConfig;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
-
 import java.io.ByteArrayOutputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
@@ -46,7 +45,12 @@ public class ZxingQrcode {
     }
 
     public enum ZxingImageFormat {
-        JPG, BMP, GIF, WBMP, PNG, JPEG,
+        JPG,
+        BMP,
+        GIF,
+        WBMP,
+        PNG,
+        JPEG,
         ;
 
         public static boolean isAvailable(String format) {

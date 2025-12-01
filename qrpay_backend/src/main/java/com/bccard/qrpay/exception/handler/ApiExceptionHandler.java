@@ -1,12 +1,13 @@
 package com.bccard.qrpay.exception.handler;
 
-
 import com.bccard.qrpay.exception.ApiError;
 import com.bccard.qrpay.exception.AuthException;
+import com.bccard.qrpay.exception.code.AuthErrorCode;
 import com.bccard.qrpay.exception.code.ErrorCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -20,10 +21,8 @@ public class ApiExceptionHandler {
     public ResponseEntity<ApiError> handleAllExceptions(Exception e) {
         HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
 
-        ApiError apiError = ApiError.builder()
-                .code("500")
-                .message(e.getMessage())
-                .build();
+        ApiError apiError =
+                ApiError.builder().code("500").message(e.getMessage()).build();
 
         log.error("Internal Server Error: {}", e.getMessage(), e);
 
@@ -44,5 +43,17 @@ public class ApiExceptionHandler {
         return ResponseEntity.status(errorCode.getStatus()).body(apiError);
     }
 
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<ApiError> handleAuthException(BadCredentialsException e) {
 
+        ErrorCode errorCode = AuthErrorCode.INVALID_CREDENTIAL;
+
+        ApiError apiError = ApiError.builder()
+                .code(errorCode.getCode())
+                .message(errorCode.getMessage())
+                .build();
+        log.error("AuthException: {}", e.getMessage(), e);
+
+        return ResponseEntity.status(errorCode.getStatus()).body(apiError);
+    }
 }

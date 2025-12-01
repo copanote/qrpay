@@ -1,16 +1,18 @@
 package com.bccard.qrpay.config.security;
 
-
 import com.bccard.qrpay.auth.filter.JwtAuthenticationFilter;
 import com.bccard.qrpay.auth.security.JwtProvider;
 import com.bccard.qrpay.auth.service.CustomPasswordEncoder;
 import com.bccard.qrpay.auth.service.CustomUserDetailsService;
+import java.util.Arrays;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.authentication.ProviderManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -18,6 +20,9 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @RequiredArgsConstructor
 @Configuration
@@ -27,51 +32,83 @@ public class SecurityConfig {
     private final JwtProvider jwtProvider;
     private final CustomAccessDeniedHandler customAccessDeniedHandler;
     private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
-
+    private final CustomPasswordEncoder customPasswordEncoder;
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
-        return web -> web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations());
+        return web ->
+                web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations());
     }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
-                .sessionManagement(sessionConfigurer -> sessionConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(req -> req
-                                .requestMatchers("/auth/**").permitAll()
-                                .requestMatchers("/view/**").permitAll()
-                                .requestMatchers("/error").permitAll()
-//                        .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
-                                .anyRequest().authenticated()
-                ).exceptionHandling(h -> h
-                        .authenticationEntryPoint(customAuthenticationEntryPoint)
+                .cors(httpSecurityCorsConfigurer -> corsConfigurationSource())
+                .sessionManagement(
+                        sessionConfigurer -> sessionConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(req -> req.requestMatchers("/auth/**")
+                        .permitAll()
+                        .requestMatchers("/view/**")
+                        .permitAll()
+                        .requestMatchers("/error")
+                        .permitAll()
+                        //
+                        // .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
+                        .anyRequest()
+                        .authenticated())
+                .exceptionHandling(h -> h.authenticationEntryPoint(customAuthenticationEntryPoint)
                         .accessDeniedHandler(customAccessDeniedHandler))
                 .authenticationManager(authenticationManager(http));
 
         // JWT 인증 필터 추가
-        http.addFilterBefore(new JwtAuthenticationFilter(jwtProvider, userDetailsService),
+        http.addFilterBefore(
+                new JwtAuthenticationFilter(jwtProvider, userDetailsService),
                 UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
 
-//    @Bean
-//    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
-//        return authenticationConfiguration.getAuthenticationManager();
-//    }
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+
+        // **Access-Control-Allow-Origin** 헤더에 해당하는 출처 설정
+        //        configuration.setAllowedOrigins(List.of("*"));
+        // 와일드카드 *를 사용할 수 있지만, `allowCredentials`가 true이면 특정 출처를 명시해야 합니다.
+        configuration.setAllowedOriginPatterns(List.of("*")); // 패턴 사용 예시
+
+        // 허용할 HTTP 메서드 (Access-Control-Allow-Methods)
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+
+        // 허용할 헤더 (Access-Control-Allow-Headers)
+        configuration.setAllowedHeaders(List.of("*")); // 모든 헤더 허용
+
+        // 자격 증명(쿠키, 인증 헤더) 허용 여부 (Access-Control-Allow-Credentials)
+        configuration.setAllowCredentials(true);
+
+        // Preflight 요청 결과 캐시 시간 (Access-Control-Max-Age)
+        configuration.setMaxAge(3600L); // 1시간
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        // 모든 경로에 CORS 설정을 적용
+        source.registerCorsConfiguration("/**", configuration);
+
+        return source;
+    }
 
     @Bean
     public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
-        AuthenticationManagerBuilder builder = http.getSharedObject(AuthenticationManagerBuilder.class);
-        builder.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
-        return builder.build();
-    }
+        //        AuthenticationManagerBuilder builder = http.getSharedObject(AuthenticationManagerBuilder.class);
+        //        builder.userDetailsService(userDetailsService).passwordEncoder(customPasswordEncoder);
+        //        return builder.build();
 
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider(userDetailsService);
+        provider.setPasswordEncoder(customPasswordEncoder); // Delegating 사용 X
+        return new ProviderManager(provider);
+    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new CustomPasswordEncoder();
+        return customPasswordEncoder;
     }
-
 }

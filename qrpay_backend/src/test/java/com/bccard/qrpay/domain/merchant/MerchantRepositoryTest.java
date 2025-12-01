@@ -1,20 +1,19 @@
 package com.bccard.qrpay.domain.merchant;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import com.bccard.qrpay.domain.common.code.*;
 import com.bccard.qrpay.domain.merchant.repository.FinancialInstitutionMerchantRepository;
 import com.bccard.qrpay.domain.merchant.repository.MerchantQueryRepository;
 import com.bccard.qrpay.domain.merchant.repository.MerchantRepository;
 import jakarta.persistence.EntityManager;
+import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @Transactional
@@ -98,7 +97,6 @@ public class MerchantRepositoryTest {
         financeInstitutionMerchantRepository.save(lotteMerchant);
         financeInstitutionMerchantRepository.flush();
 
-
         em.clear();
 
         Merchant byId = merchantQueryRepository.findById(saved.getId()).get();
@@ -114,12 +112,10 @@ public class MerchantRepositoryTest {
                 System.out.println(fiMerchant.getFinancialInstitution());
             }
         }
-
     }
 
     @Test
-    void test_save_financialMerchant() {
-    }
+    void test_save_financialMerchant() {}
 
     @Test
     void test_findById() {

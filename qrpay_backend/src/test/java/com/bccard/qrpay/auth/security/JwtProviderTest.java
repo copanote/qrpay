@@ -24,9 +24,6 @@ public class JwtProviderTest {
         System.out.println(claimsJws.getHeader());
         System.out.println(claimsJws.getPayload());
 
-
         System.out.println(jwtProvider.validateAndParse(jwt));
-
-
     }
 }
