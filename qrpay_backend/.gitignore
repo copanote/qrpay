@@ -1,3 +1,5 @@
+.idea/**
+
 #Mac file
 .DS_Store
 
@@ -31,4 +33,6 @@
 hs_err_pid*
 /target/
 
-.idea
+
+HELP.md
+
