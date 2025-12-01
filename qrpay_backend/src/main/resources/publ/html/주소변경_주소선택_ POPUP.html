@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>BC</title>
+<link rel="stylesheet" href="css/bootstrap.min.css">
+<script src="js/jquery-3.3.1.slim.min.js.js"></script>
+<script src="js/popper.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<link href="css/common.css" rel="stylesheet">
+<script src="js/common.js"></script>
+</head>
+
+<body>
+<div id="wrap">
+	<!-- header -->
+	<header id="hd">
+		<div class="container">
+			<button type="button" class="icon-back">이전 페이지 이동</button>
+			<h1>결제 내역</h1>
+			<a class="icon-home" href="/">홈으로 이동</a>
+		</div>
+	</header>
+	
+	<!-- container -->
+	<div id="ct">
+<!-- 페이지 시작 -->
+<div class="container pt60 mt60">
+	<button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#modal1">팝업 1</button>
+	<button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#modal2">팝업 2</button>
+</div>
+<!--// 페이지 끝 -->
+	</div>
+</div>
+
+<!-- modal -->
+<div class="modal fade" id="modal1">
+	<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="h4 text-center fw500">주소변경</h5>
+			</div>
+			<div class="modal-body type2">
+				<div class="bg-light pt10 pb10 text-center">도로명주소 또는 지번주소를 입력해주세요.</div>
+				<div class="frm pr15 pl15 mt20">
+                    <div class="form-group mb0">
+                        <span class="tit">주소입력</span>
+                        <input type="text" class="form-control" placeholder="예) 판교역로 235, 분당 주공">
+                    </div>
+                </div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-md btn-radius0 btn-block" data-dismiss="modal">검색하기</button>
+				<button type="button" class="btn btn-md btn-radius0 btn-block" data-dismiss="modal">취소</button>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal fade" id="modal2">
+	<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="h4 text-center fw500">주소선택</h5>
+			</div>
+			<div class="modal-body type2 pb0">
+                <table class="tb tb-fixed type2 text-center bd0">
+                    <colgroup>
+                        <col width="">
+                        <col width="80px">
+                    </colgroup>
+                    <thead>
+                    	<tr>
+                    		<th>주소</th>
+                    		<th>우편번호</th>
+                    	</tr>
+                    </thead>
+				    <tbody>
+				        <tr>
+				            <th>서울특별시 서초구 남부순환로 328길 49</th>
+				            <td>06757</td>
+				        </tr>
+				        <tr>
+				            <th>서울특별시 서초구 남부순환로 328길 49</th>
+				            <td>06757</td>
+				        </tr>
+				        <tr>
+				            <th>서울특별시 서초구 남부순환로 328길 49</th>
+				            <td>06757</td>
+				        </tr>
+				        <tr>
+				            <th>서울특별시 서초구 남부순환로 328길 49</th>
+				            <td>06757</td>
+				        </tr>
+				        <tr>
+				            <th>서울특별시 서초구 남부순환로 328길 49</th>
+				            <td>06757</td>
+				        </tr>
+				        <tr>
+				            <th>서울특별시 서초구 남부순환로 328길 49</th>
+				            <td>06757</td>
+				        </tr>
+				    </tbody>
+				</table>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-md btn-radius0 btn-block" data-dismiss="modal">취소</button>
+			</div>
+		</div>
+	</div>
+</div>
+</body>
+</html>

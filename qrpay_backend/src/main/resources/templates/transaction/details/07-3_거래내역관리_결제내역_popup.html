@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>BC</title>
+<link rel="stylesheet" href="css/bootstrap.min.css">
+<script src="js/jquery-3.3.1.slim.min.js.js"></script>
+<script src="js/popper.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<link href="css/common.css" rel="stylesheet">
+<script src="js/common.js"></script>
+</head>
+
+<body>
+<div id="wrap">
+	<!-- header -->
+	<header id="hd">
+		<div class="container">
+			<button type="button" class="icon-back">이전 페이지 이동</button>
+			<h1>결제 내역</h1>
+			<a class="icon-home" href="/">홈으로 이동</a>
+		</div>
+	</header>
+	
+	<!-- container -->
+	<div id="ct">
+<!-- 페이지 시작 -->
+<div class="container pt60 mt60">
+	<button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#modal1">팝업 1</button>
+	<button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#modal2">팝업 2</button>
+	<button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#modal3">팝업 3</button>
+	<!-- 2019-07-18 -->
+	<button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#modal4">팝업 4</button>
+	<button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#modal5">팝업 5</button>
+	<!--// 2019-07-18 -->
+</div>
+<!--// 페이지 끝 -->
+	</div>
+</div>
+
+<!-- modal -->
+<div class="modal fade" id="modal1">
+	<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-content">
+			<div class="modal-body bg-light text-center">
+				<span class="badge badge-lg bg-primary">ID: SHOPMASTER</span>
+				<p class="mt7 mb15">비밀번호를 입력해주세요.</p>
+				<div class="password-word-wrp">
+					<span class="active"></span>
+					<span class="active"></span>
+					<span></span>
+					<span></span>
+					<span></span>
+					<span></span>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-md btn-radius0 btn-block" data-dismiss="modal">취소</button>
+				<button type="button" class="btn btn-md btn-radius0 btn-block" data-dismiss="modal">확인</button>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal fade" id="modal2">
+	<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-content">
+			<div class="modal-body text-center">
+				<p>승인 취소 권한이 없습니다.</p>
+				<p class="h6">해당 권한은 대표 사용자 아이디를 통해 설정 가능합니다.</p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-md btn-radius0 btn-block" data-dismiss="modal">확인</button>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal fade" id="modal3">
+	<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-content">
+			<div class="modal-body text-center">
+				<p>추가사용자는 30분 이내 직전 거래에 대해서만 승인취소가 가능합니다.</p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-md btn-radius0 btn-block" data-dismiss="modal">확인</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- 2019-07-18 -->
+<div class="modal fade" id="modal4">
+	<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-content">
+			<div class="modal-body text-center">
+				<p>사업자 미등록 개인 가맹점인 경우, 페이북(BC카드)과 云闪付(유니온페이)를 통한 QR결제만 가능합니다.</p><!-- 2019-07-29 -->
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-md btn-radius0 btn-block" data-dismiss="modal">확인</button>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal fade" id="modal5">
+	<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-content">
+			<div class="modal-body text-center">
+				<p>QR키트 3회 신청을 완료하셨습니다.<br /><br />
+					추가 신청이 필요한 경우,<br />
+					BC QR 가맹점 상담센터(02-330-5777)를 이용해주세요.
+				</p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-md btn-radius0 btn-block" data-dismiss="modal">확인</button>
+			</div>
+		</div>
+	</div>
+</div>
+<!--// 2019-07-18 -->
+</body>
+</html>

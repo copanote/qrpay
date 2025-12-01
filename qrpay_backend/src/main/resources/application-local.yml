@@ -1,0 +1,55 @@
+server:
+  port: 9090
+
+spring:
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:test;;MODE=Oracle;DB_CLOSE_DELAY=-1
+    username: sa
+    password:
+
+  h2:
+    console:
+      enabled: true
+      path: /h2
+
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: create #create, create-drop, update, validate, none
+    properties:
+      hibernate:
+        format_sql: true
+        show_sql: true
+        default_schema: bcdba
+        dialect: org.hibernate.dialect.OracleDialect #org.hibernate.dialect.H2Dialect
+
+  sql:
+    init:
+      schema-locations: classpath:sql/schema.sql
+      mode: always
+
+  thymeleaf:
+    cache: false
+
+  devtools:
+    livereload:
+      enabled: true
+
+logging:
+  level:
+    root: info
+    org:
+      hibernate:
+        orm:
+          jdbc:
+            bind: trace
+      springframework:
+        security: debug
+
+jwt:
+  secret-hex: 823e399822c5170927c9802b3feb60b1fe54debefb406ca5f4eaf05e0014ea63
+  access-token-expiration: 900000
+  refresh-token-expiration: 604800000
+
+

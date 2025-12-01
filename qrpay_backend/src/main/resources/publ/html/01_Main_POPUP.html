@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>BC</title>
+<link rel="stylesheet" href="css/bootstrap.min.css">
+<script src="js/jquery-3.3.1.slim.min.js.js"></script>
+<script src="js/popper.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<link href="css/common.css" rel="stylesheet">
+<script src="js/common.js"></script>
+</head>
+
+<body>
+<div id="wrap">
+	<!-- header -->
+	<header id="hd">
+		<div class="container">
+			<button type="button" class="icon-back">이전 페이지 이동</button>
+			<h1>결제 내역</h1>
+			<a class="icon-home" href="/">홈으로 이동</a>
+		</div>
+	</header>
+	
+	<!-- container -->
+	<div id="ct">
+<!-- 페이지 시작 -->
+<div class="container pt60 mt60">
+	<button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#modal1">팝업 1</button>
+	<button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#modal2">팝업 2</button>
+	<button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#modal3">팝업 3</button><!--// 2019-07-18 -->
+	<!-- 2019-12-10 -->
+	<button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#modal4">팝업 4</button>
+	<button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#modal5">팝업 5</button>
+	<!--// 2019-12-10 -->
+	<button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#modal6">팝업 6</button><!--// 2021-07-29 -->
+	<button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#modal7">팝업 7</button><!--// 2021-09-13 -->
+</div>
+<!--// 페이지 끝 -->
+	</div>
+</div>
+
+<!-- modal -->
+<div class="modal fade" id="modal1">
+	<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-content">
+			<div class="modal-body">
+				<h5 class="h4 text-center">가맹점명 변경</h5>
+				<div class="bx-padding bg-light text-center mt10 mb15">
+					<p class="h6">BC QR for Shop에서 사용될 가맹점명을 변경해주세요.</p>
+				</div>
+				<div class="form-roup">
+					<input type="text" class="form-control" placeholder="가맹점명을 입력해주세요.">
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-md btn-radius0 btn-block" data-dismiss="modal">닫기</button>
+				<button type="button" class="btn btn-md btn-radius0 btn-block" data-dismiss="modal">확인</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- 셀렉트박스 -->
+<!-- https://www.jqueryscript.net/demo/Picker-iOS-UI-Selectscroll/ 플러그인 주소 -->
+<link rel="stylesheet" href="css/jquery.selectscroll.css">
+<script src="js/jquery.selectscroll.js"></script>
+<div class="modal fade" id="modal2">
+	<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-content">
+			<div class="modal-body pt0">
+				<div id="select_target"></div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-md btn-radius0 btn-block" data-dismiss="modal">닫기</button>
+				<button type="button" class="btn btn-md btn-radius0 btn-block" data-dismiss="modal">확인</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- 2019-07-18 -->
+<!-- modal3 -->
+<div class="modal fade" id="modal3">
+	<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-content">
+			<div class="modal-body">
+				<h5 class="h4 text-center">가맹점명 변경</h5>
+				<div class="bx-padding bg-light text-center mt10 mb15">
+					<p class="h6">QR키트에 표시될 가맹점명을 변경할 수 있습니다.<br />공백 포함 14글자까지 입력해주세요.</p>
+				</div>
+				<div class="form-roup">
+					<input type="text" class="form-control"><!-- 2019-07-25 -->
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-md btn-radius0 btn-block" data-dismiss="modal">닫기</button>
+				<button type="button" class="btn btn-md btn-radius0 btn-block" data-dismiss="modal">확인</button>
+			</div>
+		</div>
+	</div>
+</div>
+<!--// 2019-07-18 -->
+
+<!-- 2019-12-10 -->
+<!-- modal4 -->
+<div class="modal fade modal-agree" id="modal4">
+	<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-content type2">
+			<div class="modal-header justify-content-center">
+				<h5 class="modal-title">비씨카드 전산시스템 교체작업에 따른 서비스 일시 제한 안내</h5><!-- 2019-12-12 -->
+			</div>
+			<div class="modal-body">
+				<!-- 2019-12-12 -->
+				<p>항상 비씨카드를 사랑해 주시는 고객님께 깊은 감사를 드립니다.</p>
+				<p class="mt10">고객님께 더 나은 금융서비스 제공을 위한 비씨카드 전산시스템 교체작업으로 <strong>2020년 1월 26일(일) 오전 1시 ~ 2020년 1월 26일(일) 오전 6시까지</strong> BC QR for Shop 서비스가 제한될 예정입니다.</p>
+				<p class="mt10">서비스 이용 불편에 대하여 고객님의 넓은 양해 부탁 드립니다. 앞으로도 비씨카드는 더 나은 서비스를 제공해 드리기 위해 최선을 다하겠습니다.</p>
+				<ul class="lst-type-dot mt10">
+					<li>기능별 제한 시간은 시스템 상황에 따라 변경될 수 있습니다.</li>
+				</ul>
+				<p class="mt10"><a href="#link" class="link">자세히보기 &gt;</a></p>
+				<!--// 2019-12-12 -->
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-md btn-radius0 btn-block" data-dismiss="modal">확인</button>
+			</div>
+			<div class="modal-outside">
+				<label class="input-type-check2">
+					<input type="checkbox">
+					<span class="mr5"></span>
+					오늘 다시 보지 않기
+				</label>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- modal5 -->
+<div class="modal fade" id="modal5">
+	<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-content">
+			<div class="modal-body">
+				<p>비씨카드 전산시스템 교체작업에 따라 서비스가 일시적으로 중단되었습니다. 잠시 후 다시 시도해주세요.</p>
+				<p class="mt10">(서비스 중단 안내 확인 : 우상단 메뉴 &gt; 공지사항)</p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-md btn-radius0 btn-block" data-dismiss="modal">확인</button>
+			</div>
+		</div>
+	</div>
+</div>
+<!--// 2019-12-10 -->
+
+<!-- 2020-07-29 -->
+<!-- modal6 -->
+<div class="modal fade" id="modal6">
+	<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-content type2">
+			<div class="modal-header justify-content-center">
+				<h5 class="modal-title">현대카드의 가맹점 앱투앱 결제서비스 종료 안내</h5>
+			</div>
+			<div class="modal-body">
+				<p>항상 BC카드를 이용해 주시는 대표님께 감사의 말씀을 드립니다.</p> 
+				<p class="mt10">현대카드가 가맹점 앱투앱 결제서비스를 종료함에 따라 2021년 8월 12일 부로 현대카드 앱을 이용한 QR결제 서비스 이용이 중단됨을 알려드립니다.</p> 
+				<p class="mt10">현대카드 앱을 제외한 BC, 신한, 롯데, 하나, 국민카드 앱 또는 해외 제휴사 앱을 통한 결제는 계속 이용하실 수 있습니다.</p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-md btn-radius0 btn-block" data-dismiss="modal">확인</button>
+			</div>
+		</div>
+	</div>
+</div>
+<!--// 2020-07-29 -->
+
+<!-- 2021-09-13 -->
+<!-- modal7 -->
+<div class="modal fade" id="modal7">
+	<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-content type2">
+			<div class="modal-header justify-content-center">
+				<h5 class="modal-title">비씨카드 인터넷 서버 교체작업에 따른 서비스 일시 제한 안내</h5>
+			</div>
+			<div class="modal-body">
+				<p>항상 BC카드를 이용해 주시는 고객님께 깊은 감사를 드립니다.</p> 
+				<p class="mt10">고객님께 더 나은 금융서비스 제공을 위한 비씨카드 인터넷 서버 교체작업으로 <strong>2021년 10월 10일 오전 1시 ~ 오전 5시</strong>까지 BC QR for Shop의 전체 서비스가 제한될 예정입니다.</p> 
+				<p class="mt10">서비스 이용 불편에 대하여 고객님의 넓은 양해 부탁 드립니다. 앞으로도 비씨카드는 더 나은 서비스를 제공해 드리기 위해 최선을 다하겠습니다.</p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-md btn-radius0 btn-block" data-dismiss="modal">확인</button>
+			</div>
+		</div>
+	</div>
+</div>
+<!--// 2021-09-13 -->
+
+<script>
+	jQuery(function($){
+		function init () {
+			$('#select_target').selectScroll({
+				data: [
+					[{
+						text: '1개월',
+						id: 1
+					 },{
+						 text: '2개월',
+						 id: 2
+					 },{
+						text: '3개월',
+						id: 3
+					 },{
+						text: '4개월',
+						id: 4
+					 },{
+						text: '5개월',
+						id: 5
+					},{
+						text: '6개월',
+						id: 6
+					}]
+				],
+				selectedIndex: [0],
+				cancel: function () {
+					console.log('Canceld')
+				}
+			})
+		}
+		$('#modal2').on('shown.bs.modal	', function (e) {
+		  	init();
+		});
+	
+	});
+</script>
+<!--// 셀렉트박스 -->
+</body>
+</html>

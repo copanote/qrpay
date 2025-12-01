@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>BC</title>
+<link rel="stylesheet" href="css/bootstrap.min.css">
+<script src="js/jquery-3.3.1.slim.min.js.js"></script>
+<script src="js/popper.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<link href="css/common.css" rel="stylesheet">
+<script src="js/common.js"></script>
+</head>
+
+<body>
+<div id="wrap">
+	<!-- header -->
+	<header id="hd">
+		<div class="container">
+			<button type="button" class="icon-back">이전 페이지 이동</button>
+			<h1>QR코드 금액 입력</h1>
+			<a class="icon-home" href="/">홈으로 이동</a>
+		</div>
+	</header>
+	
+	<!-- container -->
+	<div id="ct">
+<!-- 페이지 시작 -->
+<div class="cnt-btm-wrp">
+	<div class="container">
+		<div class="frm pt50">
+			<div class="form-group">
+				<span class="tit">랑블랑제리</span>
+				<div class="input-price">
+					<span class="txt font-lato">&#8361;</span>
+					<input type="text" class="form-control font-lato" value="12,000" onkeyup="inputNumberFormat(this)">
+				</div>
+				<p class="text-muted mt10">1만 2,000원</p>
+			</div>
+			<div class="form-group">
+				<div class="row chk-inline-group">
+					<div class="col">
+						<label class="chk-type01">
+							<input type="radio" name="radio1" checked><span>일시불</span>
+						</label>
+					</div>
+					<div class="col">
+						<label class="chk-type01">
+							<input type="radio" name="radio1"><span>할부</span>
+						</label>
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="input-type-round">
+					<input type="checkbox" checked>
+					<span class="mr5"></span>
+					BC TOP 포인트 사용하기
+				</label>
+			</div>
+		</div>
+	</div>
+	
+	<div class="btm-fixed-btn">
+		<a class="btn btn-primary btn-block" href="#">확인</a>
+	</div>
+</div>
+<!--// 페이지 끝 -->
+	</div>
+</div>
+</body>
+</html>

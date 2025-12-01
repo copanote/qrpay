@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <!--    <property name="LOG_PATH" value="/applog/wasapp/mpmqr"/>-->
+    <!--    <property name="LOG_NAME" value="mpmqr"/>-->
+    <!--    <springProperty scope="context" name="LOG_PROFILE" source="instance"/>-->
+    <!--    <property name="LOG_PROFILE" value="qrpay"/>-->
+
+
+    <!--    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">-->
+    <!--        <file>${LOG_PATH}/${LOG_NAME}-${LOG_PROFILE}.log</file>-->
+    <!--        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">-->
+    <!--            <fileNamePattern>-->
+    <!--                ${LOG_PATH}/${LOG_NAME}-${LOG_PROFILE}_%d{yyyyMMdd}.log-->
+    <!--            </fileNamePattern>-->
+    <!--            <maxHistory>60</maxHistory>-->
+    <!--            <totalSizeCap>100MB</totalSizeCap>-->
+    <!--        </rollingPolicy>-->
+    <!--        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">-->
+    <!--            <charset>UTF-8</charset>-->
+    <!--            <Pattern>-->
+    <!--                %d{yyyyMMdd HH:mm:ss.SSS} %-5level %logger{36}.%M - %msg%n-->
+    <!--            </Pattern>-->
+    <!--        </encoder>-->
+    <!--    </appender>-->
+
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>%d{yyyyMMdd HH:mm:ss.SSS} %magenta([%thread]) %highlight(%-5level)
+                %logger{36}.%M - %msg%n
+            </pattern>
+        </layout>
+    </appender>
+
+    <appender name="TEST_CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>%d{yyyyMMdd HH:mm:ss.SSS} [%thread] %-5level %logger{36}.%M - %msg%n</pattern>
+        </layout>
+    </appender>
+
+    <!-- LOG LEVEL FATAL ERROR WARN INFO DEBUG TRACE -->
+    <springProfile name="test, default">
+        <root level="debug">
+            <appender-ref ref="TEST_CONSOLE"/>
+        </root>
+    </springProfile>
+
+    <springProfile name="local">
+        <root level="debug">
+            <appender-ref ref="CONSOLE"/>
+        </root>
+    </springProfile>
+
+    <springProfile name="dev, stg">
+        <root level="debug">
+            <appender-ref ref="FILE"/>
+        </root>
+        <logger name="com.bccard.mpmqr" additivity="false" level="debug">
+            <appender-ref ref="CONSOLE"/>
+        </logger>
+    </springProfile>
+
+    <springProfile name="prod">
+        <root level="info">
+            <appender-ref ref="FILE"/>
+        </root>
+        <logger name="com.bccard.mpmqr" additivity="false" level="info">
+            <appender-ref ref="CONSOLE"/>
+        </logger>
+    </springProfile>
+
+</configuration>

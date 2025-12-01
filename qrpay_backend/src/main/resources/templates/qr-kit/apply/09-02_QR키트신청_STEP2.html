@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>BC</title>
+<link rel="stylesheet" href="css/bootstrap.min.css">
+<script src="js/jquery-3.3.1.slim.min.js.js"></script>
+<script src="js/popper.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<link href="css/common.css" rel="stylesheet">
+<script src="js/common.js"></script>
+</head>
+
+<body>
+<div id="wrap">
+	<!-- header -->
+	<header id="hd">
+		<div class="container">
+			<button type="button" class="icon-back">이전 페이지 이동</button>
+			<h1>QR키트 신청</h1>
+			<a class="icon-home" href="/">홈으로 이동</a>
+		</div>
+	</header>
+	
+	<!-- container -->
+	<div id="ct">
+<!-- 페이지 시작 -->
+<div class="ft-btn-wrp">
+	<div class="container pt30 pb30">
+		<div class="bx-padding bg-light">
+			<ul class="lst-type-bull h6">
+				<li>고객님이 입력하신 주소로 QR키트를 보내드립니다.</li>
+				<li>QR키트에 표시되는 가맹점명을 변경할 수 있습니다. <br>(사업자에 등록된 가맹점명은 변경되지 않습니다.)</li>
+				<li>하단에 입력하신 정보는 실제 가맹점 정보 변경과 무관하며 QR키트 배송 및 안내에만 이용됩니다.</li>
+			</ul>
+		</div>
+		<div class="frm mt25">
+			<div class="form-group">
+				<span class="tit">가맹점명 (필수)</span>
+				<div class="pr">
+					<input type="text" class="form-control" placeholder="가맹점명을 입력해주세요" value="가맹점명" disabled>
+					<button type="button" class="btn-pos-right"><i class="icon-pen mr5 mt3"></i>변경</button>
+				</div>
+			</div>
+			<div class="form-group mb5">
+				<span class="tit">수령주소 (필수)</span>
+				<div class="pr">
+					<input type="text" class="form-control" placeholder="주소를 입력해주세요" value="서울특별시 마포구 성암로 301" disabled>
+					<button type="button" class="btn-pos-right"><i class="icon-pen mr5 mt3"></i>변경</button>
+				</div>
+			</div>
+			<div class="form-group">
+				<input type="text" class="form-control" placeholder="상세주소를 입력해주세요" value="2층 203호" disabled>
+			</div>
+			<div class="form-group">
+				<span class="tit">휴대폰 (필수)</span>
+				<input type="text" class="form-control" placeholder="휴대폰번호를 입력해주세요" value="010-8080-8080">
+			</div>
+			<!-- 2019-07-08 : E-mail 삭제 -->
+			<div class="form-group mt30">
+				<label class="input-type-round">
+					<input type="checkbox">
+					<span class="mr5"></span>
+					약관 전체 동의
+				</label>
+			</div>
+			<ul class="lst-btm-border border-top">
+				<li class="bx-detail-collapse type2">
+				    <div class="row">
+                        <div class="col-xs-auto">
+                            <label class="input-type-check">
+                                <input type="checkbox">
+                                <span></span>
+                            </label>
+                        </div>
+                        <div class="col pl5">
+                            <a class="btn-collapse collapsed" data-toggle="collapse" href="#collapse1">개인정보 수집 및 이용 동의</a>
+                        </div>
+                    </div>
+                    <div id="collapse1" class="collapse">
+                        <div class="bx-padding bg-light h6">
+							<!-- 2019-07-08 -->
+							서비스 이용을 위해 아래 안내사항을 읽고 동의하여 주시기 바랍니다.
+							<ul>
+								<li>1. 개인정보의 수집 및 이용 목적 : QR키트 제작 및 배송과 서비스 안내 및 고객 문의 대응</li>
+								<li>2. 수집하는 개인정보의 항목 : 우편번호, 수령주소, 가맹점명, 연락처(휴대폰)</li>
+								<li class="h5 fw500">3. 개인정보의 보유 및 이용 기간 : 배송완료 후 3개월</li>
+								<li>4. 귀하는 개인정보의 수집 및 이용에 대한 동의를 거부할 수 있습니다. 다만, 동의 거부 시 서비스 이용이 불가능하오니 이 점 유의하여 주시기 바랍니다.</li>
+							</ul>
+							<!--// 2019-07-08 -->
+                        </div>
+                    </div>
+				</li>
+				<li class="bx-detail-collapse type2">
+                    <div class="row">
+                        <div class="col-xs-auto">
+                            <label class="input-type-check">
+                                <input type="checkbox">
+                                <span></span>
+                            </label>
+                        </div>
+                        <div class="col pl5">
+                            <a class="btn-collapse collapsed" data-toggle="collapse" href="#collapse2">개인정보 제3자 제공 동의</a>
+                        </div>
+                    </div>
+                    <div id="collapse2" class="collapse">
+                       <div class="bx-padding bg-light h6">
+							<!-- 2019-07-08 -->
+							비씨카드(주)는 QR키트의 배송을 위해 아래와 같이 위탁업체에게 정보를 제공하고 있습니다. 
+							<ul>
+								<li class="h5 fw500">1. 제공받는 자 : 빌포스트</li>
+								<li class="h5 fw500">2. 제공 목적 : QR키트 제작 및 배송</li>
+								<li>3. 제공 항목 : 우편번호, 수령주소, 대표자(수령인)명, 가맹점명, 연락처(휴대폰)</li>
+								<li class="h5 fw500">4. 개인정보 보유 및 이용 기간 : 배송완료 후 3개월</li>
+								<li>5. 귀하는 본 동의를 거부할 수 있습니다. 다만, 동의 거부 시 서비스 혜택에 제한이 발생하오니 이 점 유의하여 주시기 바랍니다.</li>
+							</ul>
+							<!--019-07-08 -->
+                        </div>
+                    </div>
+				</li>
+			</ul>
+		</div>
+	</div>
+</div>
+<div class="">
+	<button type="button" class="btn btn-primary btn-lg btn-block rounded-0">신청하기</button>
+</div>
+<!--// 페이지 끝 -->
+	</div>
+</div>
+</body>
+</html>

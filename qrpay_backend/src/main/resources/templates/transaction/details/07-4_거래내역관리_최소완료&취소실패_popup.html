@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>BC</title>
+<link rel="stylesheet" href="css/bootstrap.min.css">
+<script src="js/jquery-3.3.1.slim.min.js.js"></script>
+<script src="js/popper.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<link href="css/common.css" rel="stylesheet">
+<script src="js/common.js"></script>
+</head>
+
+<body>
+<div id="wrap">
+	<!-- header -->
+	<header id="hd">
+		<div class="container">
+			<button type="button" class="icon-back">이전 페이지 이동</button>
+			<h1>결제 내역</h1>
+			<a class="icon-home" href="/">홈으로 이동</a>
+		</div>
+	</header>
+	
+	<!-- container -->
+	<div id="ct">
+<!-- 페이지 시작 -->
+<div class="container pt60 mt60">
+	<button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#modal1">팝업 1</button>
+	<button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#modal2">팝업 2</button>
+	<!-- 2021-06-10 -->
+	<button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#modal3">팝업 3</button>
+	<button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#modal4">팝업 4</button>
+	<!--// 2021-06-10 -->
+</div>
+<!--// 페이지 끝 -->
+	</div>
+</div>
+
+<!-- modal -->
+<div class="modal fade pop-cancel" id="modal1">
+	<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-content">
+			<button type="button" class="btn-cls" data-dismiss="modal">팝업 닫기</button>
+			<div class="modal-body">
+				<strong class="fw700">장블랑제리</strong>
+				<div class="clearfix mb15">
+					<div class="float-left">
+						<span class="price-txt-wrp del">
+							<strong class="font-lato">9,600</strong><span>원</span>
+						</span>
+					</div>
+					<div class="float-right mt8">
+						<span class="badge badge-md badge-line-muted">취소완료</span>
+					</div>
+				</div>
+				<table class="tb-paydetail">
+					<tbody>
+						<tr>
+							<th>브랜드</th>
+							<td>은련</td>
+						</tr>
+						<tr>
+							<th>거래일시</th>
+							<td>2018-08-18 12:10:01</td>
+						</tr>
+						<tr>
+							<th>승인번호</th>
+							<td>77745843</td>
+						</tr>
+						<tr>
+							<th>카드번호</th>
+							<td>****************</td>
+						</tr>
+						<tr>
+							<th>할부정보</th>
+							<td>일시불</td>
+						</tr>
+						<tr>
+							<th>거래고유번호</th>
+							<td>346862645468</td>
+						</tr>
+						<tr>
+							<th>Voucher No. (凭证号) <button type="button" class="icon-help ml5">도움말</button></th>
+							<td>은련만 노출</td>
+						</tr>
+						<tr>
+							<th>할인 전 금액</th>
+							<td>할인 시 노출</td>
+						</tr>
+						<tr>
+							<th>할인 금액</th>
+							<td>할인 시 노출</td>
+						</tr>
+						<tr>
+							<th>할인 후 금액</th>
+							<td>할인 시 노출</td>
+						</tr>
+						<tr>
+							<th>승인상태</th>
+							<td>승인완료</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal fade" id="modal2">
+	<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-content">
+			<button type="button" class="btn-cls" data-dismiss="modal">팝업 닫기</button>
+			<div class="modal-body">
+				<strong class="fw700">장블랑제리</strong>
+				<p class="text-muted">2018-08-18 12:10:01</p>
+				<div class="clearfix mb15">
+					<div class="float-left">
+						<span class="price-txt-wrp del">
+							<strong class="font-lato">9,600</strong><span>원</span>
+						</span>
+					</div>
+					<div class="float-right mt8">
+						<span class="badge badge-md badge-line-danger">취소실패</span>
+					</div>
+				</div>
+				<div class="border-top pt30 pb5 text-center">
+					<p class="mb5">실패사유</p>
+					<p class="text-muted">국문/중문/영문</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- 2021-06-10 -->
+<div class="modal fade pop-cancel" id="modal3">
+	<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-content">
+			<button type="button" class="btn-cls" data-dismiss="modal">팝업 닫기</button>
+			<div class="modal-body">
+				<strong class="fw700">장블랑제리</strong>
+				<div class="clearfix mb15">
+					<div class="float-left">
+						<span class="price-txt-wrp">
+							<strong class="font-lato">9,600</strong><span>원</span>
+						</span>
+					</div>
+					<div class="float-right mt8">
+						<span class="badge badge-md badge-line-muted">승인완료</span>
+					</div>
+				</div>
+				<table class="tb-paydetail">
+					<tbody>
+						<tr>
+							<th>브랜드</th>
+							<td>은련</td>
+						</tr>
+						<tr>
+							<th>거래일시</th>
+							<td>2018-08-18 12:10:01</td>
+						</tr>
+						<tr>
+							<th>승인번호</th>
+							<td>77745843</td>
+						</tr>
+						<tr>
+							<th>카드번호</th>
+							<td>****************</td>
+						</tr>
+						<tr>
+							<th>할부정보</th>
+							<td>일시불</td>
+						</tr>
+						<tr>
+							<th>거래고유번호</th>
+							<td>346862645468</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal fade" id="modal4">
+	<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-content">
+			<button type="button" class="btn-cls" data-dismiss="modal">팝업 닫기</button>
+			<div class="modal-body">
+				<strong class="fw700">장블랑제리</strong>
+				<p class="text-muted">2018-08-18 12:10:01</p>
+				<div class="clearfix mb15">
+					<div class="float-left">
+						<span class="price-txt-wrp del">
+							<strong class="font-lato">9,600</strong><span>원</span>
+						</span>
+					</div>
+					<div class="float-right mt8">
+						<span class="badge badge-md badge-line-danger">승인실패</span>
+					</div>
+				</div>
+				<div class="border-top pt30 pb5">
+					<p class="mb5">승인실패사유</p>
+					<p class="text-muted">국문<br />영문</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!--// 2021-06-10 -->
+</body>
+</html>
