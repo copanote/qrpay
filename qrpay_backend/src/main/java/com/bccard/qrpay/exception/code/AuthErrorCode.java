@@ -9,7 +9,8 @@ public enum AuthErrorCode implements ErrorCode {
 
 
     AUTHENTICATE_REQUIRED(401, "401", "Authenticate Required"),
-    
+
+    UNMATCHED_AUTHENTICATE(403, "403", "인증정보와 요청정보가 일치하지 않습니다"),
     INVALID_CREDENTIAL(403, "403", "ID 혹은 비밀번호가 올바르지 않습니다"),
     ACCOUNT_LOCKED_POLICY(403, "E_AUTH403", "비밀번호틀림 초과 횟수 정책 위반"),
 

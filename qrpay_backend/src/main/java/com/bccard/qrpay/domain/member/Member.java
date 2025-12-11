@@ -60,7 +60,7 @@ public class Member extends BaseEntity implements Persistable<String> {
 
     @Column(name = "AUTH_CNCL_ABLE_YN", length = 1)
     @Convert(converter = BooleanYnConverter.class)
-    private Boolean authCnclAbleYn;
+    private Boolean permissionToCancel;
 
     @Column(name = "AFFI_CO_ID", length = 40)
     private String affiCoId; //BCQRCPAY
@@ -94,7 +94,7 @@ public class Member extends BaseEntity implements Persistable<String> {
                 ", passwordErrorAt='" + passwordErrorAt + '\'' +
                 ", passwordChangedAt='" + passwordChangedAt + '\'' +
                 ", termsAgreeInfo='" + termsAgreeInfo + '\'' +
-                ", authCnclAbleYn=" + authCnclAbleYn +
+                ", authCnclAbleYn=" + permissionToCancel +
                 ", affiCoId='" + affiCoId + '\'' +
                 ", referrerId='" + referrerId + '\'' +
                 ", termsAgreedAt='" + termsAgreedAt + '\'' +
@@ -127,19 +127,19 @@ public class Member extends BaseEntity implements Persistable<String> {
         this.role = MemberRole.MASTER;
         this.status = MemberStatus.ACTIVE;
         this.termsAgreedAt = MpmDateTimeUtils.generateDtmNow(MpmDateTimeUtils.FORMATTER_YEAR_TO_SEC);
-        this.authCnclAbleYn = Boolean.TRUE;
+        this.permissionToCancel = Boolean.TRUE;
         this.affiCoId = "BCQRCPAY";
     }
 
     @Builder(builderMethodName = "createNormalMember")
-    public Member(String memberId, Merchant merchant, String loginId, String hashedPassword, Boolean authCnclAbleYn) {
+    public Member(String memberId, Merchant merchant, String loginId, String hashedPassword, Boolean permissionToCancel) {
         this.memberId = memberId;
         this.merchant = merchant;
         this.loginId = loginId;
         this.hashedPassword = hashedPassword;
-        this.authCnclAbleYn = authCnclAbleYn;
+        this.permissionToCancel = permissionToCancel;
 
-        this.role = MemberRole.NORMAL;
+        this.role = MemberRole.EMPLOYEE;
         this.status = MemberStatus.ACTIVE;
         this.affiCoId = "BCQRCPAY";
     }
@@ -147,6 +147,10 @@ public class Member extends BaseEntity implements Persistable<String> {
     public void onPasswordFail() {
         passwordErrorAt = MpmDateTimeUtils.generateDtmNow(MpmDateTimeUtils.PATTERN_YEAR_TO_DATE);
         passwordErrorCount += 1;
+    }
+    
+    public void updatePermissionToCancel(boolean permissionToCancel) {
+        this.permissionToCancel = permissionToCancel;
     }
 
 

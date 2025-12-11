@@ -2,6 +2,7 @@ package com.bccard.qrpay.controller.api;
 
 
 import com.bccard.qrpay.auth.domain.CustomUserDetails;
+import com.bccard.qrpay.controller.api.common.QrpayApiResponse;
 import com.bccard.qrpay.controller.api.dtos.*;
 import com.bccard.qrpay.domain.common.code.MemberRole;
 import com.bccard.qrpay.domain.common.code.PointOfInitMethod;
@@ -13,7 +14,9 @@ import com.bccard.qrpay.domain.mpmqr.EmvMpmService;
 import com.bccard.qrpay.domain.mpmqr.MpmQrPublication;
 import com.bccard.qrpay.domain.mpmqr.dto.PublishBcEmvMpmQrReqDto;
 import com.bccard.qrpay.exception.AuthException;
+import com.bccard.qrpay.exception.MemberException;
 import com.bccard.qrpay.exception.code.AuthErrorCode;
+import com.bccard.qrpay.exception.code.MemberErrorCode;
 import com.bccard.qrpay.utils.ZxingQrcode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +27,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 
 @Slf4j
@@ -37,27 +41,72 @@ public class MerchantApiController {
     private final EmvMpmService emvMpmService;
 
 
-    @RequestMapping(value = "/v1/merchant/info")
+    @RequestMapping(value = "/v1/merchant/{merchantId}/employees")
     @ResponseBody
-    public void merchantInfo() {
+    public ResponseEntity<?> employees(@PathVariable("merchantId") String merchantId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
         Member member = userDetails.qrpayMember();
         log.info("Member={}", member.getMemberId());
+
+        Merchant merchant = member.getMerchant();
+        if (!merchant.getMerchantId().equals(merchantId)) {
+            throw new AuthException(AuthErrorCode.UNMATCHED_AUTHENTICATE);
+        }
 
         if (member.getRole() != MemberRole.MASTER) {
             throw new AuthException(AuthErrorCode.INVALID_AUTHORIZATION);
         }
+
+        List<Member> employees = memberService.findMemberByRole(merchant, MemberRole.EMPLOYEE);
+
+        if (employees.isEmpty()) {
+            throw new MemberException(MemberErrorCode.MEMBER_NOT_FOUND);
+        }
+
+        List<EmployeesInfoDto> result = employees.stream().map(EmployeesInfoDto::from).toList();
+
+        return ResponseEntity.ok(QrpayApiResponse.ok(result));
     }
 
 
-    @PostMapping(value = "/v1/merchant/change-vat")
+    @RequestMapping(value = "/v1/merchant/{merchantId}/info")
     @ResponseBody
-    public ResponseEntity<?> changeVat(VatChangeReqDto reqDto) {
+    public ResponseEntity<?> merchantInfo(@PathVariable("merchantId") String merchantId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
         Member member = userDetails.qrpayMember();
         log.info("Member={}", member.getMemberId());
+
+        Merchant merchant = member.getMerchant();
+
+        if (!merchant.getMerchantId().equals(merchantId)) {
+            throw new AuthException(AuthErrorCode.UNMATCHED_AUTHENTICATE);
+        }
+
+        if (member.getRole() != MemberRole.MASTER) {
+            throw new AuthException(AuthErrorCode.INVALID_AUTHORIZATION);
+        }
+
+        return ResponseEntity.ok(MerchantInfoResDto.from(merchant));
+    }
+
+
+    @PostMapping(value = "/v1/merchant/{merchantId}/change-vat")
+    @ResponseBody
+    public ResponseEntity<?> changeVat(
+            @PathVariable("merchantId") String merchantId,
+            @RequestBody VatChangeReqDto reqDto) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        Member member = userDetails.qrpayMember();
+        log.info("Authenticated Member={}", member.getMemberId());
+
+        Merchant merchant = member.getMerchant();
+
+        if (!merchant.getMerchantId().equals(merchantId)) {
+            throw new AuthException(AuthErrorCode.UNMATCHED_AUTHENTICATE);
+        }
 
         if (member.getRole() != MemberRole.MASTER) {
             throw new AuthException(AuthErrorCode.INVALID_AUTHORIZATION);
@@ -67,13 +116,15 @@ public class MerchantApiController {
         if (reqDto.isEnableVat()) {
             updateVat = BigDecimal.valueOf(reqDto.getVatRate());
         }
-        Merchant changed = merchantService.updateVat(member.getMerchant(), updateVat);
+        Merchant changed = merchantService.updateVat(merchant, updateVat);
 
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping(value = "/v1/merchant/change-tip")
-    public ResponseEntity<?> changeTip(TipChangeReqDto reqDto) {
+    @PostMapping(value = "/v1/merchant/{merchantId}/change-tip")
+    public ResponseEntity<?> changeTip(
+            @PathVariable("merchantId") String merchantId,
+            @RequestBody TipChangeReqDto reqDto) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
         Member member = userDetails.qrpayMember();
@@ -93,9 +144,11 @@ public class MerchantApiController {
     }
 
 
-    @PostMapping(value = "/v1/merchant/change-name")
+    @PostMapping(value = "/v1/merchant/{merchantId}/change-name")
     @ResponseBody
-    public ResponseEntity<?> changeName(@RequestBody @Validated MerchantNameChangeReqDto req) throws Exception {
+    public ResponseEntity<?> changeName(
+            @PathVariable("merchantId") String merchantId,
+            @RequestBody @Validated MerchantNameChangeReqDto req) throws Exception {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
@@ -119,9 +172,11 @@ public class MerchantApiController {
         return ResponseEntity.ok().body(out);
     }
 
-    @PostMapping(value = "/v1/merchant/mpmqr")
+    @PostMapping(value = "/v1/merchant/{merchantId}/mpmqr")
     @ResponseBody
-    public ResponseEntity<?> mpmqr(@RequestBody @Validated MpmQrInfoReqDto req) throws Exception {
+    public ResponseEntity<?> mpmqr(
+            @PathVariable("merchantId") String merchantId,
+            @RequestBody @Validated MpmQrInfoReqDto req) throws Exception {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();

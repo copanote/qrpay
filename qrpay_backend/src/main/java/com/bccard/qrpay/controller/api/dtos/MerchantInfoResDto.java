@@ -21,8 +21,13 @@ public class MerchantInfoResDto {
 
     public static MerchantInfoResDto from(Merchant merchant) {
 
-
-        return null;
-
+        return MerchantInfoResDto.builder()
+                .merchantId(merchant.getMerchantId())
+                .merchantName(merchant.getMerchantName())
+                .enableVat(merchant.getVatRate() != null)
+                .vatRate(merchant.getVatRate().intValue())
+                .enableTip(merchant.getTipRate() != null)
+                .tipRate(merchant.getTipRate().intValue())
+                .build();
     }
 }

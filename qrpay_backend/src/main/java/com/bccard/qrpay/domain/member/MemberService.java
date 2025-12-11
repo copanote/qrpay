@@ -1,7 +1,10 @@
 package com.bccard.qrpay.domain.member;
 
+import com.bccard.qrpay.domain.common.code.MemberRole;
+import com.bccard.qrpay.domain.common.code.MemberStatus;
 import com.bccard.qrpay.domain.member.repository.MemberQueryRepository;
 import com.bccard.qrpay.domain.member.repository.MemberRepository;
+import com.bccard.qrpay.domain.merchant.Merchant;
 import com.bccard.qrpay.exception.MemberException;
 import com.bccard.qrpay.exception.code.MemberErrorCode;
 import com.bccard.qrpay.utils.security.HashCipher;
@@ -11,6 +14,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 
@@ -56,4 +60,30 @@ public class MemberService {
         String pad = StringUtils.leftPad(seq.toString(), 8, '0');
         return "";
     }
+
+    public List<Member> findMemberByRole(Merchant merchant, MemberRole role) {
+        List<Member> allMembers = memberQueryRepository.findAllMembers(merchant);
+        return allMembers.stream()
+                .filter(member -> member.getRole() == role)
+                .filter(member -> member.getStatus() != MemberStatus.CANCELLED)
+                .toList();
+    }
+
+    public List<Member> findMembers(Merchant merchant) {
+        return memberQueryRepository.findAllMembers(merchant)
+                .stream()
+                .filter(member -> member.getStatus() != MemberStatus.CANCELLED)
+                .toList();
+    }
+
+    @Transactional
+    public Member updatePermissionToCancel(Member member, boolean permissionToCancel) {
+        Member m = memberQueryRepository.findById(member.getMemberId()).orElseThrow(
+                () -> new MemberException(MemberErrorCode.MEMBER_NOT_FOUND)
+        );
+        m.updatePermissionToCancel(permissionToCancel);
+        return m;
+    }
+
+
 }
