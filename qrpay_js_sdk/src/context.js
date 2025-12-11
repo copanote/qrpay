@@ -4,12 +4,12 @@ const Context = () => {
     switch (p) {
       case 'local':
         return {
-          qrpayBaseUrl: 'http://127.0.0.1:9090',
+          qrpayBaseUrl: 'http://localhost:9090',
           loggable: true,
         };
       case 'development':
         return {
-          qrpayBaseUrl: 'http://127.0.0.1:9090',
+          qrpayBaseUrl: 'http://localhost:9090',
           loggable: true,
         };
       case 'production':

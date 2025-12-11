@@ -1,5 +1,6 @@
 package com.bccard.qrpay.domain.common.code;
 
+
 import lombok.Getter;
 
 @Getter
@@ -24,4 +25,5 @@ public enum MessageType implements DatabaseCodeConvertable {
         }
         return null;
     }
+
 }

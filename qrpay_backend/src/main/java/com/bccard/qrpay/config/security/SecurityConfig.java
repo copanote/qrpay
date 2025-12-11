@@ -1,11 +1,10 @@
 package com.bccard.qrpay.config.security;
 
+
 import com.bccard.qrpay.auth.filter.JwtAuthenticationFilter;
 import com.bccard.qrpay.auth.security.JwtProvider;
 import com.bccard.qrpay.auth.service.CustomPasswordEncoder;
 import com.bccard.qrpay.auth.service.CustomUserDetailsService;
-import java.util.Arrays;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -24,6 +23,9 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import java.util.Arrays;
+import java.util.List;
+
 @RequiredArgsConstructor
 @Configuration
 public class SecurityConfig {
@@ -34,35 +36,30 @@ public class SecurityConfig {
     private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
     private final CustomPasswordEncoder customPasswordEncoder;
 
+
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
-        return web ->
-                web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations());
+        return web -> web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations());
     }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
                 .cors(httpSecurityCorsConfigurer -> corsConfigurationSource())
-                .sessionManagement(
-                        sessionConfigurer -> sessionConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(req -> req.requestMatchers("/auth/**")
-                        .permitAll()
-                        .requestMatchers("/view/**")
-                        .permitAll()
-                        .requestMatchers("/error")
-                        .permitAll()
-                        //
-                        // .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
-                        .anyRequest()
-                        .authenticated())
-                .exceptionHandling(h -> h.authenticationEntryPoint(customAuthenticationEntryPoint)
+                .sessionManagement(sessionConfigurer -> sessionConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(req -> req
+                                .requestMatchers("/auth/**").permitAll()
+                                .requestMatchers("/pages/**").permitAll()
+                                .requestMatchers("/error").permitAll()
+//                        .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
+                                .anyRequest().authenticated()
+                ).exceptionHandling(h -> h
+                        .authenticationEntryPoint(customAuthenticationEntryPoint)
                         .accessDeniedHandler(customAccessDeniedHandler))
                 .authenticationManager(authenticationManager(http));
 
         // JWT 인증 필터 추가
-        http.addFilterBefore(
-                new JwtAuthenticationFilter(jwtProvider, userDetailsService),
+        http.addFilterBefore(new JwtAuthenticationFilter(jwtProvider, userDetailsService),
                 UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
@@ -73,7 +70,7 @@ public class SecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
 
         // **Access-Control-Allow-Origin** 헤더에 해당하는 출처 설정
-        //        configuration.setAllowedOrigins(List.of("*"));
+//        configuration.setAllowedOrigins(List.of("*"));
         // 와일드카드 *를 사용할 수 있지만, `allowCredentials`가 true이면 특정 출처를 명시해야 합니다.
         configuration.setAllowedOriginPatterns(List.of("*")); // 패턴 사용 예시
 
@@ -96,19 +93,22 @@ public class SecurityConfig {
         return source;
     }
 
+
     @Bean
     public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
-        //        AuthenticationManagerBuilder builder = http.getSharedObject(AuthenticationManagerBuilder.class);
-        //        builder.userDetailsService(userDetailsService).passwordEncoder(customPasswordEncoder);
-        //        return builder.build();
+//        AuthenticationManagerBuilder builder = http.getSharedObject(AuthenticationManagerBuilder.class);
+//        builder.userDetailsService(userDetailsService).passwordEncoder(customPasswordEncoder);
+//        return builder.build();
 
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider(userDetailsService);
         provider.setPasswordEncoder(customPasswordEncoder); // Delegating 사용 X
         return new ProviderManager(provider);
     }
 
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return customPasswordEncoder;
     }
+
 }

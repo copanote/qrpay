@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -19,18 +20,15 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Member member = memberQueryRepository
-                .findByLoginId(username)
-                .orElseThrow(() -> new UsernameNotFoundException("NotFound Username"));
+        Member member = memberQueryRepository.findByLoginId(username).orElseThrow(() -> new UsernameNotFoundException("NotFound Username"));
         log.info("{}", member);
 
         return CustomUserDetails.of(member);
     }
 
     public UserDetails loadUserByMemberId(String memberId) throws UsernameNotFoundException {
-        Member member = memberQueryRepository
-                .findById(memberId)
-                .orElseThrow(() -> new UsernameNotFoundException("NotFound Username"));
+        Member member = memberQueryRepository.findById(memberId).orElseThrow(() -> new UsernameNotFoundException("NotFound Username"));
         return CustomUserDetails.of(member);
     }
+
 }

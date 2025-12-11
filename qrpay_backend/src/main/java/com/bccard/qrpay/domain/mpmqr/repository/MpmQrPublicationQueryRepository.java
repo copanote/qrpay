@@ -1,18 +1,21 @@
 package com.bccard.qrpay.domain.mpmqr.repository;
 
+
+import com.bccard.qrpay.domain.common.code.PointOfInitMethod;
+import com.bccard.qrpay.domain.merchant.Merchant;
 import com.bccard.qrpay.domain.mpmqr.MpmQrPublication;
 import com.bccard.qrpay.domain.mpmqr.QMpmQrPublication;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import java.util.Optional;
 import org.springframework.stereotype.Repository;
+
+import java.util.Optional;
 
 @Repository
 public class MpmQrPublicationQueryRepository {
     @PersistenceContext
     private EntityManager entityManager;
-
     private final JPAQueryFactory queryFactory;
 
     public MpmQrPublicationQueryRepository(EntityManager em) {
@@ -34,4 +37,13 @@ public class MpmQrPublicationQueryRepository {
                 .fetchFirst();
         return Optional.ofNullable(m);
     }
+
+    public Optional<MpmQrPublication> findNewestStaticMpmQr(Merchant m) {
+        MpmQrPublication staticMpmQr = queryFactory.selectFrom(mpmQrPublication)
+                .where(mpmQrPublication.merchant.eq(m)
+                        .and(mpmQrPublication.pim.eq(PointOfInitMethod.STATIC)))
+                .orderBy(mpmQrPublication.createdAt.desc()).fetchFirst();
+        return Optional.ofNullable(staticMpmQr);
+    }
+
 }

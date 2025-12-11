@@ -4,13 +4,14 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
-import java.sql.Date;
-import java.time.Instant;
-import javax.crypto.SecretKey;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.codec.Hex;
 import org.springframework.stereotype.Component;
+
+import javax.crypto.SecretKey;
+import java.sql.Date;
+import java.time.Instant;
 
 @Slf4j
 @Component
@@ -41,9 +42,7 @@ public class JwtProvider {
         Claims claims = Jwts.claims().add("roles", roles).build();
 
         return Jwts.builder()
-                .header()
-                .type("JWT")
-                .and()
+                .header().type("JWT").and()
                 .subject(userId)
                 .claims(claims)
                 .issuedAt(Date.from(now))
@@ -56,6 +55,11 @@ public class JwtProvider {
         return Jwts.parser().verifyWith(key).build().parseSignedClaims(token);
     }
 
+    public String validateAndGetSubject(String token) {
+        return Jwts.parser().verifyWith(key).build().parseSignedClaims(token).getPayload().getSubject();
+    }
+
+
     public boolean validateToken(String token) {
         try {
             Jwts.parser().verifyWith(key).build().parseSignedClaims(token);
@@ -64,4 +68,6 @@ public class JwtProvider {
             return false;
         }
     }
+
+
 }

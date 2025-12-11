@@ -38,7 +38,10 @@ public class MpmQrKitApplication extends BaseEntity {
     private String addAplcRson;
 
     private String aplcChnlClss;
+
+
 }
+
 
 /**
  * 이름               널?       유형

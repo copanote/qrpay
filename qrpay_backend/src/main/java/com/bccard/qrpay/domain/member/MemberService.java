@@ -11,6 +11,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
+
 @Slf4j
 @RequiredArgsConstructor
 @Service
@@ -19,14 +22,17 @@ public class MemberService {
     private final MemberRepository memberCUDRepository;
 
     public Member findByMemberId(String memberId) {
-        return memberQueryRepository
-                .findById(memberId)
+        return memberQueryRepository.findById(memberId)
                 .orElseThrow(() -> new MemberException(MemberErrorCode.MEMBER_NOT_FOUND));
     }
 
+    public Optional<Member> findBy(String memberId) {
+        return memberQueryRepository.findById(memberId);
+    }
+
+
     public Member findMyLoginId(String loginId) {
-        return memberQueryRepository
-                .findByLoginId(loginId)
+        return memberQueryRepository.findByLoginId(loginId)
                 .orElseThrow(() -> new MemberException(MemberErrorCode.MEMBER_NOT_FOUND));
     }
 
@@ -43,6 +49,7 @@ public class MemberService {
     public String hashPassword(String password) {
         return HashCipher.sha256EncodedBase64(password);
     }
+
 
     public String createNewMemberId() {
         Long seq = memberQueryRepository.getNextSequenceValue();

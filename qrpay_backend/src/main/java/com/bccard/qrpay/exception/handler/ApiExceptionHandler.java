@@ -1,5 +1,6 @@
 package com.bccard.qrpay.exception.handler;
 
+
 import com.bccard.qrpay.exception.ApiError;
 import com.bccard.qrpay.exception.AuthException;
 import com.bccard.qrpay.exception.code.AuthErrorCode;
@@ -21,8 +22,10 @@ public class ApiExceptionHandler {
     public ResponseEntity<ApiError> handleAllExceptions(Exception e) {
         HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
 
-        ApiError apiError =
-                ApiError.builder().code("500").message(e.getMessage()).build();
+        ApiError apiError = ApiError.builder()
+                .code("500")
+                .message(e.getMessage())
+                .build();
 
         log.error("Internal Server Error: {}", e.getMessage(), e);
 
@@ -56,4 +59,6 @@ public class ApiExceptionHandler {
 
         return ResponseEntity.status(errorCode.getStatus()).body(apiError);
     }
+
+
 }

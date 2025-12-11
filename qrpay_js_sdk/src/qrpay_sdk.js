@@ -33,7 +33,7 @@ const QRPAY_SDK = () => {
   const refresh = async () => {
     const refreshToken = qrpay_storage.find('refreshToken');
     if (!refreshToken) {
-      return { ok: false, error: 'No refresh token available' };
+      return { ok: false, status: 401, error: 'No refresh token available' };
     }
 
     const data = await fetchDataAsync(createUrl(AUTH_APIS.AUTH_REFRESH), { refreshToken: refreshToken });
@@ -46,8 +46,9 @@ const QRPAY_SDK = () => {
       const { accessToken, accessTokenExpiresIn } = data;
       qrpay_storage.save('accessToken', accessToken);
       qrpay_storage.save('accessTokenExpiresIn', accessTokenExpiresIn);
-      return data;
     }
+
+    return data;
   };
 
   const logout = async () => {
@@ -110,6 +111,7 @@ const QRPAY_SDK = () => {
     try {
       const response = await fetch(url, {
         method: 'POST',
+        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
           ...authHeader,
@@ -129,7 +131,7 @@ const QRPAY_SDK = () => {
     } catch (error) {
       //Promise 자체가 rejected (network error, CORS 등)
       console.error('Fetch error:', error);
-      return { ...QRPAY_CODE.FETCH_ERROR, error: error };
+      return { ok: false, ...QRPAY_CODE.FETCH_ERROR, error: error };
     }
   }
 
@@ -139,6 +141,7 @@ const QRPAY_SDK = () => {
     try {
       const response = fetch(url, {
         method: 'POST',
+        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
           ...authHeader,
@@ -165,6 +168,8 @@ const QRPAY_SDK = () => {
     fetchDataPromise: fetchDataPromise,
     QRPAY_CODE: QRPAY_CODE,
     AUTH_APIS: AUTH_APIS,
+    PAGES_APIS: PAGES_APIS,
+    REST_APIS: REST_APIS,
   };
 
   return publicAPI;
@@ -176,19 +181,30 @@ const AUTH_APIS = {
   AUTH_LOGOUT: '/auth/logout',
 };
 
+const PAGES_APIS = {
+  PAGES_MAIN: '/pages/home/mpmqr',
+};
+
+const REST_APIS = {
+  UPDATE_MERCHANT_NAME: '/api/v1/qrpay/change-merchant-name',
+};
+
 const QRPAY_CODE = {
   RE_ATHENTICATE: {
     ok: false,
+    status: 401,
     code: 'EQ401',
-    message: 'Authentication required.',
+    message: 'Authentication Required.',
   },
   FETCH_ERROR: {
     ok: false,
+    status: 999,
     code: 'EQ999',
     message: 'Fetch Promise Rejected(Network error, CORS, etc.)',
   },
   API_ERROR: {
     ok: false,
+    status: 500,
     code: 'EQ500',
     message: 'application error',
   },

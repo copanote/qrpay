@@ -1,5 +1,6 @@
 package com.bccard.qrpay.domain.device;
 
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import lombok.*;
@@ -22,8 +23,7 @@ public class DeviceAccessToken {
     private String apiAccessExpireDate;
 
     @Builder
-    public DeviceAccessToken(
-            String apiAccessToken, Long apiAccessTokenExpires, String apiRefreshToken, String apiAccessExpireDate) {
+    public DeviceAccessToken(String apiAccessToken, Long apiAccessTokenExpires, String apiRefreshToken, String apiAccessExpireDate) {
         this.apiAccessToken = apiAccessToken;
         this.apiAccessTokenExpires = apiAccessTokenExpires;
         this.apiRefreshToken = apiRefreshToken;

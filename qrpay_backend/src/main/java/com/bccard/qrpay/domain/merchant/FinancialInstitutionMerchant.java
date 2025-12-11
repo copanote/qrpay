@@ -4,12 +4,10 @@ import com.bccard.qrpay.domain.common.code.FinancialInstitution;
 import com.bccard.qrpay.domain.common.converter.FinanceInstitutionConverter;
 import com.bccard.qrpay.domain.common.entity.BaseEntity;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.domain.Persistable;
 
+@ToString
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -27,15 +25,14 @@ public class FinancialInstitutionMerchant extends BaseEntity implements Persista
     @Convert(converter = FinanceInstitutionConverter.class)
     private FinancialInstitution financialInstitution;
 
-    @Column(name = "CARD_CO_MER_MGMT_NO", length = 15, nullable = false)
+    @Column(name = "CARD_CO_MER_MGMT_NO", length = 15, nullable = true)
     private String fiMerchantNo;
 
     @Column(name = "CARD_CO_MER_NM", length = 40)
     private String fiMerchantName;
 
     @Builder(builderMethodName = "createNewFinancialInstituteMerchant")
-    public FinancialInstitutionMerchant(
-            Merchant merchant, FinancialInstitution financialInstitution, String fiMerchantNo, String fiMerchantName) {
+    public FinancialInstitutionMerchant(Merchant merchant, FinancialInstitution financialInstitution, String fiMerchantNo, String fiMerchantName) {
         this.merchant = merchant;
         this.financialInstitution = financialInstitution;
         this.fiMerchantNo = fiMerchantNo;

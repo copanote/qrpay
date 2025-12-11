@@ -16,7 +16,6 @@
     <script src="/js/qrpay_sdk.dev.js"></script>
     <script>
       // QRPAY SDK 초기화
-
       document.addEventListener("DOMContentLoaded", function () {
         // SDK 초기화
 
@@ -65,7 +64,7 @@
               console.log("로그인 성공");
 
               // 메인 페이지 또는 대시보드로 이동
-              window.location.href = "/home/cpmqr";
+              window.location.href = "/pages/home/mpmqr";
             } else {
               const errorMsg =
                 data.message || data.error?.message || "로그인에 실패했습니다.";
@@ -78,8 +77,8 @@
           })
           .finally(() => {
             // 버튼 상태 복구
-            btnLogin.disabled = false;
-            btnLogin.textContent = originalText;
+            // btnLogin.disabled = false;
+            // btnLogin.textContent = originalText;
           });
       }
     </script>

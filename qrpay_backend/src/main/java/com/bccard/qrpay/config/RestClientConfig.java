@@ -1,6 +1,6 @@
 package com.bccard.qrpay.config;
 
-import java.util.concurrent.TimeUnit;
+
 import org.apache.hc.client5.http.classic.HttpClient;
 import org.apache.hc.client5.http.config.RequestConfig;
 import org.apache.hc.client5.http.impl.DefaultHttpRequestRetryStrategy;
@@ -14,13 +14,17 @@ import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.client.RestClient;
 
+import java.util.concurrent.TimeUnit;
+
 @Configuration
 public class RestClientConfig {
 
     @Bean
     public RestClient restClient(HttpClient httpClient) {
         ClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory(httpClient);
-        return RestClient.builder().requestFactory(factory).build();
+        return RestClient.builder()
+                .requestFactory(factory)
+                .build();
     }
 
     // 연결 풀(Connection Pool) 설정 값
@@ -48,7 +52,7 @@ public class RestClientConfig {
                 .build();
     }
 
-    /*
+/*
     @Bean
     public HttpClient proxyApacheHttpClient() {
 

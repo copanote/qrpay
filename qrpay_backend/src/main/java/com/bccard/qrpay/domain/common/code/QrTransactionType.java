@@ -1,9 +1,11 @@
 package com.bccard.qrpay.domain.common.code;
 
+
 import lombok.Getter;
 
 @Getter
 public enum QrTransactionType implements DatabaseCodeConvertable {
+
     CUSTOMER_AMOUNT_QR("CA", "고객금액설정"),
     MERCHANT_AMOUNT_QR("MA", "가맹점금액설정"),
     SMART_ORDER("SO", "메뉴판결제-스마트오더"),
@@ -25,4 +27,5 @@ public enum QrTransactionType implements DatabaseCodeConvertable {
         }
         return UNKNOWN;
     }
+
 }
