@@ -1,9 +1,9 @@
 package com.bccard.qrpay.exception;
 
-import com.bccard.qrpay.exception.code.MerchantErrorCode;
+import com.bccard.qrpay.exception.code.ErrorCode;
 
 public class MerchantException extends QrpayCustomException {
-    public MerchantException(MerchantErrorCode errorCode) {
+    public MerchantException(ErrorCode errorCode) {
         super(errorCode);
     }
 }

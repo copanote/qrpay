@@ -2,12 +2,14 @@ package com.bccard.qrpay.controller.api;
 
 
 import com.bccard.qrpay.auth.domain.CustomUserDetails;
+import com.bccard.qrpay.auth.service.CustomPasswordEncoder;
 import com.bccard.qrpay.controller.api.common.QrpayApiResponse;
 import com.bccard.qrpay.controller.api.dtos.*;
 import com.bccard.qrpay.domain.common.code.MemberRole;
 import com.bccard.qrpay.domain.common.code.PointOfInitMethod;
 import com.bccard.qrpay.domain.member.Member;
 import com.bccard.qrpay.domain.member.MemberService;
+import com.bccard.qrpay.domain.member.Permission;
 import com.bccard.qrpay.domain.merchant.Merchant;
 import com.bccard.qrpay.domain.merchant.MerchantService;
 import com.bccard.qrpay.domain.mpmqr.EmvMpmService;
@@ -15,8 +17,7 @@ import com.bccard.qrpay.domain.mpmqr.MpmQrPublication;
 import com.bccard.qrpay.domain.mpmqr.dto.PublishBcEmvMpmQrReqDto;
 import com.bccard.qrpay.exception.AuthException;
 import com.bccard.qrpay.exception.MemberException;
-import com.bccard.qrpay.exception.code.AuthErrorCode;
-import com.bccard.qrpay.exception.code.MemberErrorCode;
+import com.bccard.qrpay.exception.code.QrpayErrorCode;
 import com.bccard.qrpay.utils.ZxingQrcode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -39,6 +40,54 @@ public class MerchantApiController {
     private final MerchantService merchantService;
     private final MemberService memberService;
     private final EmvMpmService emvMpmService;
+    private final CustomPasswordEncoder customPasswordEncoder;
+
+    @RequestMapping(value = "/v1/merchant/{merchantId}/add-employee")
+    @ResponseBody
+    public ResponseEntity<?> addEmployee(
+            @PathVariable("merchantId") String merchantId,
+            @RequestBody AddEmployeeReqDto reqDto
+    ) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        Member member = userDetails.qrpayMember();
+        log.info("Member={}", member.getMemberId());
+
+        if (member.getRole() != MemberRole.MASTER) {
+            throw new AuthException(QrpayErrorCode.INVALID_AUTHORIZATION);
+        }
+
+        Merchant merchant = member.getMerchant();
+        if (!merchant.getMerchantId().equals(merchantId)) {
+            throw new AuthException(QrpayErrorCode.UNMATCHED_AUTHENTICATE);
+        }
+
+        if (memberService.exist(reqDto.getLoginId())) {
+            //exception
+        }
+
+        //id규칙 검증
+
+        if (!reqDto.getPassword().equals(reqDto.getConfirmPassword())) {
+            //exception
+        }
+        //Password 규칙검증
+
+        List<Permission> permissions = reqDto.getPermissions();
+        boolean permissionCancel = permissions.contains(Permission.CANCEL);
+
+        Member newMem = Member.createEmployee()
+                .merchant(merchant)
+                .memberId(memberService.createNewMemberId())
+                .loginId(reqDto.getLoginId())
+                .hashedPassword(customPasswordEncoder.encode(reqDto.getPassword()))
+                .permissionToCancel(permissionCancel)
+                .build();
+
+        Member newOne = memberService.save(newMem);
+
+        return ResponseEntity.ok().build();
+    }
 
 
     @RequestMapping(value = "/v1/merchant/{merchantId}/employees")
@@ -51,17 +100,17 @@ public class MerchantApiController {
 
         Merchant merchant = member.getMerchant();
         if (!merchant.getMerchantId().equals(merchantId)) {
-            throw new AuthException(AuthErrorCode.UNMATCHED_AUTHENTICATE);
+            throw new AuthException(QrpayErrorCode.UNMATCHED_AUTHENTICATE);
         }
 
         if (member.getRole() != MemberRole.MASTER) {
-            throw new AuthException(AuthErrorCode.INVALID_AUTHORIZATION);
+            throw new AuthException(QrpayErrorCode.INVALID_AUTHORIZATION);
         }
 
         List<Member> employees = memberService.findMemberByRole(merchant, MemberRole.EMPLOYEE);
 
         if (employees.isEmpty()) {
-            throw new MemberException(MemberErrorCode.MEMBER_NOT_FOUND);
+            throw new MemberException(QrpayErrorCode.MEMBER_NOT_FOUND);
         }
 
         List<EmployeesInfoDto> result = employees.stream().map(EmployeesInfoDto::from).toList();
@@ -81,11 +130,11 @@ public class MerchantApiController {
         Merchant merchant = member.getMerchant();
 
         if (!merchant.getMerchantId().equals(merchantId)) {
-            throw new AuthException(AuthErrorCode.UNMATCHED_AUTHENTICATE);
+            throw new AuthException(QrpayErrorCode.UNMATCHED_AUTHENTICATE);
         }
 
         if (member.getRole() != MemberRole.MASTER) {
-            throw new AuthException(AuthErrorCode.INVALID_AUTHORIZATION);
+            throw new AuthException(QrpayErrorCode.INVALID_AUTHORIZATION);
         }
 
         return ResponseEntity.ok(MerchantInfoResDto.from(merchant));
@@ -105,11 +154,11 @@ public class MerchantApiController {
         Merchant merchant = member.getMerchant();
 
         if (!merchant.getMerchantId().equals(merchantId)) {
-            throw new AuthException(AuthErrorCode.UNMATCHED_AUTHENTICATE);
+            throw new AuthException(QrpayErrorCode.UNMATCHED_AUTHENTICATE);
         }
 
         if (member.getRole() != MemberRole.MASTER) {
-            throw new AuthException(AuthErrorCode.INVALID_AUTHORIZATION);
+            throw new AuthException(QrpayErrorCode.INVALID_AUTHORIZATION);
         }
 
         BigDecimal updateVat = null;
@@ -131,7 +180,7 @@ public class MerchantApiController {
         log.info("Member={}", member.getMemberId());
 
         if (member.getRole() != MemberRole.MASTER) {
-            throw new AuthException(AuthErrorCode.INVALID_AUTHORIZATION);
+            throw new AuthException(QrpayErrorCode.INVALID_AUTHORIZATION);
         }
 
         BigDecimal updateVat = null;
@@ -156,7 +205,7 @@ public class MerchantApiController {
         log.info("Member={}", member.getMemberId());
 
         if (member.getRole() != MemberRole.MASTER) {
-            throw new AuthException(AuthErrorCode.INVALID_AUTHORIZATION);
+            throw new AuthException(QrpayErrorCode.INVALID_AUTHORIZATION);
         }
 
         Merchant merchant = merchantService.updateMerchantName(member.getMerchant(), req.getName());

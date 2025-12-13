@@ -1,12 +1,13 @@
 package com.bccard.qrpay.domain.member;
 
+import com.bccard.qrpay.auth.service.CustomPasswordEncoder;
 import com.bccard.qrpay.domain.common.code.MemberRole;
 import com.bccard.qrpay.domain.common.code.MemberStatus;
 import com.bccard.qrpay.domain.member.repository.MemberQueryRepository;
 import com.bccard.qrpay.domain.member.repository.MemberRepository;
 import com.bccard.qrpay.domain.merchant.Merchant;
 import com.bccard.qrpay.exception.MemberException;
-import com.bccard.qrpay.exception.code.MemberErrorCode;
+import com.bccard.qrpay.exception.code.QrpayErrorCode;
 import com.bccard.qrpay.utils.security.HashCipher;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,10 +25,12 @@ import java.util.Optional;
 public class MemberService {
     private final MemberQueryRepository memberQueryRepository;
     private final MemberRepository memberCUDRepository;
+    private final CustomPasswordEncoder customPasswordEncoder;
+
 
     public Member findByMemberId(String memberId) {
         return memberQueryRepository.findById(memberId)
-                .orElseThrow(() -> new MemberException(MemberErrorCode.MEMBER_NOT_FOUND));
+                .orElseThrow(() -> new MemberException(QrpayErrorCode`.MEMBER_NOT_FOUND));
     }
 
     public Optional<Member> findBy(String memberId) {
@@ -37,7 +40,7 @@ public class MemberService {
 
     public Member findMyLoginId(String loginId) {
         return memberQueryRepository.findByLoginId(loginId)
-                .orElseThrow(() -> new MemberException(MemberErrorCode.MEMBER_NOT_FOUND));
+                .orElseThrow(() -> new MemberException(QrpayErrorCode.MEMBER_NOT_FOUND));
     }
 
     public boolean exist(String loginId) {
@@ -79,10 +82,57 @@ public class MemberService {
     @Transactional
     public Member updatePermissionToCancel(Member member, boolean permissionToCancel) {
         Member m = memberQueryRepository.findById(member.getMemberId()).orElseThrow(
-                () -> new MemberException(MemberErrorCode.MEMBER_NOT_FOUND)
+                () -> new MemberException(QrpayErrorCode.MEMBER_NOT_FOUND)
         );
-        m.updatePermissionToCancel(permissionToCancel);
+
+        boolean nowPermission = m.getPermissionToCancel() != null && m.getPermissionToCancel();
+
+        if (nowPermission != permissionToCancel) {
+            m.updatePermissionToCancel(permissionToCancel);
+        }
         return m;
+    }
+
+    @Transactional
+    public Member updateStatus(Member member, MemberStatus status) {
+        Member m = memberQueryRepository.findById(member.getMemberId()).orElseThrow(
+                () -> new MemberException(QrpayErrorCode.MEMBER_NOT_FOUND)
+        );
+
+        if (m.getStatus() != MemberStatus.CANCELLED && m.getStatus() != status) {
+            m.updateStatus(status);
+        }
+        return m;
+    }
+
+
+    @Transactional
+    public Member updatePassword(Member member, String password) {
+        Member m = memberQueryRepository.findById(member.getMemberId()).orElseThrow(
+                () -> new MemberException(QrpayErrorCode.MEMBER_NOT_FOUND)
+        );
+        m.updatePassword(customPasswordEncoder.encode(password));
+        return m;
+    }
+
+    @Transactional
+    public Member updatePassword(Member member, String currentPassword, String encodedPassword) {
+        Member m = memberQueryRepository.findById(member.getMemberId()).orElseThrow(
+                () -> new MemberException(QrpayErrorCode.MEMBER_NOT_FOUND)
+        );
+
+        if (!m.getHashedPassword().equals(customPasswordEncoder.encode(currentPassword))) {
+//            throw new
+        }
+
+        m.updatePassword(encodedPassword);
+        return m;
+    }
+
+
+    @Transactional
+    public Member save(Member newMember) {
+        return memberCUDRepository.save(newMember);
     }
 
 

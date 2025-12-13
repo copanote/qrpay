@@ -1,7 +1,7 @@
 package com.bccard.qrpay.utils.security;
 
 import com.bccard.qrpay.exception.QrpayCustomException;
-import com.bccard.qrpay.exception.code.SystemErrorCode;
+import com.bccard.qrpay.exception.code.QrpayErrorCode;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -15,7 +15,7 @@ public class HashCipher {
             md = MessageDigest.getInstance("SHA-256");
             md.update(data.getBytes(StandardCharsets.UTF_8));
         } catch (Exception e) {
-            throw new QrpayCustomException(SystemErrorCode.CIPHER_HASH_ERROR);
+            throw new QrpayCustomException(QrpayErrorCode.CIPHER_HASH_ERROR);
         }
         return md.digest();
     }
@@ -33,7 +33,7 @@ public class HashCipher {
             md = MessageDigest.getInstance("SHA-512");
             md.update(data.getBytes(StandardCharsets.UTF_8));
         } catch (Exception e) {
-            throw new QrpayCustomException(SystemErrorCode.CIPHER_HASH_ERROR);
+            throw new QrpayCustomException(QrpayErrorCode.CIPHER_HASH_ERROR);
         }
         return md.digest();
     }

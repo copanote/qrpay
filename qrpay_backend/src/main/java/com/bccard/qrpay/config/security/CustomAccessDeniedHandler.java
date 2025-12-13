@@ -1,7 +1,7 @@
 package com.bccard.qrpay.config.security;
 
 import com.bccard.qrpay.exception.ApiError;
-import com.bccard.qrpay.exception.code.AuthErrorCode;
+import com.bccard.qrpay.exception.code.QrpayErrorCode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -30,7 +30,7 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
 
         log.info("accessDeniedException:{}", accessDeniedException.toString());
 
-        AuthErrorCode ec = AuthErrorCode.INVALID_AUTHORIZATION;
+        QrpayErrorCode ec = QrpayErrorCode.INVALID_AUTHORIZATION;
 
         ApiError apiError = ApiError.builder()
                 .code(ec.getCode())

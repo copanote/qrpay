@@ -3,8 +3,8 @@ package com.bccard.qrpay.exception.handler;
 
 import com.bccard.qrpay.exception.ApiError;
 import com.bccard.qrpay.exception.AuthException;
-import com.bccard.qrpay.exception.code.AuthErrorCode;
 import com.bccard.qrpay.exception.code.ErrorCode;
+import com.bccard.qrpay.exception.code.QrpayErrorCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -49,7 +49,7 @@ public class ApiExceptionHandler {
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<ApiError> handleAuthException(BadCredentialsException e) {
 
-        ErrorCode errorCode = AuthErrorCode.INVALID_CREDENTIAL;
+        ErrorCode errorCode = QrpayErrorCode.INVALID_CREDENTIAL;
 
         ApiError apiError = ApiError.builder()
                 .code(errorCode.getCode())

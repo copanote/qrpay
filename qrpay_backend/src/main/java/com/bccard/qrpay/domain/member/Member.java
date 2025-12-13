@@ -8,6 +8,8 @@ import com.bccard.qrpay.domain.common.converter.MemberStatusConverter;
 import com.bccard.qrpay.domain.common.entity.BaseEntity;
 import com.bccard.qrpay.domain.device.Device;
 import com.bccard.qrpay.domain.merchant.Merchant;
+import com.bccard.qrpay.exception.MemberException;
+import com.bccard.qrpay.exception.code.QrpayErrorCode;
 import com.bccard.qrpay.utils.MpmDateTimeUtils;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -131,7 +133,7 @@ public class Member extends BaseEntity implements Persistable<String> {
         this.affiCoId = "BCQRCPAY";
     }
 
-    @Builder(builderMethodName = "createNormalMember")
+    @Builder(builderMethodName = "createEmployee")
     public Member(String memberId, Merchant merchant, String loginId, String hashedPassword, Boolean permissionToCancel) {
         this.memberId = memberId;
         this.merchant = merchant;
@@ -148,12 +150,22 @@ public class Member extends BaseEntity implements Persistable<String> {
         passwordErrorAt = MpmDateTimeUtils.generateDtmNow(MpmDateTimeUtils.PATTERN_YEAR_TO_DATE);
         passwordErrorCount += 1;
     }
-    
+
     public void updatePermissionToCancel(boolean permissionToCancel) {
         this.permissionToCancel = permissionToCancel;
     }
 
+    public void updateStatus(MemberStatus status) {
+        if (this.status == MemberStatus.CANCELLED) {
+            throw new MemberException(QrpayErrorCode.MEMBER_STATUS_CHANGE_NOT_ALLOWED);
+        }
+        this.status = status;
+    }
 
+    public void updatePassword(String hashedPassword) {
+        this.hashedPassword = hashedPassword;
+        this.passwordChangedAt = MpmDateTimeUtils.generateDtmNow(MpmDateTimeUtils.PATTERN_YEAR_TO_SEC);
+    }
 }
 
 /**

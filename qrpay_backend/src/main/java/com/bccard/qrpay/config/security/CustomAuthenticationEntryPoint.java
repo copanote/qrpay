@@ -1,7 +1,7 @@
 package com.bccard.qrpay.config.security;
 
 import com.bccard.qrpay.exception.ApiError;
-import com.bccard.qrpay.exception.code.AuthErrorCode;
+import com.bccard.qrpay.exception.code.QrpayErrorCode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -29,7 +29,7 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
         log.info("authException:{}", authException.toString());
 
-        AuthErrorCode ec = AuthErrorCode.AUTHENTICATE_REQUIRED;
+        QrpayErrorCode ec = QrpayErrorCode.AUTHENTICATE_REQUIRED;
 
         ApiError apiError = ApiError.builder()
                 .code(ec.getCode())

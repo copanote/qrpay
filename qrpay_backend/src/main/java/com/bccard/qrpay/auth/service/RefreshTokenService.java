@@ -5,7 +5,7 @@ import com.bccard.qrpay.auth.repository.RefreshTokenQueryRepository;
 import com.bccard.qrpay.auth.repository.RefreshTokenRepository;
 import com.bccard.qrpay.auth.security.JwtProvider;
 import com.bccard.qrpay.exception.AuthException;
-import com.bccard.qrpay.exception.code.AuthErrorCode;
+import com.bccard.qrpay.exception.code.QrpayErrorCode;
 import com.bccard.qrpay.utils.security.HashCipher;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,10 +31,10 @@ public class RefreshTokenService {
     public RefreshToken findByHashToken(String hashToken) {
         RefreshToken rt = refreshTokenQueryRepository
                 .findByTokenHash(hashToken)
-                .orElseThrow(() -> new AuthException(AuthErrorCode.NOT_FOUND_REFRESH_TOKEN));
+                .orElseThrow(() -> new AuthException(QrpayErrorCode.NOT_FOUND_REFRESH_TOKEN));
 
         if (!rt.isValid()) {
-            throw new AuthException(AuthErrorCode.INVALID_REFRESH_TOKEN);
+            throw new AuthException(QrpayErrorCode.INVALID_REFRESH_TOKEN);
         }
 
         return rt;

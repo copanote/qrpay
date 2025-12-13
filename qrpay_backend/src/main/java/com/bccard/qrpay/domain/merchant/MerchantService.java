@@ -3,7 +3,7 @@ package com.bccard.qrpay.domain.merchant;
 import com.bccard.qrpay.domain.merchant.repository.MerchantQueryRepository;
 import com.bccard.qrpay.domain.merchant.repository.MerchantRepository;
 import com.bccard.qrpay.exception.MerchantException;
-import com.bccard.qrpay.exception.code.MerchantErrorCode;
+import com.bccard.qrpay.exception.code.QrpayErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -23,7 +23,7 @@ public class MerchantService {
     public Merchant updateMerchantName(Merchant merchant, String updatedMerchantName) {
 
         Merchant fetchedMerchant = merchantQueryRepository.findById(merchant.getMerchantId()).orElseThrow(
-                () -> new MerchantException(MerchantErrorCode.MERCHANT_NOT_FOUND)
+                () -> new MerchantException(QrpayErrorCode.MERCHANT_NOT_FOUND)
         );
 
         fetchedMerchant.updateMerchantName(updatedMerchantName);
@@ -34,7 +34,7 @@ public class MerchantService {
     public Merchant updateVat(Merchant merchant, BigDecimal updatedVat) {
 
         Merchant fetchedMerchant = merchantQueryRepository.findById(merchant.getMerchantId()).orElseThrow(
-                () -> new MerchantException(MerchantErrorCode.MERCHANT_NOT_FOUND)
+                () -> new MerchantException(QrpayErrorCode.MERCHANT_NOT_FOUND)
         );
 
         fetchedMerchant.updateVat(updatedVat);
@@ -45,7 +45,7 @@ public class MerchantService {
     public Merchant updateTip(Merchant merchant, BigDecimal tip) {
 
         Merchant fetchedMerchant = merchantQueryRepository.findById(merchant.getMerchantId()).orElseThrow(
-                () -> new MerchantException(MerchantErrorCode.MERCHANT_NOT_FOUND)
+                () -> new MerchantException(QrpayErrorCode.MERCHANT_NOT_FOUND)
         );
 
         fetchedMerchant.updateTip(tip);

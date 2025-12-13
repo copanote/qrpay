@@ -10,7 +10,7 @@ import com.bccard.qrpay.domain.member.Member;
 import com.bccard.qrpay.domain.member.MemberService;
 import com.bccard.qrpay.exception.AuthException;
 import com.bccard.qrpay.exception.MemberException;
-import com.bccard.qrpay.exception.code.AuthErrorCode;
+import com.bccard.qrpay.exception.code.QrpayErrorCode;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import lombok.RequiredArgsConstructor;
@@ -39,19 +39,19 @@ public class AuthService {
         try {
             member = memberService.findMyLoginId(userId);
         } catch (MemberException e) {
-            throw new AuthException(AuthErrorCode.INVALID_CREDENTIAL);
+            throw new AuthException(QrpayErrorCode.INVALID_CREDENTIAL);
         }
 
         //Todo:: auth policy
         if (member.getPasswordErrorCount() > 3) {
-            throw new AuthException(AuthErrorCode.ACCOUNT_LOCKED_POLICY);
+            throw new AuthException(QrpayErrorCode.ACCOUNT_LOCKED_POLICY);
         }
 
         String hashed = memberService.hashPassword(password);
         if (!member.getHashedPassword().equals(hashed)) {
             member.onPasswordFail();
 //            memberService.passwordFail(member.getMemberId());
-            throw new AuthException(AuthErrorCode.INVALID_CREDENTIAL);
+            throw new AuthException(QrpayErrorCode.INVALID_CREDENTIAL);
         }
 
         String at = jwtProvider.generateToken(member.getMemberId(), member.getRole().toString());
@@ -121,15 +121,15 @@ public class AuthService {
         try {
             claimsJws = jwtProvider.validateAndParse(refreshToken);
         } catch (Exception e) {
-            throw new AuthException(e, AuthErrorCode.INVALID_REFRESH_TOKEN);
+            throw new AuthException(e, QrpayErrorCode.INVALID_REFRESH_TOKEN);
         }
 
         RefreshToken rt = refreshTokenQueryRepository
                 .findByTokenHash(refreshTokenService.hashRefreshToken(refreshToken))
-                .orElseThrow(() -> new AuthException(AuthErrorCode.NOT_FOUND_REFRESH_TOKEN));
+                .orElseThrow(() -> new AuthException(QrpayErrorCode.NOT_FOUND_REFRESH_TOKEN));
 
         if (!rt.isValid()) {
-            throw new AuthException(AuthErrorCode.INVALID_REFRESH_TOKEN);
+            throw new AuthException(QrpayErrorCode.INVALID_REFRESH_TOKEN);
         }
 
         String subject = claimsJws.getPayload().getSubject();
@@ -138,7 +138,7 @@ public class AuthService {
         try {
             member = memberService.findByMemberId(subject);
         } catch (MemberException e) {
-            throw new AuthException(e, AuthErrorCode.INVALID_CREDENTIAL);
+            throw new AuthException(e, QrpayErrorCode.INVALID_CREDENTIAL);
         }
 
         String at = jwtProvider.generateToken(member.getMemberId(), member.getRole().toString());
@@ -162,7 +162,7 @@ public class AuthService {
 
         if (aToken.isBlank() && rToken.isBlank()) {
             //needs authenticate
-            throw new AuthException(AuthErrorCode.NOT_FOUND_REFRESH_TOKEN);
+            throw new AuthException(QrpayErrorCode.NOT_FOUND_REFRESH_TOKEN);
         }
 
         if (!jwtProvider.validateToken(aToken)) {
