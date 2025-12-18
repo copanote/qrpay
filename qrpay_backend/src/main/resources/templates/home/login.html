@@ -2,10 +2,7 @@
 <html lang="ko">
   <head>
     <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, shrink-to-fit=no"
-    />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <title>BC</title>
     <link rel="stylesheet" href="/css/bootstrap.min.css" />
     <link rel="stylesheet" href="/css/common.css" />
@@ -16,70 +13,64 @@
     <script src="/js/qrpay_sdk.dev.js"></script>
     <script>
       // QRPAY SDK 초기화
-
-      document.addEventListener("DOMContentLoaded", function () {
+      document.addEventListener('DOMContentLoaded', function () {
         // SDK 초기화
 
         // 로그인 버튼 클릭 이벤트
-        document
-          .querySelector(".btn-primary")
-          .addEventListener("click", function (e) {
-            e.preventDefault();
-            handleLogin();
-          });
+        document.querySelector('.btn-primary').addEventListener('click', function (e) {
+          e.preventDefault();
+          handleLogin();
+        });
 
         // Enter 키 입력 시에도 로그인
-        document
-          .getElementById("qr-password")
-          .addEventListener("keypress", function (e) {
-            if (e.key === "Enter") {
-              handleLogin();
-            }
-          });
+        document.getElementById('qr-password').addEventListener('keypress', function (e) {
+          if (e.key === 'Enter') {
+            handleLogin();
+          }
+        });
       });
 
       function handleLogin() {
-        const loginId = document.getElementById("qr-loginId").value.trim();
-        const password = document.getElementById("qr-password").value.trim();
+        const loginId = document.getElementById('qr-loginId').value.trim();
+        const password = document.getElementById('qr-password').value.trim();
 
         // 입력값 검증
         if (!loginId) {
-          alert("아이디를 입력해주세요.");
-          document.getElementById("qr-loginId").focus();
+          alert('아이디를 입력해주세요.');
+          document.getElementById('qr-loginId').focus();
           return;
         }
 
         if (!password) {
-          alert("비밀번호를 입력해주세요.");
-          document.getElementById("qr-password").focus();
+          alert('비밀번호를 입력해주세요.');
+          document.getElementById('qr-password').focus();
           return;
         }
 
         qrpaySdk
           .authenticate(loginId, password)
           .then((data) => {
-            console.log("인증 응답:", data);
+            console.log('인증 응답:', data);
 
             if (data.ok) {
               // 토큰이 SDK 내부에 저장됨
-              console.log("로그인 성공");
+              console.log('로그인 성공');
 
               // 메인 페이지 또는 대시보드로 이동
-              window.location.href = "/home/cpmqr";
+              window.location.href = '/pages/home/mpmqr';
             } else {
-              const errorMsg =
-                data.message || data.error?.message || "로그인에 실패했습니다.";
+              const errorMsg = data.message || data.error?.message || '로그인에 실패했습니다.';
               alert(errorMsg);
             }
           })
           .catch((error) => {
-            console.error("로그인 오류:", error);
-            alert("로그인 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.");
+            console.error('로그인 오류:', error);
+            alert('로그인 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
           })
           .finally(() => {
             // 버튼 상태 복구
-            btnLogin.disabled = false;
-            btnLogin.textContent = originalText;
+            // btnLogin.disabled = false;
+            // btnLogin.textContent = originalText;
           });
       }
     </script>
@@ -93,35 +84,18 @@
         <div id="login">
           <div class="container">
             <h1>
-              <img
-                class="img-responsive"
-                src="/images/logo2_red.png"
-                width="63"
-                alt="BC QR FOR SHOP"
-              />
+              <img class="img-responsive" src="/images/logo2_red.png" width="63" alt="BC QR FOR SHOP" />
             </h1>
             <form class="frm type2">
               <div class="form-group">
                 <span class="tit">아이디</span>
-                <input
-                  id="qr-loginId"
-                  type="text"
-                  class="form-control"
-                  placeholder="아이디를 입력해주세요"
-                />
+                <input id="qr-loginId" type="text" class="form-control" placeholder="아이디를 입력해주세요" />
               </div>
               <div class="form-group">
                 <span class="tit">비밀번호</span>
-                <input
-                  id="qr-password"
-                  type="password"
-                  class="form-control"
-                  placeholder="숫자 6자리"
-                />
+                <input id="qr-password" type="password" class="form-control" placeholder="숫자 6자리" />
               </div>
-              <button type="button" class="btn btn-primary btn-lg btn-block">
-                로그인
-              </button>
+              <button type="button" class="btn btn-primary btn-lg btn-block">로그인</button>
             </form>
             <ul class="row lst-login-btm lst-split mt20">
               <li class="col"><a href="#">아이디 찾기</a></li>

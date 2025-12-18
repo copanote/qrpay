@@ -5,7 +5,7 @@ import lombok.Getter;
 @Getter
 public enum MemberRole implements DatabaseCodeConvertable {
     MASTER("Y"),
-    NORMAL("N"),
+    EMPLOYEE("N"),
     UNDEFINED(""),
     ;
 
@@ -19,6 +19,6 @@ public enum MemberRole implements DatabaseCodeConvertable {
         if ("Y".equalsIgnoreCase(code)) {
             return MASTER;
         }
-        return NORMAL;
+        return EMPLOYEE;
     }
 }

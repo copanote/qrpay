@@ -4,13 +4,14 @@ import com.bccard.qrpay.domain.common.code.*;
 import com.bccard.qrpay.domain.common.converter.*;
 import com.bccard.qrpay.domain.common.entity.BaseEntity;
 import jakarta.persistence.*;
+import lombok.*;
+import org.springframework.data.domain.Persistable;
+
 import java.io.Serial;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import lombok.*;
-import org.springframework.data.domain.Persistable;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -104,7 +105,7 @@ public class Merchant extends BaseEntity implements Persistable<String>, Seriali
     private AcquisitionMethod acquisitionMethod;
 
     @Column(name = "VAT_RT", precision = 5, scale = 2)
-    private BigDecimal taxRate;
+    private BigDecimal vatRate;
 
     @Column(name = "SVC_FEE_RT", precision = 5, scale = 2)
     private BigDecimal tipRate;
@@ -168,5 +169,29 @@ public class Merchant extends BaseEntity implements Persistable<String>, Seriali
         this.merTpCode = "ML";
         this.monthlyLimitAmount = 10000000L;
         this.singleLimitAmount = 1000000L;
+    }
+
+    public void updateMerchantName(String merchantName) {
+
+        this.merchantName = merchantName;
+    }
+
+    public void updateVat(BigDecimal vatRate) {
+
+        BigDecimal t = this.tipRate == null ? BigDecimal.ZERO : this.tipRate;
+        BigDecimal v = vatRate == null ? BigDecimal.ZERO : vatRate;
+        if (t.add(v).compareTo(BigDecimal.valueOf(100)) >= 0) {
+            throw new IllegalStateException("부가세 + 봉사료 합계는 100 미만");
+        }
+        this.vatRate = vatRate;
+    }
+
+    public void updateTip(BigDecimal tipRate) {
+        BigDecimal v = this.vatRate == null ? BigDecimal.ZERO : this.vatRate;
+        BigDecimal t = tipRate == null ? BigDecimal.ZERO : tipRate;
+        if (t.add(v).compareTo(BigDecimal.valueOf(100)) >= 0) {
+            throw new IllegalStateException("부가세 + 봉사료 합계는 100 미만");
+        }
+        this.tipRate = tipRate;
     }
 }

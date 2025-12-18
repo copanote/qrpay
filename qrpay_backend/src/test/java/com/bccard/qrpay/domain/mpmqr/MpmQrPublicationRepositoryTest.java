@@ -4,19 +4,27 @@ import com.bccard.qrpay.domain.common.code.PointOfInitMethod;
 import com.bccard.qrpay.domain.member.Member;
 import com.bccard.qrpay.domain.member.repository.MemberRepository;
 import com.bccard.qrpay.domain.merchant.Merchant;
+import com.bccard.qrpay.domain.merchant.repository.MerchantQueryRepository;
 import com.bccard.qrpay.domain.merchant.repository.MerchantRepository;
+import com.bccard.qrpay.domain.mpmqr.dto.PublishBcEmvMpmQrReqDto;
 import com.bccard.qrpay.domain.mpmqr.repository.MpmQrPublicationQueryRepository;
 import com.bccard.qrpay.domain.mpmqr.repository.MpmQrPublicationRepository;
 import com.bccard.qrpay.utils.MpmDateTimeUtils;
 import jakarta.persistence.EntityManager;
-import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @SpringBootTest
 @Transactional
+@Sql("classpath:sql/data.sql")
+@ActiveProfiles("test")
 public class MpmQrPublicationRepositoryTest {
 
     @Autowired
@@ -34,6 +42,12 @@ public class MpmQrPublicationRepositoryTest {
     @Autowired
     MerchantRepository merchantRepository;
 
+    @Autowired
+    private MerchantQueryRepository merchantQueryRepository;
+
+    @Autowired
+    EmvMpmQrService emvMpmQrService;
+
     @Test
     void test_createqrRefId() {
         Long nextSequenceValue = mpmQrPublicationQueryRepository.getNextSequenceValue();
@@ -45,7 +59,7 @@ public class MpmQrPublicationRepositoryTest {
 
         Merchant merchant = Merchant.createNewMerchant().merchantId("m999").build();
 
-        Member member = Member.createNormalMember()
+        Member member = Member.createEmployee()
                 .memberId("999")
                 .merchant(merchant)
                 .loginId("test123")
@@ -55,7 +69,7 @@ public class MpmQrPublicationRepositoryTest {
         MpmQrPublication newMpmQr = MpmQrPublication.createMpmqrPublication()
                 .qrReferenceId("qrref1")
                 .merchant(merchant)
-                .member(member)
+                .memberId("999")
                 .pim(PointOfInitMethod.STATIC)
                 .amount(1000L)
                 .qrData("qrdata")
@@ -77,4 +91,29 @@ public class MpmQrPublicationRepositoryTest {
         System.out.println(qrref1.get().getQrReferenceId());
         System.out.println(qrref2.isPresent());
     }
+
+
+    @Test
+    void test_findStaticmpmQR() {
+        Merchant merchant = Merchant.createNewMerchant().merchantId("m999").build();
+        mpmQrPublicationQueryRepository.findNewestStaticMpmQr(merchant);
+    }
+
+    @Test
+    @Rollback(value = false)
+    void test_publishEmvMpm() {
+
+        String memberId = "TEST11";
+
+        Optional<Merchant> merchant = merchantQueryRepository.findById("900004862");
+
+        PublishBcEmvMpmQrReqDto req = PublishBcEmvMpmQrReqDto.staticEmvMpm(memberId, merchant.get(), "410");
+
+        MpmQrPublication mpmQrPublication = emvMpmQrService.publishBcEmvMpmQr(req);
+        System.out.println(mpmQrPublication.getQrReferenceId());
+        System.out.println(mpmQrPublication.getQrData());
+
+    }
+
+
 }

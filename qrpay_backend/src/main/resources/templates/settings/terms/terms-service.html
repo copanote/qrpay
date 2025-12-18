@@ -1,41 +1,41 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ko">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <title>BC</title>
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <script src="js/jquery-3.3.1.slim.min.js.js"></script>
-    <script src="js/popper.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <link href="css/common.css" rel="stylesheet">
-    <script src="js/common.js"></script>
-</head>
+    <link rel="stylesheet" href="/css/bootstrap.min.css" />
+    <script src="/js/jquery-3.3.1.slim.min.js.js"></script>
+    <script src="/js/popper.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <link href="/css/common.css" rel="stylesheet" />
+    <script src="/js/common.js"></script>
+  </head>
 
-<body>
-<div id="wrap">
-    <!-- header -->
-    <header id="hd">
+  <body>
+    <div id="wrap">
+      <!-- header -->
+      <header id="hd">
         <div class="container">
-            <button type="button" class="icon-back">이전 페이지 이동</button>
-            <h1>약관 및 서비스 정보</h1>
-            <a class="icon-home" href="/">홈으로 이동</a>
+          <button type="button" class="icon-back" onclick="goBack()">이전 페이지 이동</button>
+          <h1>약관 및 서비스 정보</h1>
+          <a class="icon-home" href="javascript:void(0)" onclick="goHome()">홈으로 이동</a>
         </div>
-    </header>
+      </header>
 
-    <!-- container -->
-    <div id="ct">
+      <!-- container -->
+      <div id="ct">
         <!-- 페이지 시작 -->
         <div class="container mt25 mb25">
-            <ul class="lst-btm-border lst-right-arrow">
-                <li><a href="#">BC QR for Shop 약관</a></li>
-                <li><a href="#">앱 접근 권한</a></li>
-                <li><a href="#">서비스 해지</a></li>
-                <li><a href="#">버전 (1.1.1)</a></li>
-            </ul>
+          <ul class="lst-btm-border lst-right-arrow">
+            <li><a href="/pages/settings/terms-service/terms">BC QR for Shop 약관</a></li>
+            <li><a href="/pages/settings/terms-service/permissions">앱 접근 권한</a></li>
+            <li><a href="/pages/settings/terms-service/cancel">서비스 해지</a></li>
+            <li><a href="javascript:void(0)">버전 (1.1.1)</a></li>
+          </ul>
         </div>
         <!--// 페이지 끝 -->
+      </div>
     </div>
-</div>
-</body>
+  </body>
 </html>

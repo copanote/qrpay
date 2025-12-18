@@ -4,16 +4,17 @@ import lombok.Getter;
 
 @Getter
 public enum PointOfInitMethod implements DatabaseCodeConvertable {
-    STATIC("11"),
-    DYNAMIC("12"),
-
-    UNKNOWN(""),
+    STATIC("11", "고정형(금액없음)"),
+    DYNAMIC("12", "변동형(금액존재)"),
+    UNKNOWN("", ""),
     ;
 
     private final String dbCode;
+    private final String desc;
 
-    PointOfInitMethod(String dbCode) {
+    PointOfInitMethod(String dbCode, String desc) {
         this.dbCode = dbCode;
+        this.desc = desc;
     }
 
     public static PointOfInitMethod of(String code) {

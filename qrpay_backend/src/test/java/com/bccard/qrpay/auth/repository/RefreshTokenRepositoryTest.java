@@ -2,15 +2,18 @@ package com.bccard.qrpay.auth.repository;
 
 import com.bccard.qrpay.auth.domain.RefreshToken;
 import jakarta.persistence.EntityManager;
-import java.time.Instant;
-import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.Instant;
+import java.util.Optional;
 
 @SpringBootTest
 @Transactional
+@ActiveProfiles("test")
 public class RefreshTokenRepositoryTest {
 
     @Autowired
@@ -38,5 +41,11 @@ public class RefreshTokenRepositoryTest {
 
         Optional<RefreshToken> tokenhash = refreshTokenQueryRepository.findByTokenHash("tokenhash");
         System.out.println(tokenhash.get().getCreatedAt());
+    }
+
+    @Test
+    void test_revoke() {
+        refreshTokenRepository.revokeAllRefreshTokenByMemberId("111", 11L, "test");
+        em.flush();
     }
 }

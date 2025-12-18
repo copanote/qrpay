@@ -1,8 +1,8 @@
 package com.bccard.qrpay.domain.transaction;
 
 public class MerchantMonthlyApproval {
-    private String merMgmtNo; // pk
-    private String yaerMonth; // pk
+    private String merMgmtNo;  //pk
+    private String yaerMonth;  //pk
     private Long authAmt;
     private Long cnclAmt;
 }

@@ -1,0 +1,1 @@
+// removed gnb js (reverted)

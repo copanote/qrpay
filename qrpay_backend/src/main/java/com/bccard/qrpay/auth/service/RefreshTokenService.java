@@ -5,13 +5,16 @@ import com.bccard.qrpay.auth.repository.RefreshTokenQueryRepository;
 import com.bccard.qrpay.auth.repository.RefreshTokenRepository;
 import com.bccard.qrpay.auth.security.JwtProvider;
 import com.bccard.qrpay.exception.AuthException;
-import com.bccard.qrpay.exception.code.AuthErrorCode;
+import com.bccard.qrpay.exception.code.QrpayErrorCode;
 import com.bccard.qrpay.utils.security.HashCipher;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.Instant;
+import java.util.Optional;
+
 
 @Slf4j
 @RequiredArgsConstructor
@@ -29,10 +32,10 @@ public class RefreshTokenService {
     public RefreshToken findByHashToken(String hashToken) {
         RefreshToken rt = refreshTokenQueryRepository
                 .findByTokenHash(hashToken)
-                .orElseThrow(() -> new AuthException(AuthErrorCode.NOT_FOUND_REFRESH_TOKEN));
+                .orElseThrow(() -> new AuthException(QrpayErrorCode.NOT_FOUND_REFRESH_TOKEN));
 
         if (!rt.isValid()) {
-            throw new AuthException(AuthErrorCode.INVALID_REFRESH_TOKEN);
+            throw new AuthException(QrpayErrorCode.INVALID_REFRESH_TOKEN);
         }
 
         return rt;
@@ -44,6 +47,12 @@ public class RefreshTokenService {
         Optional<RefreshToken> optionalRefreshToken = refreshTokenQueryRepository.findByTokenHash(hashed);
         optionalRefreshToken.ifPresent(rt -> rt.revoke(revokeReason));
     }
+
+    @Transactional
+    public int revokeAll(String memberId, String reason) {
+        return refreshTokenCudRepository.revokeAllRefreshTokenByMemberId(memberId, Instant.now().toEpochMilli(), reason);
+    }
+
 
     @Transactional
     public void refresh(String refreshToken) {

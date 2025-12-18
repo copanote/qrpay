@@ -6,11 +6,12 @@ import com.bccard.qrpay.domain.device.repository.DeviceRepository;
 import com.bccard.qrpay.domain.member.Member;
 import com.bccard.qrpay.domain.merchant.Merchant;
 import jakarta.persistence.EntityManager;
-import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @SpringBootTest
 @Transactional
@@ -30,7 +31,7 @@ public class DeviceRepositoryTest {
 
         Merchant merchant = Merchant.createNewMerchant().merchantId("m999").build();
 
-        Member member = Member.createNormalMember()
+        Member member = Member.createEmployee()
                 .memberId("999")
                 .merchant(merchant)
                 .loginId("test123")
@@ -73,5 +74,6 @@ public class DeviceRepositoryTest {
     }
 
     @Test
-    void test_findByMemeberId() {}
+    void test_findByMemeberId() {
+    }
 }

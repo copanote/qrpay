@@ -9,7 +9,6 @@ import lombok.ToString;
 public class RequestLogin {
     @NotBlank
     private String loginId;
-
     @NotBlank
     private String password;
 }

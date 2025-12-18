@@ -8,6 +8,8 @@ import com.bccard.qrpay.domain.common.converter.MemberStatusConverter;
 import com.bccard.qrpay.domain.common.entity.BaseEntity;
 import com.bccard.qrpay.domain.device.Device;
 import com.bccard.qrpay.domain.merchant.Merchant;
+import com.bccard.qrpay.exception.MemberException;
+import com.bccard.qrpay.exception.code.QrpayErrorCode;
 import com.bccard.qrpay.utils.MpmDateTimeUtils;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -60,10 +62,10 @@ public class Member extends BaseEntity implements Persistable<String> {
 
     @Column(name = "AUTH_CNCL_ABLE_YN", length = 1)
     @Convert(converter = BooleanYnConverter.class)
-    private Boolean authCnclAbleYn;
+    private Boolean permissionToCancel;
 
     @Column(name = "AFFI_CO_ID", length = 40)
-    private String affiCoId; // BCQRCPAY
+    private String affiCoId; //BCQRCPAY
 
     @Column(name = "RCRU_PE_NO", length = 10)
     private String referrerId;
@@ -83,28 +85,29 @@ public class Member extends BaseEntity implements Persistable<String> {
 
     @Override
     public String toString() {
-        return "Member{" + "memberId='"
-                + memberId + '\'' + ", loginId='"
-                + loginId + '\'' + ", hashedPassword='"
-                + hashedPassword + '\'' + ", role="
-                + role + ", status="
-                + status + ", lastLoginAt='"
-                + lastLoginAt + '\'' + ", passwordErrorCount="
-                + passwordErrorCount + ", passwordErrorAt='"
-                + passwordErrorAt + '\'' + ", passwordChangedAt='"
-                + passwordChangedAt + '\'' + ", termsAgreeInfo='"
-                + termsAgreeInfo + '\'' + ", authCnclAbleYn="
-                + authCnclAbleYn + ", affiCoId='"
-                + affiCoId + '\'' + ", referrerId='"
-                + referrerId + '\'' + ", termsAgreedAt='"
-                + termsAgreedAt + '\'' + ", email='"
-                + email + '\'' + ", withdrawalAt='"
-                + withdrawalAt + '\'' + ", device="
-                + device + ", createdBy='"
-                + createdBy + '\'' + ", createdAt='"
-                + createdAt + '\'' + ", lastModifiedBy='"
-                + lastModifiedBy + '\'' + ", lastModifiedAt='"
-                + lastModifiedAt + '\'' + '}';
+        return "Member{" +
+                "memberId='" + memberId + '\'' +
+                ", loginId='" + loginId + '\'' +
+                ", hashedPassword='" + hashedPassword + '\'' +
+                ", role=" + role +
+                ", status=" + status +
+                ", lastLoginAt='" + lastLoginAt + '\'' +
+                ", passwordErrorCount=" + passwordErrorCount +
+                ", passwordErrorAt='" + passwordErrorAt + '\'' +
+                ", passwordChangedAt='" + passwordChangedAt + '\'' +
+                ", termsAgreeInfo='" + termsAgreeInfo + '\'' +
+                ", authCnclAbleYn=" + permissionToCancel +
+                ", affiCoId='" + affiCoId + '\'' +
+                ", referrerId='" + referrerId + '\'' +
+                ", termsAgreedAt='" + termsAgreedAt + '\'' +
+                ", email='" + email + '\'' +
+                ", withdrawalAt='" + withdrawalAt + '\'' +
+                ", device=" + device +
+                ", createdBy='" + createdBy + '\'' +
+                ", createdAt='" + createdAt + '\'' +
+                ", lastModifiedBy='" + lastModifiedBy + '\'' +
+                ", lastModifiedAt='" + lastModifiedAt + '\'' +
+                '}';
     }
 
     @Override
@@ -113,14 +116,7 @@ public class Member extends BaseEntity implements Persistable<String> {
     }
 
     @Builder(builderMethodName = "createMasterMemeber")
-    public Member(
-            String memberId,
-            Merchant merchant,
-            String loginId,
-            String hashedPassword,
-            String termsAgreeInfo,
-            String referrerId,
-            String email) {
+    public Member(String memberId, Merchant merchant, String loginId, String hashedPassword, String termsAgreeInfo, String referrerId, String email) {
         this.memberId = memberId;
         this.merchant = merchant;
         this.loginId = loginId;
@@ -129,22 +125,23 @@ public class Member extends BaseEntity implements Persistable<String> {
         this.referrerId = referrerId;
         this.email = email;
 
+
         this.role = MemberRole.MASTER;
         this.status = MemberStatus.ACTIVE;
         this.termsAgreedAt = MpmDateTimeUtils.generateDtmNow(MpmDateTimeUtils.FORMATTER_YEAR_TO_SEC);
-        this.authCnclAbleYn = Boolean.TRUE;
+        this.permissionToCancel = Boolean.TRUE;
         this.affiCoId = "BCQRCPAY";
     }
 
-    @Builder(builderMethodName = "createNormalMember")
-    public Member(String memberId, Merchant merchant, String loginId, String hashedPassword, Boolean authCnclAbleYn) {
+    @Builder(builderMethodName = "createEmployee")
+    public Member(String memberId, Merchant merchant, String loginId, String hashedPassword, Boolean permissionToCancel) {
         this.memberId = memberId;
         this.merchant = merchant;
         this.loginId = loginId;
         this.hashedPassword = hashedPassword;
-        this.authCnclAbleYn = authCnclAbleYn;
+        this.permissionToCancel = permissionToCancel;
 
-        this.role = MemberRole.NORMAL;
+        this.role = MemberRole.EMPLOYEE;
         this.status = MemberStatus.ACTIVE;
         this.affiCoId = "BCQRCPAY";
     }
@@ -152,6 +149,22 @@ public class Member extends BaseEntity implements Persistable<String> {
     public void onPasswordFail() {
         passwordErrorAt = MpmDateTimeUtils.generateDtmNow(MpmDateTimeUtils.PATTERN_YEAR_TO_DATE);
         passwordErrorCount += 1;
+    }
+
+    public void updatePermissionToCancel(boolean permissionToCancel) {
+        this.permissionToCancel = permissionToCancel;
+    }
+
+    public void updateStatus(MemberStatus status) {
+        if (this.status == MemberStatus.CANCELLED) {
+            throw new MemberException(QrpayErrorCode.MEMBER_STATUS_CHANGE_NOT_ALLOWED);
+        }
+        this.status = status;
+    }
+
+    public void updatePassword(String hashedPassword) {
+        this.hashedPassword = hashedPassword;
+        this.passwordChangedAt = MpmDateTimeUtils.generateDtmNow(MpmDateTimeUtils.PATTERN_YEAR_TO_SEC);
     }
 }
 

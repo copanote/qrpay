@@ -1,21 +1,23 @@
 package com.bccard.qrpay.auth.contoller;
 
 import com.bccard.qrpay.auth.contoller.dto.RequestLogin;
+import com.bccard.qrpay.auth.contoller.dto.ResponseRevoke;
 import com.bccard.qrpay.auth.domain.CustomUserDetails;
 import com.bccard.qrpay.auth.domain.JwtToken;
 import com.bccard.qrpay.auth.service.AuthService;
 import com.bccard.qrpay.domain.member.Member;
+import com.bccard.qrpay.domain.member.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
 
 @Slf4j
 @RequiredArgsConstructor
@@ -24,6 +26,7 @@ public class AuthController {
 
     private final AuthenticationManager authenticationManager;
     private final AuthService authService;
+    private final MemberService memberService;
 
     @PostMapping(value = "/auth/login")
     @ResponseBody
@@ -39,18 +42,59 @@ public class AuthController {
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
 
         Member member = userDetails.qrpayMember();
-        JwtToken jwt =
-                authService.createJwt(member.getMemberId(), member.getRole().toString());
+        JwtToken jwt = authService.createJwt(member.getMemberId(), member.getRole().toString());
         log.info("{}", jwt.toString());
 
-        return ResponseEntity.ok(jwt);
+        ResponseCookie cookie_ac = ResponseCookie.from("accessToken", jwt.getAccessToken())
+                .httpOnly(false) // JavaScript 접근 방지 (XSS 공격 방어)
+                .secure(false)   // HTTPS 통신에서만 전송 (Secure 속성)
+                .path("/")      // 쿠키가 유효한 경로 설정 (전체 경로)
+                .maxAge(60 * 30) // 쿠키 유효기간 설정 (예: 30분)
+                .sameSite("Lax") // CSRF 방어를 위한 SameSite 설정 (선택 사항)
+                .build();
+
+        ResponseCookie cookie_rt = ResponseCookie.from("refreshToken", jwt.getRefreshToken())
+                .httpOnly(false) // JavaScript 접근 방지 (XSS 공격 방어)
+                .secure(false)   // HTTPS 통신에서만 전송 (Secure 속성)
+                .path("/")      // 쿠키가 유효한 경로 설정 (전체 경로)
+                .maxAge(60 * 30) // 쿠키 유효기간 설정 (예: 30분)
+                .sameSite("Lax") // CSRF 방어를 위한 SameSite 설정 (선택 사항)
+                .build();
+
+        ResponseCookie cookie_memId = ResponseCookie.from("memId", member.getMemberId())
+                .httpOnly(false) // JavaScript 접근 방지 (XSS 공격 방어)
+                .secure(false)   // HTTPS 통신에서만 전송 (Secure 속성)
+                .path("/")      // 쿠키가 유효한 경로 설정 (전체 경로)
+                .maxAge(60 * 60 * 365) // 쿠키 유효기간 설정 (예: 1Year)
+                .sameSite("Lax") // CSRF 방어를 위한 SameSite 설정 (선택 사항)
+                .build();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.SET_COOKIE, cookie_ac.toString());
+        headers.add(HttpHeaders.SET_COOKIE, cookie_rt.toString());
+        headers.add(HttpHeaders.SET_COOKIE, cookie_memId.toString());
+
+
+        return ResponseEntity.ok().headers(headers).body(jwt);
     }
 
     @PostMapping(value = "/auth/refresh")
     @ResponseBody
     public ResponseEntity<?> refresh(@RequestBody JwtToken refreshToken) {
         JwtToken newAccessToken = authService.refresh(refreshToken.getRefreshToken());
-        return ResponseEntity.ok(newAccessToken);
+
+        ResponseCookie cookie_ac = ResponseCookie.from("accessToken", newAccessToken.getAccessToken())
+                .httpOnly(false) // JavaScript 접근 방지 (XSS 공격 방어)
+                .secure(false)   // HTTPS 통신에서만 전송 (Secure 속성)
+                .path("/")      // 쿠키가 유효한 경로 설정 (전체 경로)
+                .maxAge(60 * 30) // 쿠키 유효기간 설정 (예: 30분)
+                .sameSite("Lax") // CSRF 방어를 위한 SameSite 설정 (선택 사항)
+                .build();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.SET_COOKIE, cookie_ac.toString());
+
+        return ResponseEntity.ok().headers(headers).body(newAccessToken);
     }
 
     @PostMapping(value = "/auth/logout")
@@ -63,8 +107,8 @@ public class AuthController {
 
         log.info("{}", refreshToken);
         authService.logout(refreshToken.getRefreshToken());
-        // history
-
+        //history
+        
         return ResponseEntity.ok().build();
     }
 
@@ -79,11 +123,26 @@ public class AuthController {
 
     @PostMapping(value = "/auth/revoke")
     @ResponseBody
-    public void revoke(@RequestBody JwtToken refreshToken) {
+    public ResponseEntity<?> revoke(@RequestBody JwtToken refreshToken) {
         /*
         (옵션) POST /auth/revoke 관리자용: 특정 토큰/세션 무효화
          */
         log.info("{}", refreshToken);
         authService.revoke(refreshToken.getRefreshToken());
+        return ResponseEntity.ok().build();
     }
+
+    @GetMapping(value = "/auth/revoke/merchant/{merchantId}")
+    @ResponseBody
+    public ResponseEntity<?> revokeAll(@PathVariable("merchantId") String merchantId) {
+
+        if (merchantId == null || merchantId.isEmpty()) {
+            return ResponseEntity.ok(ResponseRevoke.builder().count(0).build());
+        }
+        int cnt = authService.revokeAllByMerchant(merchantId, "ADMINI_REVOKE");
+
+        return ResponseEntity.ok(ResponseRevoke.builder().count(cnt).build());
+    }
+
+
 }

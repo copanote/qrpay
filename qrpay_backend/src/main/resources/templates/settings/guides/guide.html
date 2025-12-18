@@ -1,292 +1,295 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ko">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>BC</title>
-<link rel="stylesheet" href="css/bootstrap.min.css">
-<script src="js/jquery-3.3.1.slim.min.js.js"></script>
-<script src="js/popper.min.js"></script>
-<script src="js/bootstrap.min.js"></script>
-<link href="css/common.css" rel="stylesheet">
-<script src="js/common.js"></script>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>BC</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css" />
+    <script src="/js/jquery-3.3.1.slim.min.js.js"></script>
+    <script src="/js/popper.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <link href="/css/common.css" rel="stylesheet" />
+    <script src="/js/common.js"></script>
+    <!-- swiper -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.5.0/css/swiper.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.5.0/js/swiper.min.js"></script>
+  </head>
+  <body>
+    <div id="wrap">
+      <!-- header -->
+      <header id="hd">
+        <div class="container">
+          <button type="button" class="icon-back" onclick="goBack()">이전 페이지 이동</button>
+          <h1>
+            이용가이드
+            <button type="button" class="icon-help ml5">도움말</button>
+          </h1>
+          <a class="icon-home" href="javascript:void(0)" onclick="goHome()">홈으로 이동</a>
+        </div>
+      </header>
 
-<!-- swiper --->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.5.0/css/swiper.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.5.0/js/swiper.min.js"></script>
-</head>
-
-<body>
-<div id="wrap">
-	<!-- header -->
-	<header id="hd">
-		<div class="container">
-			<button type="button" class="icon-back">이전 페이지 이동</button>
-			<h1>이용가이드 <button type="button" class="icon-help ml5">도움말</button></h1>
-			<a class="icon-home" href="/">홈으로 이동</a>
-		</div>
-	</header>
-	
-	<!-- container -->
-	<div id="ct">
-<!-- 페이지 시작 -->
-<div class="ft-txt-wrp">
-    <div class="container pt25">
-        <ul class="lst-btm-border">
-            <li class="bx-detail-collapse type2">
+      <!-- container -->
+      <div id="ct">
+        <!-- 페이지 시작 -->
+        <div class="ft-txt-wrp">
+          <div class="container pt25">
+            <ul class="lst-btm-border">
+              <li class="bx-detail-collapse type2">
                 <a class="btn-collapse collapsed" data-toggle="collapse" href="#collapse1">이용 가능 카드사</a>
                 <div id="collapse1" class="collapse">
-                    <div class="text-center">
-                        <!-- 2019-07-25 -->
-                        <p class="h6 pt40 pb10">BC QR for Shop의 QR결제는<br />아래 앱으로 이용가능합니다.</p><!--// 2019-07-18 -->
-						<p class="h6 pb40">※ 사업자 미등록 개인 가맹점인 경우, 페이북(BC카드)과<br />云闪付(유니온페이)를 통한 QR결제만 가능합니다.</p><!--// 2021-07-29 -->
-						<!--// 2019-07-25 -->
-                        <img src="images/guide1.jpg" height="333" alt="">
-                    </div>
+                  <div class="text-center">
+                    <!-- 2019-07-25 -->
+                    <p class="h6 pt40 pb10">BC QR for Shop의 QR결제는<br />아래 앱으로 이용가능합니다.</p>
+                    <!--// 2019-07-18 -->
+                    <p class="h6 pb40">※ 사업자 미등록 개인 가맹점인 경우, 페이북(BC카드)과<br />云闪付(유니온페이)를 통한 QR결제만 가능합니다.</p>
+                    <!--// 2021-07-29 -->
+                    <!--// 2019-07-25 -->
+                    <img src="/images/guide1.jpg" height="333" alt="" />
+                  </div>
                 </div>
-            </li>
-            <li class="bx-detail-collapse type2">
+              </li>
+              <li class="bx-detail-collapse type2">
                 <a class="btn-collapse collapsed js-slide" data-toggle="collapse" href="#collapse2">QR결제하는 방법(금액 미포함)</a>
                 <div id="collapse2" class="collapse">
-                	<div class="text-center pt30">
-               			<div class="guide-slide slide swiper-container">
-               				<div class="swiper-page"></div>
-               				<div class="swiper-wrapper">
-               					<div class="swiper-slide">
-               						<strong class="h3">STEP 1</strong>
-                					<p class="h6">금액이 미포함된 QR코드를 고객이 스캔</p>
-               						<img src="images/guide2.jpg" height="333" alt="">
-               					</div>
-               					<div class="swiper-slide">
-               						<strong class="h3">STEP 2</strong>
-                					<p class="h6">고객이 직접 금액과 일시불/할부를 설정하여 결제</p>
-               						<img src="images/guide2_2.jpg" height="333" alt="">
-               					</div>
-               					<div class="swiper-slide">
-               						<strong class="h3">STEP 3</strong>
-                					<p class="h6">결제 완료</p>
-               						<img src="images/guide2_3.jpg" height="333" alt="">
-               					</div>
-               				</div>
-               			</div>
-                	</div>
+                  <div class="text-center pt30">
+                    <div class="guide-slide slide swiper-container">
+                      <div class="swiper-page"></div>
+                      <div class="swiper-wrapper">
+                        <div class="swiper-slide">
+                          <strong class="h3">STEP 1</strong>
+                          <p class="h6">금액이 미포함된 QR코드를 고객이 스캔</p>
+                          <img src="/images/guide2.jpg" height="333" alt="" />
+                        </div>
+                        <div class="swiper-slide">
+                          <strong class="h3">STEP 2</strong>
+                          <p class="h6">고객이 직접 금액과 일시불/할부를 설정하여 결제</p>
+                          <img src="/images/guide2_2.jpg" height="333" alt="" />
+                        </div>
+                        <div class="swiper-slide">
+                          <strong class="h3">STEP 3</strong>
+                          <p class="h6">결제 완료</p>
+                          <img src="/images/guide2_3.jpg" height="333" alt="" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-            </li>
-            <li class="bx-detail-collapse type2">
+              </li>
+              <li class="bx-detail-collapse type2">
                 <a class="btn-collapse collapsed js-slide" data-toggle="collapse" href="#collapse3">QR결제하는 방법(금액 포함)</a>
                 <div id="collapse3" class="collapse">
-                	<div class="text-center pt30">
-               			<div class="guide-slide slide2 swiper-container">
-               				<div class="swiper-page"></div>
-               				<div class="swiper-wrapper">
-								<!-- 2019-07-08 : STEP 3 삭제, STEP456을 STEP345로 수정-->
-               					<div class="swiper-slide">
-               						<strong class="h3">STEP 1</strong>
-                					<p class="h6">결제금액 입력란을 터치</p>
-               						<img src="images/guide3.jpg" height="333" alt="">
-               					</div>
-               					<div class="swiper-slide">
-               						<strong class="h3">STEP 2</strong>
-                					<p class="h6">결제금액 입력</p>
-               						<img src="images/guide3_2.jpg" height="333" alt="">
-               					</div>
-               					<div class="swiper-slide">
-               						<strong class="h3">STEP 3</strong>
-                					<p class="h6">금액이 포함된 QR코드를 고객이 스캔</p>
-               						<img src="images/guide3_4.jpg" height="333" alt="">
-               					</div>
-               					<div class="swiper-slide">
-               						<strong class="h3">STEP 4</strong>
-                					<p class="h6">결제인증 후 완료</p>
-               						<img src="images/guide3_5.jpg" height="333" alt="">
-               					</div>
-               					<div class="swiper-slide">
-               						<strong class="h3">STEP 5</strong>
-                					<p class="h6">QR초기화를 통해 QR코드의 금액 정보 초기화</p>
-               						<img src="images/guide3_6.jpg" height="333" alt="">
-               					</div>
-								<!--// 2019-07-08 -->
-               				</div>
-               			</div>
-                	</div>
+                  <div class="text-center pt30">
+                    <div class="guide-slide slide2 swiper-container">
+                      <div class="swiper-page"></div>
+                      <div class="swiper-wrapper">
+                        <!-- 2019-07-08 : STEP 3 삭제, STEP456을 STEP345로 수정-->
+                        <div class="swiper-slide">
+                          <strong class="h3">STEP 1</strong>
+                          <p class="h6">결제금액 입력란을 터치</p>
+                          <img src="/images/guide3.jpg" height="333" alt="" />
+                        </div>
+                        <div class="swiper-slide">
+                          <strong class="h3">STEP 2</strong>
+                          <p class="h6">결제금액 입력</p>
+                          <img src="/images/guide3_2.jpg" height="333" alt="" />
+                        </div>
+                        <div class="swiper-slide">
+                          <strong class="h3">STEP 3</strong>
+                          <p class="h6">금액이 포함된 QR코드를 고객이 스캔</p>
+                          <img src="/images/guide3_4.jpg" height="333" alt="" />
+                        </div>
+                        <div class="swiper-slide">
+                          <strong class="h3">STEP 4</strong>
+                          <p class="h6">결제인증 후 완료</p>
+                          <img src="/images/guide3_5.jpg" height="333" alt="" />
+                        </div>
+                        <div class="swiper-slide">
+                          <strong class="h3">STEP 5</strong>
+                          <p class="h6">QR초기화를 통해 QR코드의 금액 정보 초기화</p>
+                          <img src="/images/guide3_6.jpg" height="333" alt="" />
+                        </div>
+                        <!--// 2019-07-08 -->
+                      </div>
+                    </div>
+                  </div>
                 </div>
-            </li>
-			<!-- 2019-07-18 -->
-			<li class="bx-detail-collapse type2">
-				<a class="btn-collapse collapsed js-slide" data-toggle="collapse" href="#collapse7">QR스캔 결제하는 방법</a>
-				<div id="collapse7" class="collapse">
-					<div class="text-center pt30">
-			   			<div class="guide-slide slide6 swiper-container">
-			   				<div class="swiper-page"></div>
-			   				<div class="swiper-wrapper">
-			   					<div class="swiper-slide">
-			   						<strong class="h3">STEP 1</strong>
-									<p class="h6">QR스캔 터치</p>
-			   						<img src="images/guide8.jpg" height="333" alt="">
-			   					</div>
-			   					<div class="swiper-slide">
-			   						<strong class="h3">STEP 2</strong>
-									<p class="h6">페이북 QR 스캔</p>
-			   						<img src="images/guide8_2.jpg" height="333" alt="">
-			   					</div>
-			   					<div class="swiper-slide">
-			   						<strong class="h3">STEP 3</strong>
-									<p class="h6">결제금액 입력</p>
-			   						<img src="images/guide8_3.jpg" height="333" alt="">
-			   					</div>
-			   					<div class="swiper-slide">
-			   						<strong class="h3">STEP 4</strong>
-									<p class="h6">결제 완료</p>
-			   						<img src="images/guide8_4.jpg" height="333" alt="">
-			   					</div>
-			   				</div>
-			   			</div>
-					</div>
-				</div>	
-			</li>
-			<!--// 2019-07-18 -->
-            <li class="bx-detail-collapse type2">
-                <a class="btn-collapse collapsed js-slide" data-toggle="collapse" href="#collapse4">결제 취소하는 방법</a><!-- 2019-07-29 -->
+              </li>
+              <!-- 2019-07-18 -->
+              <li class="bx-detail-collapse type2">
+                <a class="btn-collapse collapsed js-slide" data-toggle="collapse" href="#collapse7">QR스캔 결제하는 방법</a>
+                <div id="collapse7" class="collapse">
+                  <div class="text-center pt30">
+                    <div class="guide-slide slide6 swiper-container">
+                      <div class="swiper-page"></div>
+                      <div class="swiper-wrapper">
+                        <div class="swiper-slide">
+                          <strong class="h3">STEP 1</strong>
+                          <p class="h6">QR스캔 터치</p>
+                          <img src="/images/guide8.jpg" height="333" alt="" />
+                        </div>
+                        <div class="swiper-slide">
+                          <strong class="h3">STEP 2</strong>
+                          <p class="h6">페이북 QR 스캔</p>
+                          <img src="/images/guide8_2.jpg" height="333" alt="" />
+                        </div>
+                        <div class="swiper-slide">
+                          <strong class="h3">STEP 3</strong>
+                          <p class="h6">결제금액 입력</p>
+                          <img src="/images/guide8_3.jpg" height="333" alt="" />
+                        </div>
+                        <div class="swiper-slide">
+                          <strong class="h3">STEP 4</strong>
+                          <p class="h6">결제 완료</p>
+                          <img src="/images/guide8_4.jpg" height="333" alt="" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </li>
+              <!--// 2019-07-18 -->
+              <li class="bx-detail-collapse type2">
+                <a class="btn-collapse collapsed js-slide" data-toggle="collapse" href="#collapse4">결제 취소하는 방법</a
+                ><!-- 2019-07-29 -->
                 <div id="collapse4" class="collapse">
-                	<div class="text-center pt30">
-               			<div class="guide-slide slide3 swiper-container">
-               				<div class="swiper-page"></div>
-               				<div class="swiper-wrapper">
-               					<div class="swiper-slide">
-               						<strong class="h3">STEP 1</strong>
-                					<p class="h6">거래내역 메뉴 터치</p>
-               						<img src="images/guide4.jpg" height="333" alt="">
-               					</div>
-               					<div class="swiper-slide">
-               						<strong class="h3">STEP 2</strong>
-                					<p class="h6">취소하고 싶은 거래내역 조회하고 터치</p>
-               						<img src="images/guide4_2.jpg" height="333" alt="">
-               					</div>
-               					<div class="swiper-slide">
-               						<strong class="h3">STEP 3</strong>
-                					<p class="h6">결제 내역 하단에 '승인취소' 터치</p>
-               						<img src="images/guide4_3.jpg" height="333" alt="">
-               					</div>
-               				</div>
-               			</div>
-                	</div>
+                  <div class="text-center pt30">
+                    <div class="guide-slide slide3 swiper-container">
+                      <div class="swiper-page"></div>
+                      <div class="swiper-wrapper">
+                        <div class="swiper-slide">
+                          <strong class="h3">STEP 1</strong>
+                          <p class="h6">거래내역 메뉴 터치</p>
+                          <img src="/images/guide4.jpg" height="333" alt="" />
+                        </div>
+                        <div class="swiper-slide">
+                          <strong class="h3">STEP 2</strong>
+                          <p class="h6">취소하고 싶은 거래내역 조회하고 터치</p>
+                          <img src="/images/guide4_2.jpg" height="333" alt="" />
+                        </div>
+                        <div class="swiper-slide">
+                          <strong class="h3">STEP 3</strong>
+                          <p class="h6">결제 내역 하단에 '승인취소' 터치</p>
+                          <img src="/images/guide4_3.jpg" height="333" alt="" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-            </li>
-            <li class="bx-detail-collapse type2">
+              </li>
+              <li class="bx-detail-collapse type2">
                 <a class="btn-collapse collapsed js-slide" data-toggle="collapse" href="#collapse5">거래내역 관리 이용 방법</a>
                 <div id="collapse5" class="collapse">
-                	<div class="text-center pt30">
-               			<div class="guide-slide slide4 swiper-container">
-               				<div class="swiper-page"></div>
-               				<div class="swiper-wrapper">
-               					<div class="swiper-slide">
-               						<strong class="h3">STEP 1</strong>
-                					<p class="h6">거래내역 메뉴 터치</p>
-               						<img src="images/guide5.jpg" height="333" alt="">
-               					</div>
-               					<div class="swiper-slide">
-               						<strong class="h3">STEP 2</strong>
-                					<p class="h6">상세조회 터치</p>
-               						<img src="images/guide5_2.jpg" height="333" alt="">
-               					</div>
-               					<div class="swiper-slide">
-               						<strong class="h3">STEP 3</strong>
-                					<p class="h6">승인번호/브랜드/거래상태/거래일자에 따라 거래내역 조회</p>
-               						<img src="images/guide5_3.jpg" height="333" alt="">
-               					</div>
-               				</div>
-               			</div>
-                	</div>
+                  <div class="text-center pt30">
+                    <div class="guide-slide slide4 swiper-container">
+                      <div class="swiper-page"></div>
+                      <div class="swiper-wrapper">
+                        <div class="swiper-slide">
+                          <strong class="h3">STEP 1</strong>
+                          <p class="h6">거래내역 메뉴 터치</p>
+                          <img src="/images/guide5.jpg" height="333" alt="" />
+                        </div>
+                        <div class="swiper-slide">
+                          <strong class="h3">STEP 2</strong>
+                          <p class="h6">상세조회 터치</p>
+                          <img src="/images/guide5_2.jpg" height="333" alt="" />
+                        </div>
+                        <div class="swiper-slide">
+                          <strong class="h3">STEP 3</strong>
+                          <p class="h6">승인번호/브랜드/거래상태/거래일자에 따라 거래내역 조회</p>
+                          <img src="/images/guide5_3.jpg" height="333" alt="" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-            </li>
-            <li class="bx-detail-collapse type2">
+              </li>
+              <li class="bx-detail-collapse type2">
                 <a class="btn-collapse collapsed js-slide" data-toggle="collapse" href="#collapse6">승인 알림 ON/OFF 방법</a>
                 <div id="collapse6" class="collapse">
-                	<div class="text-center pt30">
-               			<div class="guide-slide slide5 swiper-container">
-               				<div class="swiper-page"></div>
-               				<div class="swiper-wrapper">
-               					<div class="swiper-slide">
-               						<strong class="h3">STEP 1</strong>
-                					<p class="h6">핸드폰 내 '설정' 터치</p>
-               						<img src="images/guide6.jpg" height="333" alt="">
-               					</div>
-               					<div class="swiper-slide">
-               						<strong class="h3">STEP 2</strong>
-                					<p class="h6">'앱 및 알림' 터치</p>
-               						<img src="images/guide6_2.jpg" height="333" alt="">
-               					</div>
-               					<div class="swiper-slide">
-               						<strong class="h3">STEP 3</strong>
-                					<p class="h6">앱 알림에서 'BC QR for Shop' 선택</p>
-               						<img src="images/guide6_3.jpg" height="333" alt="">
-               					</div>
-               					<div class="swiper-slide">
-               						<strong class="h3">STEP 4</strong>
-                					<p class="h6">'사용함'으로 설정 시 승인 알림 ON, '사용 안함'으로 설정 시 승인 알림 OFF</p>
-               						<img src="images/guide6_4.jpg" height="333" alt="">
-               					</div>
-               				</div>
-               			</div>
-                	</div>
+                  <div class="text-center pt30">
+                    <div class="guide-slide slide5 swiper-container">
+                      <div class="swiper-page"></div>
+                      <div class="swiper-wrapper">
+                        <div class="swiper-slide">
+                          <strong class="h3">STEP 1</strong>
+                          <p class="h6">핸드폰 내 '설정' 터치</p>
+                          <img src="/images/guide6.jpg" height="333" alt="" />
+                        </div>
+                        <div class="swiper-slide">
+                          <strong class="h3">STEP 2</strong>
+                          <p class="h6">'앱 및 알림' 터치</p>
+                          <img src="/images/guide6_2.jpg" height="333" alt="" />
+                        </div>
+                        <div class="swiper-slide">
+                          <strong class="h3">STEP 3</strong>
+                          <p class="h6">앱 알림에서 'BC QR for Shop' 선택</p>
+                          <img src="/images/guide6_3.jpg" height="333" alt="" />
+                        </div>
+                        <div class="swiper-slide">
+                          <strong class="h3">STEP 4</strong>
+                          <p class="h6">'사용함'으로 설정 시 승인 알림 ON, '사용 안함'으로 설정 시 승인 알림 OFF</p>
+                          <img src="/images/guide6_4.jpg" height="333" alt="" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-            </li>
-        </ul>
-    </div>
-</div>
-<div class="bx-gray-id h6">
-	<span>추가 문의 사항은<br>BC QR결제 가맹점 상담센터(<a href="tel:02-330-5777">02-330-5777</a>)를 이용해주세요.</span>
-</div>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="bx-gray-id h6">
+          <span>추가 문의 사항은<br />BC QR결제 가맹점 상담센터(<a href="tel:02-330-5777">02-330-5777</a>)를 이용해주세요.</span>
+        </div>
 
-<script>
-	jQuery(function($){
-		var guideSlide = new Swiper('.slide', {
-			pagination: {
-				el: '.swiper-page',
-			},
-		});
-		var guideSlide2 = new Swiper('.slide2', {
-			pagination: {
-				el: '.swiper-page',
-			},
-		});
-		var guideSlide3 = new Swiper('.slide3', {
-			pagination: {
-				el: '.swiper-page',
-			},
-		});
-		var guideSlide4 = new Swiper('.slide4', {
-			pagination: {
-				el: '.swiper-page',
-			},
-		});
-		var guideSlide5 = new Swiper('.slide5', {
-			pagination: {
-				el: '.swiper-page',
-			},
-		});
-		// 2019-07-18
-		var guideSlide5 = new Swiper('.slide6', {
-			pagination: {
-				el: '.swiper-page',
-			},
-		});
-		//end 2019-07-18
-		$('.js-slide').click(function(){
-			setTimeout(function(){
-				$(window).resize();
-				guideSlide.update();
-				guideSlide2.update();
-				guideSlide3.update();
-				guideSlide4.update();
-				guideSlide5.update();
-			},100);
-		});
-	});
-	
-</script>
-<!--// 페이지 끝 -->
-	</div>
-</div>
-</body>
+        <script>
+          jQuery(function ($) {
+            var guideSlide = new Swiper('.slide', {
+              pagination: {
+                el: '.swiper-page',
+              },
+            });
+            var guideSlide2 = new Swiper('.slide2', {
+              pagination: {
+                el: '.swiper-page',
+              },
+            });
+            var guideSlide3 = new Swiper('.slide3', {
+              pagination: {
+                el: '.swiper-page',
+              },
+            });
+            var guideSlide4 = new Swiper('.slide4', {
+              pagination: {
+                el: '.swiper-page',
+              },
+            });
+            var guideSlide5 = new Swiper('.slide5', {
+              pagination: {
+                el: '.swiper-page',
+              },
+            });
+            // 2019-07-18
+            var guideSlide5 = new Swiper('.slide6', {
+              pagination: {
+                el: '.swiper-page',
+              },
+            });
+            //end 2019-07-18
+            $('.js-slide').click(function () {
+              setTimeout(function () {
+                $(window).resize();
+                guideSlide.update();
+                guideSlide2.update();
+                guideSlide3.update();
+                guideSlide4.update();
+                guideSlide5.update();
+              }, 100);
+            });
+          });
+        </script>
+        <!--// 페이지 끝 -->
+      </div>
+    </div>
+  </body>
 </html>

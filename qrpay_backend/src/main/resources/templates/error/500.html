@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>404 Not Found</title>
+</head>
+<body>
+<div style="text-align: center; margin-top: 100px;">
+    <h1>😅 500 Error</h1>
+    <p>Internal Server Error</p>
+
+    <p th:text="${'요청 경로: ' + path}"></p>
+    <p th:text="${'에러 메시지: ' + message}"></p>
+
+    <a href="/">메인 페이지로 돌아가기</a>
+</div>
+</body>
+</html>

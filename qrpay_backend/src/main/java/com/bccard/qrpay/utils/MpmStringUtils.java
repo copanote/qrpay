@@ -4,6 +4,7 @@ import java.nio.charset.Charset;
 
 public class MpmStringUtils {
 
+
     /**
      * 문자열을 지정된 바이트 길이(Byte Length)로 안전하게 자릅니다.
      * 멀티바이트 문자(예: 한글)가 중간에 잘리지 않도록 유효한 문자 경계까지만 포함합니다.

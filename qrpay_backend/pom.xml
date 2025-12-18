@@ -153,6 +153,30 @@
             <systemPath>${project.basedir}/libs/emvmpm-0.0.9.jar</systemPath>
         </dependency>
 
+        <dependency>
+            <groupId>nice</groupId>
+            <artifactId>NiceID</artifactId>
+            <version>1.1</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/libs/NiceID_v1.1.jar</systemPath>
+        </dependency>
+
+        <dependency>
+            <groupId>com.nshc</groupId>
+            <artifactId>NSafer</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/libs/nfsrv.1.9.12.jar</systemPath>
+        </dependency>
+
+        <dependency>
+            <groupId>bccard.bxi</groupId>
+            <artifactId>bxi-interface-client</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/libs/bxi-interface-client-0.0.1_jdk1.8_utf8_230104.jar</systemPath>
+        </dependency>
+
     </dependencies>
 
     <build>

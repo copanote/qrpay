@@ -5,18 +5,25 @@ import com.bccard.qrpay.auth.domain.RefreshToken;
 import com.bccard.qrpay.auth.repository.RefreshTokenQueryRepository;
 import com.bccard.qrpay.auth.repository.RefreshTokenRepository;
 import com.bccard.qrpay.auth.security.JwtProvider;
+import com.bccard.qrpay.auth.service.dto.ResponseAuthDto;
 import com.bccard.qrpay.domain.member.Member;
 import com.bccard.qrpay.domain.member.MemberService;
+import com.bccard.qrpay.domain.merchant.Merchant;
+import com.bccard.qrpay.domain.merchant.MerchantService;
 import com.bccard.qrpay.exception.AuthException;
 import com.bccard.qrpay.exception.MemberException;
-import com.bccard.qrpay.exception.code.AuthErrorCode;
+import com.bccard.qrpay.exception.MerchantException;
+import com.bccard.qrpay.exception.code.QrpayErrorCode;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
-import java.time.Instant;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.Instant;
+import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -25,6 +32,7 @@ public class AuthService {
 
     private final JwtProvider jwtProvider;
     private final MemberService memberService;
+    private final MerchantService merchantService;
     private final RefreshTokenService refreshTokenService;
     private final RefreshTokenRepository refreshTokenRepository;
     private final RefreshTokenQueryRepository refreshTokenQueryRepository;
@@ -36,38 +44,45 @@ public class AuthService {
         try {
             member = memberService.findMyLoginId(userId);
         } catch (MemberException e) {
-            throw new AuthException(AuthErrorCode.INVALID_CREDENTIAL);
+            throw new AuthException(QrpayErrorCode.INVALID_CREDENTIAL);
         }
 
-        // Todo:: auth policy
+        //Todo:: auth policy
         if (member.getPasswordErrorCount() > 3) {
-            throw new AuthException(AuthErrorCode.ACCOUNT_LOCKED_POLICY);
+            throw new AuthException(QrpayErrorCode.ACCOUNT_LOCKED_POLICY);
         }
 
         String hashed = memberService.hashPassword(password);
         if (!member.getHashedPassword().equals(hashed)) {
             member.onPasswordFail();
-            //            memberService.passwordFail(member.getMemberId());
-            throw new AuthException(AuthErrorCode.INVALID_CREDENTIAL);
+//            memberService.passwordFail(member.getMemberId());
+            throw new AuthException(QrpayErrorCode.INVALID_CREDENTIAL);
         }
 
-        String at =
-                jwtProvider.generateToken(member.getMemberId(), member.getRole().toString());
+        String at = jwtProvider.generateToken(member.getMemberId(), member.getRole().toString());
         String rt = jwtProvider.generateRefreshToken(member.getMemberId());
 
+
         Instant now = Instant.now();
+
         RefreshToken newRefreshToken = RefreshToken.createNew()
                 .memberId(member.getMemberId())
                 .tokenHash(refreshTokenService.hashRefreshToken(rt))
                 .issuedAt(now.toEpochMilli())
-                .expiresAt(now.plusMillis(jwtProvider.getJwtProperties().getRefreshTokenExpiration())
-                        .toEpochMilli())
+                .expiresAt(now.plusMillis(jwtProvider.getJwtProperties().getRefreshTokenExpiration()).toEpochMilli())
                 .deviceId("")
                 .build();
 
         RefreshToken saved = refreshTokenRepository.save(newRefreshToken);
 
-        return JwtToken.builder().accessToken(at).refreshToken(rt).build();
+        Long accessTokenExpiresIn = now.plusMillis(jwtProvider.getJwtProperties().getAccessTokenExpiration()).toEpochMilli();
+
+
+        return JwtToken.builder()
+                .accessToken(at)
+                .accessTokenExpiresIn(accessTokenExpiresIn)
+                .refreshToken(rt)
+                .build();
     }
 
     public JwtToken createJwt(String memberId, String role) {
@@ -75,44 +90,70 @@ public class AuthService {
         String rt = jwtProvider.generateRefreshToken(memberId);
 
         Instant now = Instant.now();
+
         RefreshToken newRefreshToken = RefreshToken.createNew()
                 .memberId(memberId)
                 .tokenHash(refreshTokenService.hashRefreshToken(rt))
                 .issuedAt(now.toEpochMilli())
-                .expiresAt(now.plusMillis(jwtProvider.getJwtProperties().getRefreshTokenExpiration())
-                        .toEpochMilli())
+                .expiresAt(now.plusMillis(jwtProvider.getJwtProperties().getRefreshTokenExpiration()).toEpochMilli())
                 .deviceId("")
                 .build();
 
         RefreshToken saved = refreshTokenRepository.save(newRefreshToken);
 
-        return JwtToken.builder().accessToken(at).refreshToken(rt).build();
+        Long accessTokenExpiresIn = now.plusMillis(jwtProvider.getJwtProperties().getAccessTokenExpiration()).toEpochMilli();
+
+        return JwtToken.builder()
+                .accessToken(at)
+                .accessTokenExpiresIn(accessTokenExpiresIn)
+                .refreshToken(rt)
+                .build();
     }
 
     public void logout(String refreshToken) {
-        refreshTokenService.revoke(refreshToken, "USER_LOGOUT");
-        // TODO accesstoken balcklist
+        if (jwtProvider.validateToken(refreshToken)) {
+            String memberId = jwtProvider.validateAndGetSubject(refreshToken);
+            refreshTokenService.revokeAll(memberId, "USER_LOGOUT");
+        } else {
+            refreshTokenService.revoke(refreshToken, "USER_LOGOUT");
+        }
     }
 
     public void revoke(String refreshToken) {
         refreshTokenService.revoke(refreshToken, "ADMIN_REVOKE");
-        // TODO accesstoken balcklist
+        //TODO accesstoken balcklist
     }
+
+    public int revokeAllByMerchant(String merchantId, String reason) {
+
+        Merchant merchant = merchantService.findById(merchantId)
+                .orElseThrow(() -> new MerchantException(QrpayErrorCode.MERCHANT_NOT_FOUND));
+
+        List<Member> members = memberService.findMembers(merchant);
+        int cnt = 0;
+        for (Member member : members) {
+            int r = refreshTokenService.revokeAll(member.getMemberId(), reason);
+            cnt += r;
+        }
+
+        return cnt;
+    }
+
 
     public JwtToken refresh(String refreshToken) {
         Jws<Claims> claimsJws;
         try {
             claimsJws = jwtProvider.validateAndParse(refreshToken);
         } catch (Exception e) {
-            throw new AuthException(e, AuthErrorCode.INVALID_REFRESH_TOKEN);
+            throw new AuthException(e, QrpayErrorCode.INVALID_REFRESH_TOKEN);
         }
 
         RefreshToken rt = refreshTokenQueryRepository
                 .findByTokenHash(refreshTokenService.hashRefreshToken(refreshToken))
-                .orElseThrow(() -> new AuthException(AuthErrorCode.NOT_FOUND_REFRESH_TOKEN));
+                .orElseThrow(() -> new AuthException(QrpayErrorCode.NOT_FOUND_REFRESH_TOKEN));
 
         if (!rt.isValid()) {
-            throw new AuthException(AuthErrorCode.INVALID_REFRESH_TOKEN);
+            throw new AuthException(QrpayErrorCode.INVALID_REFRESH_TOKEN);
         }
 
         String subject = claimsJws.getPayload().getSubject();
@@ -121,16 +162,48 @@ public class AuthService {
         try {
             member = memberService.findByMemberId(subject);
         } catch (MemberException e) {
-            throw new AuthException(e, AuthErrorCode.INVALID_CREDENTIAL);
+            throw new AuthException(e, QrpayErrorCode.INVALID_CREDENTIAL);
         }
 
-        String at =
-                jwtProvider.generateToken(member.getMemberId(), member.getRole().toString());
+        String at = jwtProvider.generateToken(member.getMemberId(), member.getRole().toString());
         rt.refresh();
+
+        Instant now = Instant.now();
+        Long accessTokenExpiresIn = now.plusMillis(jwtProvider.getJwtProperties().getAccessTokenExpiration()).toEpochMilli();
+
 
         return JwtToken.builder()
                 .accessToken(at)
-                //                .refreshToken(refreshToken)
+                .accessTokenExpiresIn(accessTokenExpiresIn)
+//                .refreshToken(refreshToken)
                 .build();
     }
+
+    //
+    public ResponseAuthDto authenticate(String accessToken, String refreshToken) {
+        String aToken = StringUtils.defaultIfBlank(accessToken, "");
+        String rToken = StringUtils.defaultIfBlank(refreshToken, "");
+
+        if (aToken.isBlank() && rToken.isBlank()) {
+            //needs authenticate
+            throw new AuthException(QrpayErrorCode.NOT_FOUND_REFRESH_TOKEN);
+        }
+
+        if (!jwtProvider.validateToken(aToken)) {
+            JwtToken refresh = refresh(refreshToken);
+            aToken = refresh.getAccessToken();
+            rToken = refresh.getRefreshToken();
+        }
+
+        String memberId = jwtProvider.validateAndGetSubject(aToken);
+
+        return ResponseAuthDto
+                .builder()
+                .memberId(memberId)
+                .accessToken(aToken)
+                .refreshToken(rToken)
+                .build();
+    }
+
+
 }
