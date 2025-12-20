@@ -7,6 +7,13 @@ spring:
     url: jdbc:h2:mem:test;;MODE=Oracle;DB_CLOSE_DELAY=-1
     username: sa
     password:
+  web:
+    resources:
+      chain:
+        strategy:
+          content:
+            enabled: true # 파일 내용 기반 해시값(?v=...) 추가
+            paths: /** # 모든 리소스 경로에 적용
 
   h2:
     console:
@@ -51,5 +58,3 @@ jwt:
   secret-hex: 823e399822c5170927c9802b3feb60b1fe54debefb406ca5f4eaf05e0014ea63
   access-token-expiration: 900000
   refresh-token-expiration: 604800000
-
-

@@ -130,6 +130,10 @@ jQuery(function ($) {
     .trigger('scroll');
 });
 
+const goLogin = () => {
+  window.location.href = PAGES_APIS.PAGES_LOGIN;
+};
+
 const goHome = () => {
   window.location.href = PAGES_APIS.PAGES_MAIN_MPMQR;
 };
@@ -151,4 +155,23 @@ const PAGES_APIS = {
   PAGES_TERMS_SERVICE_TERMS: '/pages/settings/terms-service/terms',
   PAGES_TERMS_SERVICE_PERMISSIONS: '/pages/settings/terms-service/permissions',
   PAGES_TERMS_SERVICE_CANCEL: '/pages/settings/terms-service/cancel',
+  PAGES_EMPLOYEE_ADD: '/pages/member/employee/add',
+  PAGES_EMPLOYEE_LIST: '/pages/member/employee/list',
+  PAGES_EMPLOYEE_PW_CHANGE: '/pages/member/employee/change-pw',
+};
+
+const REST_APIS = {
+  MERCHANT: {
+    INFO: '/qrpay/api/v1/merchant/info',
+    EMPLOYEES: '/qrpay/api/v1/merchant/employees',
+    ADD_EMPLOYEES: '/qrpay/api/v1/merchant/add-employee',
+    MPMQR: '/qrpay/api/v1/merchant/mpmqr',
+    CHANGE_NAME: '/qrpay/api/v1/merchant/change-name',
+    CHANGE_TIP: '/qrpay/api/v1/merchant/change-tip',
+    CHANGE_VAT: '/qrpay/api/v1/merchant/change-vat',
+  },
+  MEMBER: {
+    ID_DUP_CHECK: '/qrpay/api/v1/member/id-check',
+  },
+  QR_KIT: {},
 };

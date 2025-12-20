@@ -10,412 +10,429 @@
     <script src="/js/bootstrap.min.js"></script>
     <link href="/css/common.css" rel="stylesheet" />
     <script src="/js/common.js"></script>
-    <script src="/js/qrpay_sdk.dev.js"></script>
+    <th:block th:if="${#arrays.contains(@environment.getActiveProfiles(), 'local')}">
+      <script th:src="@{/js/qrpay_sdk.dev.js}"></script>
+    </th:block>
+
+    <th:block th:if="${#arrays.contains(@environment.getActiveProfiles(), 'dev')}">
+      <script th:src="@{/js/qrpay_sdk.dev.js}"></script>
+    </th:block>
+
+    <th:block th:if="${#arrays.contains(@environment.getActiveProfiles(), 'prod')}">
+      <script th:src="@{/js/qrpay_sdk.prod.js}"></script>
+    </th:block>
   </head>
 
   <body>
     <div id="state-mpmqr">
       <div id="wrap">
-      <!-- header -->
-      <header id="hd" class="main">
-        <div class="container">
-          <h1>
-            <a href="/">
-              <img src="/images/logo_big.png" height="33" alt="BC QR FOR SHOP" /><!-- 2019-05-08 -->
-              <span class="sr-only">BC QR FOR SHOP</span>
-            </a>
-          </h1>
-          <button type="button" class="icon-menu js-mn">메뉴열기</button>
-        </div>
-        <nav id="gnb">
-          <div class="gnb-top">
-            <button type="button" class="icon-back js-mn">메뉴닫기</button>
-            <h2 class="h3">
-              <span th:text="${homeMpmqrResDto.homeMpmqrNavi.merchantName}">Merchant-Name</span>
-              <small th:text="${homeMpmqrResDto.homeMpmqrNavi.loginId}">ID</small>
-            </h2>
-            <a class="icon-home js-mn" href="javascript:void(0)">홈으로 이동</a>
+        <!-- header -->
+        <header id="hd" class="main">
+          <div class="container">
+            <h1>
+              <a href="javascript:void(0)">
+                <img src="/images/logo_big.png" height="33" alt="BC QR FOR SHOP" /><!-- 2019-05-08 -->
+                <span class="sr-only">BC QR FOR SHOP</span>
+              </a>
+            </h1>
+            <button type="button" class="icon-menu js-mn">메뉴열기</button>
           </div>
-          <ul class="gnb">
-            <li class="dep" th:if="${homeMpmqrResDto.homeMpmqrNavi.isAdmin}">
-              <h3>카드사 등록</h3>
-              <ul class="dep2">
-                <li>
-                  <a href="#">
-                    <p>추가 등록 및 변경</p>
-                    <small>BC카드 외 카드사를 추가 설정할 수 있습니다.</small>
-                  </a>
-                </li>
-              </ul>
-            </li>
-            <li class="dep" th:if="${homeMpmqrResDto.homeMpmqrNavi.isAdmin}">
-              <h3>사용자 관리</h3>
-              <ul class="dep2">
-                <li><a href="#">대표 사용자 비밀번호 변경</a></li>
-                <li><a href="#">추가 사용자 등록</a></li>
-                <li>
-                  <a href="#">
-                    <p>추가 사용자 관리</p>
-                    <small>우리 가게를 관리하는 사용자를 추가 등록하거나 <br />사용 권한을 설정할 수 있습니다.</small>
-                  </a>
-                </li>
-              </ul>
-            </li>
-            <li class="dep" th:if="${homeMpmqrResDto.homeMpmqrNavi.isAdmin}">
-              <h3>거래 설정</h3>
-              <ul class="dep2">
-                <li><a href="#">부가세 설정</a></li>
-                <li><a href="#">봉사료 설정</a></li>
-              </ul>
-            </li>
-            <li class="dep">
-              <h3>이용 가이드</h3>
-              <ul class="dep2">
-                <li onclick="location.href='/pages/settings/guide'">
-                  <a href="javascript:void(0)">
-                    <p>이용 가이드</p>
-                    <small>추가 문의는 BC QR 가맹점 <br />상담센터 (02-330-5777)에서 도와드립니다.</small>
-                  </a>
-                </li>
-              </ul>
-            </li>
-            <!-- 2019-07-18 -->
-            <li class="dep" th:if="${homeMpmqrResDto.homeMpmqrNavi.isAdmin}">
-              <h3>QR키트</h3>
-              <!-- 2019-07-25 -->
-              <ul class="dep2">
-                <li>
-                  <a href="#">
-                    <p>신청 하기</p>
-                    <small>QR키트를 무료로 신청할 수 있습니다.</small>
-                  </a>
-                </li>
-                <li>
-                  <a href="#">
-                    <p>배송조회</p>
+          <nav id="gnb">
+            <div class="gnb-top">
+              <button type="button" class="icon-back js-mn">메뉴닫기</button>
+              <h2 class="h3">
+                <span id="navi-merchant-name" th:text="${homeMpmqrResDto.homeMpmqrNavi.merchantName}">Merchant-Name</span>
+                <small th:text="${homeMpmqrResDto.homeMpmqrNavi.loginId}">ID</small>
+              </h2>
+              <a class="icon-home js-mn" href="javascript:void(0)">홈으로 이동</a>
+            </div>
+            <ul class="gnb">
+              <li class="dep" th:if="${homeMpmqrResDto.homeMpmqrNavi.isAdmin}">
+                <h3>카드사 등록</h3>
+                <ul class="dep2">
+                  <li>
+                    <a href="#">
+                      <p>추가 등록 및 변경</p>
+                      <small>BC카드 외 카드사를 추가 설정할 수 있습니다.</small>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+              <li class="dep" th:if="${homeMpmqrResDto.homeMpmqrNavi.isAdmin}">
+                <h3>사용자 관리</h3>
+                <ul class="dep2">
+                  <li><a href="#">대표 사용자 비밀번호 변경</a></li>
+                  <li onclick="location.href='/pages/member/employee/add'">
+                    <a href="javascript:void(0)">추가 사용자 등록</a>
+                  </li>
+                  <li onclick="location.href='/pages/member/employee/list'">
+                    <a href="javascript:void(0)">
+                      <p>추가 사용자 관리</p>
+                      <small>우리 가게를 관리하는 사용자를 추가 등록하거나 <br />사용 권한을 설정할 수 있습니다.</small>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+              <li class="dep" th:if="${homeMpmqrResDto.homeMpmqrNavi.isAdmin}">
+                <h3>거래 설정</h3>
+                <ul class="dep2">
+                  <li><a href="#">부가세 설정</a></li>
+                  <li><a href="#">봉사료 설정</a></li>
+                </ul>
+              </li>
+              <li class="dep">
+                <h3>이용 가이드</h3>
+                <ul class="dep2">
+                  <li onclick="location.href='/pages/settings/guide'">
+                    <a href="javascript:void(0)">
+                      <p>이용 가이드</p>
+                      <small>추가 문의는 BC QR 가맹점 <br />상담센터 (02-330-5777)에서 도와드립니다.</small>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+              <!-- 2019-07-18 -->
+              <li class="dep" th:if="${homeMpmqrResDto.homeMpmqrNavi.isAdmin}">
+                <h3>QR키트</h3>
+                <!-- 2019-07-25 -->
+                <ul class="dep2">
+                  <li>
+                    <a href="#">
+                      <p>신청 하기</p>
+                      <small>QR키트를 무료로 신청할 수 있습니다.</small>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#">
+                      <p>배송조회</p>
                       <small>QR키트 배송 진행상황을 확인할 수 있습니다.</small>
-                  </a>
-                </li>
-              </ul>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+              <!--// 2019-07-18 -->
+              <li class="dep">
+                <h3>BC QR for Shop 서비스</h3>
+                <ul class="dep2">
+                  <li onclick="location.href='/pages/settings/notice'"><a href="javascript:void(0)">공지사항</a></li>
+                  <!-- 2019-09-24 -->
+                  <li onclick="location.href='/pages/settings/terms-service'"><a href="javascript:void(0)">약관 및 서비스 정보</a></li>
+                </ul>
+              </li>
+            </ul>
+            <div class="gnb-btm">
+              <button id="btn-logout" type="button" class="btn btb-light btn-block"><i class="icon-logout"></i>로그아웃</button>
+            </div>
+          </nav>
+        </header>
+
+        <div id="fixedToolbar">
+          <ul class="row">
+            <li class="col-4 active">
+              <a href="#">
+                <i class="icon-toolbar1"></i>
+                <p>QR 코드</p>
+              </a>
             </li>
-            <!--// 2019-07-18 -->
-            <li class="dep">
-              <h3>BC QR for Shop 서비스</h3>
-              <ul class="dep2">
-                <li onclick="location.href='/pages/settings/notice'"><a href="javascript:void(0)">공지사항</a></li>
-                <!-- 2019-09-24 -->
-                <li onclick="location.href='/pages/settings/terms-service'"><a href="javascript:void(0)">약관 및 서비스 정보</a></li>
-              </ul>
+            <li class="col-4">
+              <a href="#">
+                <i class="icon-toolbar2"></i>
+                <p>거래내역</p>
+              </a>
+            </li>
+            <li class="col-4">
+              <a href="#">
+                <i class="icon-toolbar3"></i>
+                <p>월별 매출 합계</p>
+              </a>
             </li>
           </ul>
-          <div class="gnb-btm">
-            <button id="btn-logout" type="button" class="btn btb-light btn-block"><i class="icon-logout"></i>로그아웃</button>
+        </div>
+
+        <!-- container -->
+        <div id="ct">
+          <!-- 페이지 시작 -->
+          <div id="index">
+            <div class="container top-area">
+              <!-- 2019-04-25 -->
+              <div class="sub-title">
+                <div class="row align-items-center" id="merchant-name-fragment">
+                  <h2 class="tit col pr20">
+                    <span id="merchantName" th:text="${homeMpmqrResDto.homeMpmqrMain.merchantName}">Merchant-Name</span>
+                  </h2>
+                  <div class="col-xs-auto" th:if="${homeMpmqrResDto.homeMpmqrMain.isAdmin}">
+                    <button id="edit-merchantname-view-btn" type="button" class="btn-refresh"><i class="icon-pen mr5 mt2"></i>변경</button>
+                  </div>
+                </div>
+
+                <div class="row align-items-center" id="edit-merchant-name-fragment" style="display: none">
+                  <h2 class="tit col pr20">
+                    <input id="toChangeMerchantName" type="text" class="form-control" placeholder="가맹점명을 입력해주세요." th:value="${homeMpmqrResDto.homeMpmqrMain.merchantName}" />
+                  </h2>
+                  <div class="col-xs-auto">
+                    <button id="btn-change-merchant-name" type="button" class="btn-refresh" onclick=""><i class="icon-check mr5"></i>완료</button>
+                  </div>
+                </div>
+              </div>
+              <div class="barcode">
+                <button type="button" data-toggle="modal" data-target="#modal1">
+                  <img id="mpmqr-img" th:src="'data:image/png;base64,' + ${homeMpmqrResDto.homeMpmqrMain.qrBase64Image}" alt="Merchant MPM QRCode Image" />
+                </button>
+              </div>
+              <div class="form-group btm-form">
+                <!-- 2019-05-08 -->
+                <div class="btm-text">
+                  <button type="button"><i class="icon-scan mr5"></i> QR스캔</button>
+                </div>
+                <p class="tit text-muted">결제금액</p>
+                <div class="input-price">
+                  <span class="txt font-lato">&#8361;</span>
+                  <input id="main-mpmqr-amount" type="text" class="form-control font-lato" placeholder="금액을 입력해주세요" value="" onclick="onChangeState();" onkeyup="inputNumberFormat(this)" />
+                </div>
+                <div class="row mt10">
+                  <div class="col align-self-end">
+                    <ul class="lst-split text-muted">
+                      <li><a id="installment-label"></a></li>
+                    </ul>
+                  </div>
+                  <div id="main-qr-init" class="col-xs-auto align-self-end" style="display: none">
+                    <button type="button" onclick="reqStaticMpmQr()"><i class="icon-refresh mr5"></i> QR초기화</button>
+                  </div>
+                </div>
+                <!--// 2019-05-08 -->
+                <div class="btm-text pa20">
+                  <!-- 2019-05-20 pa20으로 수정 //-->
+                  <img src="/images/card_company.png" alt="unionpay/bccard 카드사" style="width: 70%" />
+                </div>
+                <div class="btn-area btm-text">
+                  <a href="/pages/settings/guide" class="btn-underline">이용 가능 카드사 안내</a>
+                </div>
+              </div>
+              <!-- // 2019-04-25 -->
+            </div>
           </div>
-        </nav>
-      </header>
-
-      <div id="fixedToolbar">
-        <ul class="row">
-          <li class="col-4 active">
-            <a href="#">
-              <i class="icon-toolbar1"></i>
-              <p>QR 코드</p>
-            </a>
-          </li>
-          <li class="col-4">
-            <a href="#">
-              <i class="icon-toolbar2"></i>
-              <p>거래내역</p>
-            </a>
-          </li>
-          <li class="col-4">
-            <a href="#">
-              <i class="icon-toolbar3"></i>
-              <p>월별 매출 합계</p>
-            </a>
-          </li>
-        </ul>
+          <!--// 페이지 끝 -->
+        </div>
       </div>
+      <!-- modal -->
+      <div class="modal fade" id="modal1">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-body">
+              <div class="text-center">
+                <p class="h6 fw500">QR이미지를 인쇄하여 매장에서 사용하세요!</p>
+                <p class="h3 text-primary fw500">App 없이도 QR결제가 가능합니다.</p>
+              </div>
+              <div class="bx-qr">
+                <div class="text-center">
+                  <img src="/images/qrpay.png" height="52" alt="" />
+                </div>
+                <div class="img">
+                  <img class="img-fluid" src="/images/_temp/1.jpg" alt="" />
+                </div>
+                <div class="row align-items-center">
+                  <div class="col-auto">카드사앱으로 결제하세요</div>
+                  <div class="col">
+                    <a href="#"> <img class="img-fluid" src="/images/btn_pay.png" alt="pay" /></a>
+                  </div>
+                  <div class="col">
+                    <a href="#"> <img class="img-fluid" src="/images/btn_life.png" alt="life" /></a>
+                  </div>
+                  <div class="col">
+                    <a href="#"> <img class="img-fluid" src="/images/btn_fan.png" alt="fan" /></a>
+                  </div>
+                  <div class="col">
+                    <button type="button" class="btn-block">
+                      <img src="/images/icon/icon_add.png" alt="" />
+                    </button>
+                  </div>
+                </div>
+                <div class="mt20 text-center">
+                  <img src="/images/bccard.png" height="18" alt="BC card" />
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-md btn-radius0 btn-block" data-dismiss="modal">취소</button>
+              <button type="button" class="btn btn-md btn-primary btn-radius0 btn-block" data-dismiss="modal">내보내기</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
+    <div id="state-amountinput" style="display: none">
+      <!-- header -->
+      <header id="hd">
+        <div class="container">
+          <button type="button" class="icon-back" onclick="onChangeState();">이전 페이지 이동</button>
+          <h1>결제 금액 입력</h1>
+          <a class="icon-home" href="javascript:void(0)" onclick="onChangeState();">홈으로 이동</a>
+        </div>
+      </header>
       <!-- container -->
       <div id="ct">
         <!-- 페이지 시작 -->
-        <div id="index">
-          <div class="container top-area">
-            <!-- 2019-04-25 -->
-            <div class="sub-title">
-              <div class="row align-items-center" id="merchant-name-fragment">
-                <h2 class="tit col pr20">
-                  <span id="merchantName" th:text="${homeMpmqrResDto.homeMpmqrMain.merchantName}">Merchant-Name</span>
-                </h2>
-                <div class="col-xs-auto" th:if="${homeMpmqrResDto.homeMpmqrMain.isAdmin}">
-                  <button id="edit-merchantname-view-btn" type="button" class="btn-refresh"><i class="icon-pen mr5 mt2"></i>변경</button>
-                </div>
-              </div>
-
-              <div class="row align-items-center" id="edit-merchant-name-fragment" style="display: none">
-                <h2 class="tit col pr20">
-                  <input
-                    id="toChangeMerchantName"
-                    type="text"
-                    class="form-control"
-                    placeholder="가맹점명을 입력해주세요."
-                    th:value="${homeMpmqrResDto.homeMpmqrMain.merchantName}"
-                  />
-                </h2>
-                <div class="col-xs-auto">
-                  <button id="btn-change-merchant-name" type="button" class="btn-refresh" onclick=""><i class="icon-check mr5"></i>완료</button>
-                </div>
-              </div>
-            </div>
-            <div class="barcode">
-              <button type="button" data-toggle="modal" data-target="#modal1">
-                <img id="mpmqr-img" th:src="'data:image/png;base64,' + ${homeMpmqrResDto.homeMpmqrMain.qrBase64Image}" alt="Merchant MPM QRCode Image" />
-              </button>
-            </div>
-            <div class="form-group btm-form">
-              <!-- 2019-05-08 -->
-              <div class="btm-text">
-                <button type="button"><i class="icon-scan mr5"></i> QR스캔</button>
-              </div>
-              <p class="tit text-muted">결제금액</p>
-              <div class="input-price">
-                <span class="txt font-lato">&#8361;</span>
-                <input type="text" class="form-control font-lato" placeholder="금액을 입력해주세요" value="" onclick="onChangeState();" onkeyup="inputNumberFormat(this)" />
-              </div>
-              <div class="row mt10">
-                <div class="col align-self-end">
-                  <ul class="lst-split text-muted">
-                    <li><a id="installment-label"></a></li>
-                  </ul>
-                </div>
-                <div class="col-xs-auto align-self-end">
-                  <button type="button"><i class="icon-refresh mr5"></i> QR초기화</button>
-                </div>
-              </div>
-              <!--// 2019-05-08 -->
-              <div class="btm-text pa20">
-                <!-- 2019-05-20 pa20으로 수정 //-->
-                <img src="/images/card_company.png" alt="unionpay/bccard 카드사" style="width: 70%" />
-              </div>
-              <div class="btn-area btm-text">
-                <a href="/pages/settings/guide" class="btn-underline">이용 가능 카드사 안내</button>
-              </div>
-            </div>
-            <!-- // 2019-04-25 -->
-          </div>
-        </div>
-        <!--// 페이지 끝 -->
-      </div>
-    </div>
-    <!-- modal -->
-    <div class="modal fade" id="modal1">
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-body">
-            <div class="text-center">
-              <p class="h6 fw500">QR이미지를 인쇄하여 매장에서 사용하세요!</p>
-              <p class="h3 text-primary fw500">App 없이도 QR결제가 가능합니다.</p>
-            </div>
-            <div class="bx-qr">
-              <div class="text-center">
-                <img src="/images/qrpay.png" height="52" alt="" />
-              </div>
-              <div class="img">
-                <img class="img-fluid" src="/images/_temp/1.jpg" alt="" />
-              </div>
-              <div class="row align-items-center">
-                <div class="col-auto">카드사앱으로 결제하세요</div>
-                <div class="col">
-                  <a href="#"> <img class="img-fluid" src="/images/btn_pay.png" alt="pay" /></a>
-                </div>
-                <div class="col">
-                  <a href="#"> <img class="img-fluid" src="/images/btn_life.png" alt="life" /></a>
-                </div>
-                <div class="col">
-                  <a href="#"> <img class="img-fluid" src="/images/btn_fan.png" alt="fan" /></a>
-                </div>
-                <div class="col">
-                  <button type="button" class="btn-block">
-                    <img src="/images/icon/icon_add.png" alt="" />
-                  </button>
-                </div>
-              </div>
-              <div class="mt20 text-center">
-                <img src="/images/bccard.png" height="18" alt="BC card" />
-              </div>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-md btn-radius0 btn-block" data-dismiss="modal">취소</button>
-            <button type="button" class="btn btn-md btn-primary btn-radius0 btn-block" data-dismiss="modal">내보내기</button>
-          </div>
-        </div>
-      </div>
-    </div>
-    </div>
-
-
-    <div id="state-amountinput" style="display: none;">
-      <!-- header -->
-      <header id="hd">
+        <div class="cnt-btm-wrp">
           <div class="container">
-              <button type="button" class="icon-back" onclick="onChangeState();" >이전 페이지 이동</button>
-              <h1>결제 금액 입력</h1>
-              <a class="icon-home" href="javascript:void(0)" onclick="onChangeState();">홈으로 이동</a>
-          </div>
-      </header>
-      <!-- container -->
-      <div id="ct">
-          <!-- 페이지 시작 -->
-          <div class="cnt-btm-wrp">
-              <div class="container">
-                  <div class="frm pt50">
-                      <div class="form-group">
-                <span class="tit" th:text="${homeMpmqrResDto.homeMpmqrMain.merchantName}">Merchant-Namespan></span>
+            <div class="frm pt50">
+              <div class="form-group">
+                <span id="amountinput-merchant-name" class="tit" th:text="${homeMpmqrResDto.homeMpmqrMain.merchantName}">Merchant-NameSpan></span>
                 <div class="input-price input-delete">
                   <span class="txt font-lato">&#8361;</span>
                   <input id="mpmqr-amount" type="text" class="form-control font-lato" value="" onkeyup="inputNumberFormat(this)" />
                   <button id="init-mpmqr-amount" type="button" class="btn-delete"><img src="/images/icon/icon_delete.png" alt="삭제" /></button>
                 </div>
                 <p class="text-muted mt10" id="mpmqr-amount-desc"></p>
-                      </div>
-                      <div class="form-group">
-                          <div class="row chk-inline-group">
-                              <div class="col">
-                                  <label class="chk-type01"> <input type="radio" name="radio1" value="lumpsum" checked /><span>일시불</span> </label>
-                              </div>
-                              <div class="col">
-                                  <label class="chk-type01"> <input type="radio" value="installment" name="radio1" /><span id="installmentSpan">할부</span> </label>
-                              <div id="installment-area" style="display: none; margin-top: 10px;">
-                                <select id="installment-select" class="form-select">
-                                  <option value="2">2개월</option>
-                                  <option value="3">3개월</option>
-                                  <option value="4">4개월</option>
-                                  <option value="5">5개월</option>
-                                  <option value="6">6개월</option>
-                                  <option value="7">7개월</option>
-                                  <option value="8">8개월</option>
-                                  <option value="9">9개월</option>
-                                  <option value="10">10개월</option>
-                                  <option value="11">11개월</option>
-                                  <option value="12">12개월</option>
-                                  <option value="13">13개월</option>
-                                  <option value="14">14개월</option>
-                                  <option value="15">15개월</option>
-                                  <option value="16">16개월</option>
-                                  <option value="17">17개월</option>
-                                  <option value="18">18개월</option>
-                                  <option value="19">19개월</option>
-                                  <option value="20">20개월</option>
-                                  <option value="21">21개월</option>
-                                  <option value="22">22개월</option>
-                                  <option value="23">23개월</option>
-                                  <option value="24">24개월</option>
-                                </select>
-                              </div>
-                              </div>
-
-                          </div>
-                      </div>
-                      <!-- <div class="form-group">
-                        <label class="input-type-round">
-                          <input type="checkbox" checked />
-                          <span class="mr5"></span>
-                          BC TOP 포인트 사용하기
-                        </label>
-                      </div> -->
-                  </div>
               </div>
-
-              <div class="btm-fixed-btn">
-                  <a class="btn btn-primary btn-block" href="javascript:void(0)" onclick="onAmoutInputConfirm();">확인</a>
-              </div>  
+              <div class="form-group">
+                <div class="row chk-inline-group">
+                  <div class="col">
+                    <label class="chk-type01"> <input type="radio" name="radio1" value="lumpsum" checked /><span>일시불</span> </label>
+                  </div>
+                  <div class="col">
+                    <label class="chk-type01"> <input type="radio" value="installment" name="radio1" /><span id="installmentSpan">할부</span> </label>
+                    <div id="installment-area" style="display: none; margin-top: 10px">
+                      <select id="installment-select" class="form-select" value="">
+                        <option value="2">2개월</option>
+                        <option value="3">3개월</option>
+                        <option value="4">4개월</option>
+                        <option value="5">5개월</option>
+                        <option value="6">6개월</option>
+                        <option value="7">7개월</option>
+                        <option value="8">8개월</option>
+                        <option value="9">9개월</option>
+                        <option value="10">10개월</option>
+                        <option value="11">11개월</option>
+                        <option value="12">12개월</option>
+                        <option value="13">13개월</option>
+                        <option value="14">14개월</option>
+                        <option value="15">15개월</option>
+                        <option value="16">16개월</option>
+                        <option value="17">17개월</option>
+                        <option value="18">18개월</option>
+                        <option value="19">19개월</option>
+                        <option value="20">20개월</option>
+                        <option value="21">21개월</option>
+                        <option value="22">22개월</option>
+                        <option value="23">23개월</option>
+                        <option value="24">24개월</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
-          <!--// 페이지 끝 -->
+
+          <div class="btm-fixed-btn">
+            <a class="btn btn-primary btn-block" href="javascript:void(0)" onclick="onAmoutInputConfirm();">확인</a>
+          </div>
+        </div>
+        <!--// 페이지 끝 -->
       </div>
       <script type="text/javascript">
         const radioButtons = document.querySelectorAll('input[name="radio1"]');
         const installmentArea = document.getElementById('installment-area');
         const installmentSpan = document.getElementById('installmentSpan');
         const installmentSelect = document.getElementById('installment-select');
-        const radioBtnCheckValue = document.querySelector('input[name="radio1"]:checked').value;
 
+        radioButtons.forEach((radio) => {
+          radio.addEventListener('click', function () {
+            const isInstallment = document.querySelector('input[name="radio1"]:checked').value == 'installment';
+            console.log('isInstallment:', isInstallment);
+            console.log('installmentSelect.value:', installmentSelect.value);
+            const amountValue = document.getElementById('mpmqr-amount').value;
 
-radioButtons.forEach(radio => {
-    radio.addEventListener('click', function() {
-        // '할부' 라디오 버튼의 텍스트나 value로 확인
-        // 여기서는 span의 텍스트가 '할부'인 경우로 체크하거나 value를 활용
-        const isInstallment = document.querySelector('input[name="radio1"]:checked').value == 'installment';
-         console.log("isInstallment:", isInstallment);
-         console.log("installmentSelect.value:", installmentSelect.value);
+            if (isInstallment) {
+              if (amountValue < 50000) {
+                alert('할부는 최소 50,000원 이상이어야 합니다.');
+                radioButtons[0].checked = true; // 일시불 선택
+                return;
+              }
+              installmentArea.style.display = 'block'; // 보이기
+            } else {
+              installmentArea.style.display = 'none'; // 숨기기
+              installmentSelect.value = '2'; // 값 초기화
+              installmentSpan.innerText = '할부'; // 선택된 값으로 업데이트
+            }
+          });
+        });
+
+        installmentSelect.addEventListener('change', function () {
+          const selectedValue = installmentSelect.value;
+          installmentSpan.innerText = selectedValue + '개월';
+          installmentArea.style.display = 'none'; // 숨기기
+        });
+        const mpmqrAmount = document.getElementById('mpmqr-amount');
+        mpmqrAmount.addEventListener('input', function () {
           const amountValue = document.getElementById('mpmqr-amount').value;
-
-        if (isInstallment) {
-          if(amountValue < 50000){
-            alert("할부는 최소 50,000원 이상이어야 합니다.");
-            radioButtons[0].checked = true; // 일시불 선택
+          const numericValue = amountValue.replace(/,/g, ''); // 콤마 제거
+          if (numericValue === '') {
+            document.getElementById('mpmqr-amount-desc').innerText = '';
             return;
           }
-            installmentArea.style.display = 'block'; // 보이기
-        } else {
-            installmentArea.style.display = 'none';  // 숨기기
-            installmentSelect.value = "2";            // 값 초기화
-            installmentSpan.innerText = '할부'; // 선택된 값으로 업데이트
+          const formattedValue = parseInt(numericValue, 10).toLocaleString(); // 숫자로 변환 후 다시 콤마 추가
+          document.getElementById('mpmqr-amount-desc').innerText = formattedValue + '원';
+        });
 
-        }
-    });
-});
+        const initMpmqrAmountBtn = document.getElementById('init-mpmqr-amount');
+        initMpmqrAmountBtn.addEventListener('click', function () {
+          onInitAmountInputState();
+        });
 
-installmentSelect.addEventListener('change', function() {
-  const selectedValue = installmentSelect.value;
-    installmentSpan.innerText = selectedValue + '개월';
-    installmentArea.style.display = 'none';  // 숨기기
+        const onInitAmountInputState = () => {
+          document.getElementById('mpmqr-amount').value = '';
+          document.getElementById('mpmqr-amount-desc').innerText = '';
+          document.querySelector('input[name="radio1"][value="lumpsum"]').checked = true; // 일시불 선택
+        };
 
-});
-const mpmqrAmount = document.getElementById('mpmqr-amount');
-mpmqrAmount.addEventListener('input', function() {
-  const amountValue = document.getElementById('mpmqr-amount').value;
-  const numericValue = amountValue.replace(/,/g, ''); // 콤마 제거
-  if(numericValue === ""){
-    document.getElementById('mpmqr-amount-desc').innerText = "";
-    return;
-  }
-  const formattedValue = parseInt(numericValue, 10).toLocaleString(); // 숫자로 변환 후 다시 콤마 추가
-  document.getElementById('mpmqr-amount-desc').innerText = formattedValue + "원";
-});
+        const onAmoutInputConfirm = async () => {
+          const radioBtnCheckValue = document.querySelector('input[name="radio1"]:checked').value;
+          const installmentValue = radioBtnCheckValue === 'lumpsum' ? 0 : document.getElementById('installment-select').value;
+          const amountValue = document.getElementById('mpmqr-amount').value;
+          const numericValue = amountValue.replace(/,/g, ''); // 콤마 제거
 
-const initMpmqrAmountBtn = document.getElementById('init-mpmqr-amount');
-initMpmqrAmountBtn.addEventListener('click', function() {
-  document.getElementById('mpmqr-amount').value = "";
-  document.getElementById('mpmqr-amount-desc').innerText = "";
-});
+          console.log('numericValue:', numericValue);
+          console.log('radioBtnCheckValue:', radioBtnCheckValue);
+          console.log('installmentValue:', installmentValue);
 
-const onAmoutInputConfirm = () => {
-  const radioBtnCheckValue = document.querySelector('input[name="radio1"]:checked').value;
-  const installmentValue = installmentSelect.value;
-  const amountValue = document.getElementById('mpmqr-amount').value;
-  console.log("amountValue:", amountValue);
-  console.log("radioBtnCheckValue:", radioBtnCheckValue);
-  console.log("installmentValue:", installmentValue);
+          if (amountValue === '') {
+            alert('금액을 입력해주세요.');
+            return;
+          } else if (amountValue < 10) {
+            alert('금액은 최소 10원 이상이어야 합니다.');
+            return;
+          }
 
-  if(amountValue === ""){
-    alert("금액을 입력해주세요.");
-    return; 
-  } else if(amountValue < 10) {
-    alert("금액은 최소 10원 이상이어야 합니다.");
-    return; 
-  }
+          let reqMpmqr = {
+            pim: 'DYNAMIC',
+            amount: Number(numericValue),
+            installment: Number(installmentValue),
+          };
 
-  
-
-};
-
-
-
+          const data = await qrpaySdk.fetchPostAsync(qrpaySdk.REST_APIS.MERCHANT.MPMQR, reqMpmqr);
+          console.log(data);
+          if (data.ok) {
+            const { pim, qrBase64Image, merchantName } = data;
+            onQrInfoUpdate(data);
+            onChangeState();
+            onInitAmountInputState();
+          } else {
+            const status = data.status;
+            if (status === 401) {
+              alert('로그인이 필요합니다.');
+              //TODO
+              return;
+            } else {
+              onInitAmountInputState();
+              const errorMsg = data || data.message || 'MPMQR 생성에 실패했습니다.';
+              alert(errorMsg);
+            }
+          }
+        };
       </script>
-  </div>
-
+    </div>
   </body>
 
   <script type="text/javascript">
@@ -428,9 +445,6 @@ const onAmoutInputConfirm = () => {
       $('#merchant-name-fragment').hide();
       $('#edit-merchant-name-fragment').show();
       $('#edit-merchant-name-fragment').focus();
-
-      // document.getElementById('merchant-name-fragment').style.display = 'none';
-      // document.getElementById('edit-merchant-name-fragment').style.display = 'block';
     };
     document.getElementById('edit-merchantname-view-btn').addEventListener('click', onMerchantNameChangeView);
 
@@ -456,16 +470,11 @@ const onAmoutInputConfirm = () => {
 
       console.log(accessToken);
 
-      const data = await qrpaySdk.apiAsyncRequest(qrpaySdk.REST_APIS.UPDATE_MERCHANT_NAME, { name: changedName }, accessToken);
+      const data = await qrpaySdk.fetchPostAsync(qrpaySdk.REST_APIS.MERCHANT.CHANGE_NAME, { name: changedName }, accessToken);
       console.log(data);
       if (data.ok) {
         const { pim, qrBase64Image, merchantName, amount, installment } = data;
-        if (pim == 'DYNAMIC') {
-          document.getElementById('mpmqr-img').src = 'data:image/png;base64,' + qrBase64Image;
-          document.getElementById('merchantName').innerText = merchantName;
-        } else if (pim == 'STATIC') {
-          // static mpmqr 일 경우 처리 로직
-        }
+        onQrInfoUpdate({ pim, merchantName, qrBase64Image, amount, installment });
       } else {
         const status = data.status;
         if (status === 401) {
@@ -473,39 +482,94 @@ const onAmoutInputConfirm = () => {
           //TODO
           return;
         } else {
-          const errorMsg = response.message || '가맹점명 변경에 실패했습니다.';  
+          const errorMsg = data || data.message || '가맹점명 변경에 실패했습니다.';
           alert(errorMsg);
         }
       }
-
       $('#merchant-name-fragment').show();
       $('#edit-merchant-name-fragment').hide();
     };
     document.getElementById('btn-change-merchant-name').addEventListener('click', onMerchantNameChange);
-    
+
     const onLogout = async () => {
-      const date = await qrpaySdk.logout();  
+      const date = await qrpaySdk.logout();
       console.log(date);
       window.location.href = qrpaySdk.PAGES_APIS.LOGIN_PAGE || '/pages/login';
     };
     document.getElementById('btn-logout').addEventListener('click', onLogout);
 
-
-
-
-    let current_state="state-mpmqr"; //state-amountinput
+    let current_state = 'state-mpmqr'; //state-amountinput
     const onChangeState = () => {
-      if(current_state==="state-mpmqr"){
-        current_state="state-amountinput";
+      if (current_state === 'state-mpmqr') {
+        current_state = 'state-amountinput';
         $('#state-mpmqr').hide();
         $('#state-amountinput').show();
-      }else{
-        current_state="state-mpmqr";
+      } else {
+        current_state = 'state-mpmqr';
         $('#state-amountinput').hide();
         $('#state-mpmqr').show();
       }
     };
+
+    const reqStaticMpmQr = async () => {
+      const data = await qrpaySdk.fetchPostAsync(qrpaySdk.REST_APIS.MERCHANT.MPMQR, { pim: 'STATIC' });
+      console.log(data);
+      if (data.ok) {
+        onQrInfoUpdate(data);
+      } else {
+        const status = data.status;
+        if (status === 401) {
+          alert('로그인이 필요합니다.');
+          //TODO
+          return;
+        } else {
+          const errorMsg = data || data.message || 'QR 초기화에 실패하였습니다';
+          alert(errorMsg);
+        }
+      }
+    };
+
+    const onQrInfoUpdate = ({ pim, merchantName, qrBase64Image, amount, installment }) => {
+      document.getElementById('merchantName').innerText = merchantName;
+      document.getElementById('toChangeMerchantName').value = merchantName;
+      document.getElementById('amountinput-merchant-name').innerText = merchantName;
+      document.getElementById('navi-merchant-name').innerText = merchantName;
+
+      document.getElementById('mpmqr-img').src = 'data:image/png;base64,' + qrBase64Image;
+
+      if (pim == 'DYNAMIC') {
+        $('#main-qr-init').show();
+        // dynamic mpmqr 일 경우 처리 로직
+        document.getElementById('main-mpmqr-amount').value = amount;
+        let installment_label = '일시불';
+        if (installment && installment > 1) {
+          installment_label = installment + '개월';
+        }
+        document.getElementById('installment-label').innerText = installment_label;
+        sessionStorage.setItem('pim', pim);
+        sessionStorage.setItem('installment-label', installment_label);
+        sessionStorage.setItem('amount', amount);
+      } else {
+        document.getElementById('main-mpmqr-amount').value = '';
+        document.getElementById('installment-label').innerText = '';
+        $('#main-qr-init').hide();
+        sessionStorage.clear();
+      }
+    };
+    window.addEventListener('pageshow', (event) => {
+      console.log('pageshow event');
+      if (document.getElementById('main-mpmqr-amount').value > 0) {
+        console.log('페이지복구-session');
+        const pim = sessionStorage.getItem('pim');
+        sessionStorage.getItem('amount');
+        const hasAmount = document.getElementById('main-mpmqr-amount').value > 0;
+        if (pim && pim == 'DYNAMIC') {
+          document.getElementById('installment-label').innerText = sessionStorage.getItem('installment-label');
+          $('#main-qr-init').show();
+        }
+      } else {
+        sessionStorage.clear();
+      }
+    });
   </script>
-
 </html>
-

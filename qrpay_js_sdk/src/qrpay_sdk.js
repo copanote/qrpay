@@ -14,7 +14,7 @@ const QRPAY_SDK = () => {
 
   const authenticate = async (username, password) => {
     console.log(username, password);
-    const data = await fetchPostAsync(createUrl(AUTH_APIS.AUTH_LOGIN), { loginId: username, password: password });
+    const data = await fetchPostAsyncInternal(createUrl(AUTH_APIS.AUTH_LOGIN), { loginId: username, password: password });
 
     if (loggable) {
       console.log('Authentication data:', data);
@@ -33,10 +33,10 @@ const QRPAY_SDK = () => {
   const refresh = async () => {
     const refreshToken = qrpay_storage.find('refreshToken');
     if (!refreshToken) {
-      return { ok: false, status: 401, error: 'No refresh token available' };
+      return { ok: false, status: 401, error: 'No refresh token available. AUTEHNTICATE REQUIRED' };
     }
 
-    const data = await fetchPostAsync(createUrl(AUTH_APIS.AUTH_REFRESH), { refreshToken: refreshToken });
+    const data = await fetchPostAsyncInternal(createUrl(AUTH_APIS.AUTH_REFRESH), { refreshToken: refreshToken });
 
     if (loggable) {
       console.log('Refresh data:', data);
@@ -57,7 +57,7 @@ const QRPAY_SDK = () => {
       return { ok: false, error: 'No refresh token available' };
     }
 
-    const data = await fetchPostAsync(createUrl(AUTH_APIS.AUTH_LOGOUT), { refreshToken: refreshToken });
+    const data = await fetchPostAsyncInternal(createUrl(AUTH_APIS.AUTH_LOGOUT), { refreshToken: refreshToken });
     if (!data.ok) {
       console.error('Logout failed:', data);
     }
@@ -89,7 +89,36 @@ const QRPAY_SDK = () => {
     return true;
   };
 
+  async function fetchPostAsyncInternal(url, data) {
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        return { ok: true, ...data };
+      }
+
+      const errorBody = await response.json().catch(() => ({}));
+      console.log('Http status:', response.status, response.statusText);
+      console.log('Error body:', errorBody);
+      return { ok: false, status: response.status, statusText: response.statusText, error: errorBody };
+    } catch (error) {
+      //Promise 자체가 rejected (network error, CORS 등)
+      console.error('Fetch error:', error);
+      return { ok: false, ...QRPAY_CODE.FETCH_ERROR, error: error };
+    }
+  }
+
   async function fetchPostAsync(url, data, accessToken) {
+    if (accessToken === undefined) accessToken = getAccessToken().accessToken;
+
     const authHeader = accessToken ? { Authorization: `Bearer ${accessToken}` } : {};
 
     try {
@@ -111,7 +140,36 @@ const QRPAY_SDK = () => {
       const errorBody = await response.json().catch(() => ({}));
       console.log('Http status:', response.status, response.statusText);
       console.log('Error body:', errorBody);
-      return { ok: false, status: response.status, statusText: response.statusText, error: errorBody };
+
+      if (response.status === 401) {
+        const refresh_result = await refresh();
+        if (refresh_result.ok) {
+          accessToken = getAccessToken().accessToken;
+          const authHeader = accessToken ? { Authorization: `Bearer ${accessToken}` } : {};
+
+          const response = await fetch(url, {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+              'Content-Type': 'application/json',
+              ...authHeader,
+            },
+            body: JSON.stringify(data),
+          });
+          if (response.ok) {
+            const data = await response.json();
+            return { ok: true, ...data };
+          }
+
+          const errorBody = await response.json().catch(() => ({}));
+          console.log('Http status:', response.status, response.statusText);
+          console.log('Error body:', errorBody);
+          return { ok: false, status: response.status, statusText: response.statusText, error: errorBody };
+        }
+        return { ok: false, status: response.status, statusText: response.statusText, error: errorBody };
+      } else {
+        return { ok: false, status: response.status, statusText: response.statusText, error: errorBody };
+      }
     } catch (error) {
       //Promise 자체가 rejected (network error, CORS 등)
       console.error('Fetch error:', error);
@@ -119,6 +177,8 @@ const QRPAY_SDK = () => {
     }
   }
   async function fetchGetAsync(url, accessToken) {
+    if (accessToken === undefined) accessToken = getAccessToken().accessToken;
+
     const authHeader = accessToken ? { Authorization: `Bearer ${accessToken}` } : {};
 
     try {
@@ -139,6 +199,7 @@ const QRPAY_SDK = () => {
       const errorBody = await response.json().catch(() => ({}));
       console.log('Http status:', response.status, response.statusText);
       console.log('Error body:', errorBody);
+
       return { ok: false, status: response.status, statusText: response.statusText, error: errorBody };
     } catch (error) {
       //Promise 자체가 rejected (network error, CORS 등)
@@ -147,7 +208,9 @@ const QRPAY_SDK = () => {
     }
   }
 
-  function fetchPostPromise(url, data, accessToken) {
+  function fetchPostPromise(url, data, accessToken = undefined) {
+    if (accessToken === undefined) accessToken = getAccessToken().accessToken;
+
     const authHeader = accessToken ? { Authorization: `Bearer ${accessToken}` } : {};
 
     try {
@@ -170,6 +233,8 @@ const QRPAY_SDK = () => {
   }
 
   function fetchGetPromise(url, accessToken) {
+    if (accessToken === undefined) accessToken = getAccessToken().accessToken;
+
     const authHeader = accessToken ? { Authorization: `Bearer ${accessToken}` } : {};
 
     try {
@@ -216,17 +281,6 @@ const AUTH_APIS = {
   AUTH_LOGOUT: '/auth/logout',
 };
 
-const PAGES_APIS = {
-  PAGES_LOGIN: '/pages/login',
-  PAGES_MAIN: '/pages/home/mpmqr',
-  PAGES_NOTICE: '/pages/settings/notice',
-  PAGES_GUIDE: '/pages/settings/guide',
-  PAGES_TERMS_SERVICE: '/pages/settings/terms-service',
-  PAGES_TERMS_SERVICE_TERMS: '/pages/settings/terms-service/terms',
-  PAGES_TERMS_SERVICE_PERMISSIONS: '/pages/settings/terms-service/permissions',
-  PAGES_TERMS_SERVICE_CANCEL: '/pages/settings/terms-service/cancel',
-};
-
 const REST_APIS = {
   MERCHANT: {
     INFO: '/qrpay/api/v1/merchant/info',
@@ -237,7 +291,9 @@ const REST_APIS = {
     CHANGE_TIP: '/qrpay/api/v1/merchant/change-tip',
     CHANGE_VAT: '/qrpay/api/v1/merchant/change-vat',
   },
-  MEMBER: {},
+  MEMBER: {
+    ID_DUP_CHECK: '/v1/member/id-check',
+  },
   QR_KIT: {},
 };
 

@@ -13,6 +13,7 @@ import com.bccard.qrpay.exception.code.QrpayErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
@@ -22,6 +23,28 @@ import org.springframework.web.bind.annotation.*;
 public class MemberApiController {
 
     private final MemberService memberService;
+
+    @RequestMapping(value = "/v1/member/id-check")
+    @ResponseBody
+    public ResponseEntity<?> idDuplicationCheck(
+            @LoginMember Member member,
+            @RequestBody @Validated IdDupCheckReqDto reqDto
+    ) {
+        log.info("Member={}", member.getMemberId());
+
+        log.info("reqDto={}", reqDto);
+
+        if (member.getRole() != MemberRole.MASTER) {
+            throw new AuthException(QrpayErrorCode.INVALID_AUTHORIZATION);
+        }
+
+        if (memberService.exist(reqDto.getId())) {
+            throw new MemberException(QrpayErrorCode.LOGIN_ID_CONFLICT);
+        }
+
+        return ResponseEntity.ok(QrpayApiResponse.ok());
+    }
+
 
     @RequestMapping(value = "/v1/member/{memberId}/password-change")
     @ResponseBody

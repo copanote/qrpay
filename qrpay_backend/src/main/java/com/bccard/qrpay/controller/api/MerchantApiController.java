@@ -51,6 +51,8 @@ public class MerchantApiController {
 
         Merchant merchant = member.getMerchant();
 
+        log.info("reqDto={}", reqDto);
+
         List<Permission> permissions = reqDto.getPermissions();
         boolean permissionCancel = permissions.contains(Permission.CANCEL);
 

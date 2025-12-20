@@ -62,8 +62,7 @@ public class MemberService {
 
     public String createNewMemberId() {
         Long seq = memberQueryRepository.getNextSequenceValue();
-        String pad = StringUtils.leftPad(seq.toString(), 8, '0');
-        return "";
+        return StringUtils.leftPad(seq.toString(), 8, 'T');
     }
 
     public List<Member> findMemberByRole(Merchant merchant, MemberRole role) {

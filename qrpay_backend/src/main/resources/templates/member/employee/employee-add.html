@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>BC</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css" />
+    <script src="/js/jquery-3.3.1.slim.min.js.js"></script>
+    <script src="/js/popper.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <link href="/css/common.css" rel="stylesheet" />
+    <script src="/js/common.js"></script>
+
+    <th:block th:if="${#arrays.contains(@environment.getActiveProfiles(), 'local')}">
+      <script th:src="@{/js/qrpay_sdk.dev.js}"></script>
+    </th:block>
+
+    <th:block th:if="${#arrays.contains(@environment.getActiveProfiles(), 'dev')}">
+      <script th:src="@{/js/qrpay_sdk.dev.js}"></script>
+    </th:block>
+
+    <th:block th:if="${#arrays.contains(@environment.getActiveProfiles(), 'prod')}">
+      <script th:src="@{/js/qrpay_sdk.prod.js}"></script>
+    </th:block>
+  </head>
+
+  <body>
+    <div id="wrap">
+      <!-- header -->
+      <header id="hd">
+        <div class="container">
+          <button type="button" class="icon-back" onclick="goBack()">이전 페이지 이동</button>
+          <h1>추가 사용자 신규등록</h1>
+          <a class="icon-home" href="javascript:void(0)" onclick="goHome()">홈으로 이동</a>
+        </div>
+      </header>
+
+      <!-- container -->
+      <div id="ct">
+        <!-- 페이지 시작 -->
+        <div class="cnt-btm-wrp type2">
+          <div class="container">
+            <div class="frm mt25 mb25">
+              <div class="form-group">
+                <span class="tit">아이디</span>
+                <div class="pr">
+                  <input id="input-id" type="text" maxlength="12" class="form-control pr60" placeholder="아이디를 입력해주세요" />
+                  <button type="button" class="btn-pos-right" onclick="checkIdDuplication()">중복확인</button>
+                </div>
+                <small id="id-rule-msg" class="form-text text-muted fw300">4~12자리의 영문/숫자/영문+숫자 조합</small>
+              </div>
+              <div class="form-group">
+                <span class="tit">비밀번호</span>
+                <input id="input-emp-pw" type="password" class="form-control" placeholder="숫자 6자리" maxlength="6" />
+                <small class="form-text text-muted fw300">
+                  <span id="pw-rule-six">v 6자리</span>
+                  <span id="pw-rule-sequencial">v 동일/연속 3자리 이상 입력불가</span>
+                </small>
+              </div>
+              <div class="form-group">
+                <span class="tit">비밀번호 확인</span>
+                <input id="input-emp-pw-confirm" type="password" class="form-control" placeholder="숫자 6자리" maxlength="6" />
+                <small id="pw-mismatch-msg" class="form-text text-danger fw300" style="display: none"> 비밀번호가 일치하지 않습니다 </small>
+              </div>
+            </div>
+            <p class="btm-border mt30">권한 부여</p>
+            <ul class="lst-btm-border mt10">
+              <li class="row align-items-center">
+                <div class="col">승인취소 권한 <button type="button" class="icon-help ml5">도움말</button></div>
+                <div class="col-xs-auto">
+                  <label class="switch-chk"> <input id="permission-cancel" type="checkbox" checked /><i></i> </label>
+                </div>
+              </li>
+            </ul>
+          </div>
+          <div class="btm-fixed-btn type2">
+            <button id="btn-add-emp" class="btn btn-primary btn-block" onclick="addEmployee()" disabled>확인</button>
+          </div>
+        </div>
+        <!--// 페이지 끝 -->
+      </div>
+    </div>
+    <script>
+      let passedIdRule = false;
+      const idInput = document.getElementById('input-id');
+      const idRuleMsg = document.getElementById('id-rule-msg');
+      const addEmpBtn = document.getElementById('btn-add-emp');
+
+      idInput.addEventListener('input', function () {
+        const val = this.value;
+
+        //  정규식 설명:
+        // ^[a-zA-Z0-9] : 영문 대소문자 또는 숫자로 시작
+        // {4,12} : 최소 4자, 최대 12자
+        const idRegex = /^[a-zA-Z0-9]{4,12}$/;
+
+        const isIdValid = idRegex.test(val);
+
+        // 🎯 isIdValid가 true면 disabled를 해제(false), false면 설정(true)
+
+        if (val.length === 0) {
+          // 값이 없을 때는 기본 회색(text-muted)으로 초기화
+          idRuleMsg.className = 'form-text text-muted fw300';
+          passedIdRule = false;
+        } else if (isIdValid) {
+          // 조건에 맞을 때 (초록색)
+          idRuleMsg.classList.add('text-success');
+          idRuleMsg.classList.remove('text-danger', 'text-muted');
+          passedIdRule = true;
+        } else {
+          // 조건에 맞지 않을 때 (빨간색)
+          idRuleMsg.classList.add('text-danger');
+          idRuleMsg.classList.remove('text-success', 'text-muted');
+          passedIdRule = false;
+        }
+      });
+
+      const checkIdDuplication = async () => {
+        if (!passedIdRule) {
+          alert('아이디는 영문, 숫자, 영문+숫자 혼합 4~12자리를 입력해주세요.');
+          return;
+        }
+        let reqIdDupCheck = {
+          id: idInput.value,
+        };
+        const data = await qrpaySdk.fetchPostAsync(REST_APIS.MEMBER.ID_DUP_CHECK, reqIdDupCheck);
+        console.log(data);
+        if (!data.ok) {
+          addEmpBtn.disabled = true;
+          const status = data.status;
+          if (status === 401) {
+            alert('로그인이 필요합니다.');
+            return;
+          } else if (status === 409) {
+            const errorMsg = '동일 ID가 존재합니다';
+            alert(errorMsg);
+          } else {
+            const errorMsg = data || data.message || '동일 ID가 존재합니다';
+            alert(errorMsg);
+          }
+        } else {
+          addEmpBtn.disabled = false;
+          alert('등록가능한 ID입니다');
+        }
+      };
+
+      const pwInput = document.getElementById('input-emp-pw');
+      const ruleSix = document.getElementById('pw-rule-six');
+      const ruleSeq = document.getElementById('pw-rule-sequencial');
+      pwInput.addEventListener('input', function () {
+        const val = this.value;
+
+        // 1. 6자리 체크 (정확히 6자리 숫자)
+        const isSix = /^\d{6}$/.test(val);
+        updateStatus(ruleSix, isSix);
+
+        // 2. 동일/연속 3자리 체크
+        const isNoSequence = checkSequence(val);
+        // 값이 있을 때만 체크 (빈 값일 때는 기본 상태)
+        updateStatus(ruleSeq, val.length > 0 ? isNoSequence : false);
+      });
+
+      // 상태 업데이트 함수 (클래스 교체)
+      function updateStatus(element, isValid) {
+        if (isValid) {
+          element.classList.add('text-success');
+          element.classList.remove('text-danger', 'text-muted');
+        } else {
+          element.classList.add('text-danger');
+          element.classList.remove('text-success', 'text-muted');
+        }
+      }
+
+      // 동일/연속 문자 검사 로직
+      function checkSequence(str) {
+        if (str.length < 3) return true; // 3자리 미만은 일단 통과
+
+        for (let i = 0; i < str.length - 2; i++) {
+          const c1 = str.charCodeAt(i);
+          const c2 = str.charCodeAt(i + 1);
+          const c3 = str.charCodeAt(i + 2);
+
+          // 동일 문자 3개 (예: 111, aaa)
+          if (c1 === c2 && c2 === c3) return false;
+
+          // 연속 숫자/문자 (예: 123, abc 또는 321, cba)
+          if ((c1 + 1 === c2 && c2 + 1 === c3) || (c1 - 1 === c2 && c2 - 1 === c3)) {
+            return false;
+          }
+        }
+        return true;
+      }
+
+      // 요소 가져오기
+      const confirmPwInput = document.getElementById('input-emp-pw-confirm'); // 비번 확인
+      const mismatchMsg = document.getElementById('pw-mismatch-msg');
+
+      confirmPwInput.addEventListener('input', function () {
+        const originVal = pwInput.value;
+        const confirmVal = this.value;
+
+        // 1. 6글자가 입력되었는지 확인
+        if (confirmVal.length === 6) {
+          // 2. 원본과 일치하는지 비교
+          if (originVal !== confirmVal) {
+            // 일치하지 않으면 메시지 표시
+            mismatchMsg.style.display = 'block';
+          } else {
+            // 일치하면 메시지 숨김
+            mismatchMsg.style.display = 'none';
+          }
+        } else {
+          // 3. 6글자가 아니면(지웠을 때 포함) 무조건 메시지 숨김
+          mismatchMsg.style.display = 'none';
+        }
+      });
+
+      const addEmployee = async () => {
+        const permissions_array = document.getElementById('permission-cancel').checked ? ['cancel'] : [];
+
+        let reqAddEmployee = {
+          loginId: idInput.value,
+          password: pwInput.value,
+          confirmPassword: confirmPwInput.value,
+          permissions: permissions_array,
+        };
+
+        const data = await qrpaySdk.fetchPostAsync(REST_APIS.MERCHANT.ADD_EMPLOYEES, reqAddEmployee);
+        console.log(data);
+        if (!data.ok) {
+          const status = data.status;
+          if (status === 401) {
+            alert('로그인이 필요합니다.');
+            return;
+          } else {
+            const errorMsg = data || data.message || '시스템오류';
+            alert('추가 사용자 등록에 실패하였습니다[' + errorMsg + ']');
+          }
+        } else {
+          pageMove(PAGES_APIS.PAGES_EMPLOYEE_LIST);
+        }
+      };
+
+      window.addEventListener('pageshow', (event) => {
+        idInput.value = '';
+        pwInput.value = '';
+        confirmPwInput.value = '';
+        document.getElementById('permission-cancel').checked = true;
+        addEmpBtn.disabled = true;
+      });
+    </script>
+  </body>
+</html>
