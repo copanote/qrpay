@@ -115,6 +115,19 @@ public class Member extends BaseEntity implements Persistable<String> {
         return memberId;
     }
 
+    @Builder(builderMethodName = "createEmployee")
+    public Member(String memberId, Merchant merchant, String loginId, String hashedPassword, Boolean permissionToCancel) {
+        this.memberId = memberId;
+        this.merchant = merchant;
+        this.loginId = loginId;
+        this.hashedPassword = hashedPassword;
+        this.permissionToCancel = permissionToCancel;
+
+        this.role = MemberRole.EMPLOYEE;
+        this.status = MemberStatus.ACTIVE;
+        this.affiCoId = "BCQRCPAY";
+    }
+
     @Builder(builderMethodName = "createMasterMemeber")
     public Member(String memberId, Merchant merchant, String loginId, String hashedPassword, String termsAgreeInfo, String referrerId, String email) {
         this.memberId = memberId;
@@ -133,18 +146,6 @@ public class Member extends BaseEntity implements Persistable<String> {
         this.affiCoId = "BCQRCPAY";
     }
 
-    @Builder(builderMethodName = "createEmployee")
-    public Member(String memberId, Merchant merchant, String loginId, String hashedPassword, Boolean permissionToCancel) {
-        this.memberId = memberId;
-        this.merchant = merchant;
-        this.loginId = loginId;
-        this.hashedPassword = hashedPassword;
-        this.permissionToCancel = permissionToCancel;
-
-        this.role = MemberRole.EMPLOYEE;
-        this.status = MemberStatus.ACTIVE;
-        this.affiCoId = "BCQRCPAY";
-    }
 
     public void onPasswordFail() {
         passwordErrorAt = MpmDateTimeUtils.generateDtmNow(MpmDateTimeUtils.PATTERN_YEAR_TO_DATE);
@@ -166,6 +167,14 @@ public class Member extends BaseEntity implements Persistable<String> {
         this.hashedPassword = hashedPassword;
         this.passwordChangedAt = MpmDateTimeUtils.generateDtmNow(MpmDateTimeUtils.PATTERN_YEAR_TO_SEC);
     }
+
+    public void cancel() {
+        if (this.status != MemberStatus.CANCELLED) {
+            this.withdrawalAt = MpmDateTimeUtils.generateDtmNow(MpmDateTimeUtils.PATTERN_YEAR_TO_DATE);
+            this.status = MemberStatus.CANCELLED;
+        }
+    }
+
 }
 
 /**

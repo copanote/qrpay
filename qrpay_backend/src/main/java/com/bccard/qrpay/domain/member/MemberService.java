@@ -67,6 +67,7 @@ public class MemberService {
 
     public List<Member> findMemberByRole(Merchant merchant, MemberRole role) {
         List<Member> allMembers = memberQueryRepository.findAllMembers(merchant);
+
         return allMembers.stream()
                 .filter(member -> member.getRole() == role)
                 .filter(member -> member.getStatus() != MemberStatus.CANCELLED)
@@ -103,6 +104,19 @@ public class MemberService {
         if (m.getStatus() != MemberStatus.CANCELLED && m.getStatus() != status) {
             m.updateStatus(status);
         }
+        return m;
+    }
+
+    @Transactional
+    public Member cancel(Member member) {
+        Member m = memberQueryRepository.findById(member.getMemberId()).orElseThrow(
+                () -> new MemberException(QrpayErrorCode.MEMBER_NOT_FOUND)
+        );
+
+        if (m.getStatus() != MemberStatus.CANCELLED) {
+            m.cancel();
+        }
+
         return m;
     }
 
@@ -166,8 +180,17 @@ public class MemberService {
                 .hashedPassword(customPasswordEncoder.encode(password))
                 .permissionToCancel(permissionToCancel)
                 .build();
+        // [테스트 코드 추가]
+        long count = memberCUDRepository.count();
+        System.out.println("저장 직 데이터 개수: " + count);
+        Member save = memberCUDRepository.save(newMem);
+        memberCUDRepository.flush(); // DB에 즉시 반영
 
-        return memberCUDRepository.save(newMem);
+        // [테스트 코드 추가]
+        long count2 = memberCUDRepository.count();
+        System.out.println("저장 직후 데이터 개수: " + count2);
+        return save;
+
     }
 
 

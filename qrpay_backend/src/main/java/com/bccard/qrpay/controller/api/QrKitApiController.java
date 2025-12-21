@@ -66,7 +66,7 @@ public class QrKitApiController {
         MpmQrKitApplication newQrKit = qrKitService.apply(serviceQrKitReqDto);
         QrKitApplicationDto from = QrKitApplicationDto.from(newQrKit);
 
-        QrpayApiResponse<QrKitApplicationDto> res = QrpayApiResponse.ok(from);
+        QrpayApiResponse<QrKitApplicationDto> res = QrpayApiResponse.ok(member, from);
 
         return ResponseEntity.ok().body(res);
     }
@@ -92,7 +92,7 @@ public class QrKitApiController {
         List<QrKitApplicationDto> list = mpmQrKitApplications.stream()
                 .map(QrKitApplicationDto::from).toList();
 
-        QrpayApiResponse<QrKitApplicationResDto> res = QrpayApiResponse.ok(QrKitApplicationResDto.of(list));
+        QrpayApiResponse<QrKitApplicationResDto> res = QrpayApiResponse.ok(member, QrKitApplicationResDto.of(list));
 
         return ResponseEntity.ok().body(res);
     }

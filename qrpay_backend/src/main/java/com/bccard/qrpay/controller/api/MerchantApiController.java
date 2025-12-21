@@ -57,8 +57,8 @@ public class MerchantApiController {
         boolean permissionCancel = permissions.contains(Permission.CANCEL);
 
         Member newEmployee = memberService.addEmployee(merchant, reqDto.getLoginId(), reqDto.getPassword(), permissionCancel);
-
-        return ResponseEntity.ok(QrpayApiResponse.ok(EmployeesInfoDto.from(newEmployee)));
+        
+        return ResponseEntity.ok(QrpayApiResponse.ok(member, EmployeesInfoDto.from(newEmployee)));
     }
 
 
@@ -76,7 +76,7 @@ public class MerchantApiController {
         List<Member> employees = memberService.findMemberByRole(merchant, MemberRole.EMPLOYEE);
         List<EmployeesInfoDto> result = employees.stream().map(EmployeesInfoDto::from).toList();
 
-        return ResponseEntity.ok(QrpayApiResponse.ok(EmployeesInfoResDto.of(result)));
+        return ResponseEntity.ok(QrpayApiResponse.ok(member, EmployeesInfoResDto.of(result)));
     }
 
 
@@ -90,7 +90,7 @@ public class MerchantApiController {
             throw new AuthException(QrpayErrorCode.INVALID_AUTHORIZATION);
         }
 
-        return ResponseEntity.ok(QrpayApiResponse.ok(MerchantInfoResDto.from(merchant)));
+        return ResponseEntity.ok(QrpayApiResponse.ok(member, MerchantInfoResDto.from(merchant)));
     }
 
 

@@ -4,6 +4,32 @@
 @import url(https://fonts.googleapis.com/css?family=Lato);
 @import url(util.css);
 
+/* 전체 화면 모달 스타일 */
+.custom-modal-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw; /* 가로 꽉 차게 */
+  height: 100vh; /* 세로 꽉 차게 */
+  background-color: #ffffff; /* 배경을 흰색으로 */
+  z-index: 9999;
+  display: none; /* 기본은 숨김 */
+  overflow-y: auto; /* 내용이 길어지면 스크롤 생성 */
+}
+
+/* 내부 콘텐츠 영역도 100%로 설정 */
+.modal-content-area {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 헤더 고정 및 스타일 조정 (필요 시) */
+#passwordModal #hd {
+  border-bottom: 1px solid #eee;
+}
+
 /* 현대적인 브라우저 표준 */
 input::placeholder {
   color: #000;

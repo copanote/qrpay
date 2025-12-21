@@ -10,6 +10,18 @@
     <script src="/js/bootstrap.min.js"></script>
     <link href="/css/common.css" rel="stylesheet" />
     <script src="/js/common.js"></script>
+    <script src="/js/password-modal.js"></script>
+    <th:block th:if="${#arrays.contains(@environment.getActiveProfiles(), 'local')}">
+      <script th:src="@{/js/qrpay_sdk.dev.js}"></script>
+    </th:block>
+
+    <th:block th:if="${#arrays.contains(@environment.getActiveProfiles(), 'dev')}">
+      <script th:src="@{/js/qrpay_sdk.dev.js}"></script>
+    </th:block>
+
+    <th:block th:if="${#arrays.contains(@environment.getActiveProfiles(), 'prod')}">
+      <script th:src="@{/js/qrpay_sdk.prod.js}"></script>
+    </th:block>
   </head>
 
   <body>
@@ -28,67 +40,230 @@
         <!-- 페이지 시작 -->
         <div class="container mt25 mb25">
           <button type="button" class="btn btn-primary btn-lg btn-block" onclick="location.href='/pages/member/employee/add'">신규등록</button>
-          <ul class="lst-btm-border mt10">
-            <li>SUB01</li>
-            <li class="row align-items-center">
-              <div class="col">
-                승인취소 권한
-                <button type="button" class="icon-help ml5">도움말</button>
-              </div>
-              <div class="col-xs-auto">
-                <label class="switch-chk"> <input type="checkbox" checked /><i></i> </label>
-              </div>
-            </li>
-            <li class="row align-items-center">
-              <div class="col">
-                사용 중지
-                <button type="button" class="icon-help ml5">도움말</button>
-              </div>
-              <div class="col-xs-auto">
-                <label class="switch-chk"> <input type="checkbox" /><i></i> </label>
-              </div>
-            </li>
-          </ul>
-          <div class="row mt15">
-            <div class="col pr5">
-              <button type="button" class="btn btn-outline-dark btn-block">비밀번호 변경</button>
-            </div>
-            <div class="col pl5">
-              <button type="button" class="btn btn-outline-dark btn-block">사용자 해지</button>
-            </div>
-          </div>
-          <ul class="lst-btm-border mt10">
-            <li>SUB01</li>
-            <li class="row align-items-center">
-              <div class="col">
-                승인취소 권한
-                <button type="button" class="icon-help ml5">도움말</button>
-              </div>
-              <div class="col-xs-auto">
-                <label class="switch-chk"> <input type="checkbox" checked /><i></i> </label>
-              </div>
-            </li>
-            <li class="row align-items-center">
-              <div class="col">
-                사용 중지
-                <button type="button" class="icon-help ml5">도움말</button>
-              </div>
-              <div class="col-xs-auto">
-                <label class="switch-chk"> <input type="checkbox" /><i></i> </label>
-              </div>
-            </li>
-          </ul>
-          <div class="row mt15">
-            <div class="col pr5">
-              <button type="button" class="btn btn-outline-dark btn-block">비밀번호 변경</button>
-            </div>
-            <div class="col pl5">
-              <button type="button" class="btn btn-outline-dark btn-block">사용자 해지</button>
-            </div>
-          </div>
+          <div id="employee-list-container"></div>
         </div>
         <!--// 페이지 끝 -->
       </div>
     </div>
+    <div th:replace="~{fragments/modals/passwordModal :: passwordContent}"></div>
+
+    <script th:inline="javascript">
+      const EmployeeManager = {
+        // 1. 상태 관리 (데이터)
+        state: {
+          employees: [],
+          authMemberId: [[${authMemberId}]],
+          authLoginId: [[${authLoginId}]],
+        },
+
+        // 2. 초기화 및 API 호출 시뮬레이션
+        init: async function () {
+          // 실제 운영 시: fetch('/api/employees').then(res => res.json()).then(data => this.updateState(data));
+          const mockData = [
+            { memberId: 'SUB01', loginId: 'SUB01', permissionToCancel: true, suspended: false },
+            { memberId: 'SUB02', loginId: 'SUB02', permissionToCancel: false, suspended: false },
+          ];
+
+          const data = await qrpaySdk.fetchGetAsync(REST_APIS.MERCHANT.EMPLOYEES);
+          console.log(JSON.stringify(data));
+          if (data.ok) {
+            this.updateState(data.data.list);
+            this.bindEvents(); // 이벤트 위임 설정
+          } else {
+            const status = data.status;
+            if (status === 401) {
+              console.log('로그인이 필요합니다.');
+              const auth_loginId = this.state.authLoginId || 'test';
+              PasswordModal.open({
+                loginId: auth_loginId,
+                onSuccessCallback: (res) => {
+                  this.init();
+                },
+                onCancelCallback: () => {
+                  console.log('cancel authentication');
+                },
+              });
+            } else {
+              const errorMsg = data || data.message || '추가 사용자 정보 조회 실패';
+              alert(errorMsg);
+            }
+          }
+
+
+        },
+
+        // 3. 상태 업데이트 및 렌더링 트리거
+        updateState: function (newData) {
+          this.state.employees = newData;
+          this.render();
+        },
+
+        updateById: function (targetMemberId, updatedData) {
+          // 1. 상태(state) 배열에서 해당 데이터 찾아 수정
+          const index = this.state.employees.findIndex((emp) => emp.memberId === targetMemberId);
+          console.log(index);
+
+          if (index !== -1) {
+            // 기존 데이터와 새 데이터를 합침 (Object.assign)
+            this.state.employees[index] = { ...this.state.employees[index], ...updatedData };
+            this.render();
+          }
+        },
+
+        deleteById: function (targetMemberId) {
+          this.state.employees = this.state.employees.filter((emp) => emp.memberId !== targetMemberId);
+          this.render();
+        },
+
+        // 4. [성능 최적화] 부분 렌더링 로직
+        render: function () {
+          const container = document.getElementById('employee-list-container');
+
+          this.state.employees.forEach((emp) => {
+            let itemEl = document.getElementById(`emp-card-${emp.memberId}`);
+
+            if (itemEl) {
+              // [최적화] 이미 존재하면 데이터가 변한 부분만 업데이트
+              this.updateExistingItem(itemEl, emp);
+            } else {
+              // 없으면 새로 생성 (innerHTML 사용 시 보안을 위해 데이터 바인딩 주의)
+              const tempDiv = document.createElement('div');
+              tempDiv.innerHTML = this.getTemplate(emp);
+              container.appendChild(tempDiv.firstElementChild);
+            }
+          });
+
+          // 삭제된 데이터 처리 (데이터셋에 없는데 UI에만 있는 경우 삭제)
+          const currentIds = this.state.employees.map((e) => `emp-card-${e.memberId}`);
+          Array.from(container.children).forEach((child) => {
+            if (!currentIds.includes(child.id)) child.remove();
+          });
+        },
+
+        // 5. [최적화] 특정 요소의 값만 변경
+        updateExistingItem: function (el, data) {
+          const cancelChk = el.querySelector('.chk-cancel');
+          const suspendChk = el.querySelector('.chk-suspend');
+
+          if (cancelChk.checked !== data.permissionToCancel) cancelChk.checked = data.permissionToCancel;
+          if (suspendChk.checked !== data.suspended) suspendChk.checked = data.suspended;
+        },
+
+        // 6. 이벤트 위임 (성능 및 동적 요소 관리 최적화)
+        bindEvents: function () {
+          const container = document.getElementById('employee-list-container');
+
+          container.addEventListener('change', (e) => {
+            if (e.target.tagName === 'INPUT' && e.target.type === 'checkbox') {
+              const card = e.target.closest('.employee-card');
+              const id = card.id.replace('emp-card-', '');
+              const field = e.target.classList.contains('chk-cancel') ? 'permissionToCancel' : 'suspended';
+
+              // 데이터 상태 동기화 (실제로는 여기서 서버 API 호출)
+              const emp = this.state.employees.find((item) => item.memberId === id);
+              if (field == 'permissionToCancel') {
+                console.log(`${id}의 ${field} 변경시도: ${e.target.checked}`);
+                console.log(emp);
+                this.handleChangePermisstionToCancel(emp, e.target.checked);
+              }
+
+              // const emp = this.state.employees.find((item) => item.memberId === id);
+              //if (emp) emp[field] = e.target.checked;
+            }
+          });
+
+          container.addEventListener('click', (e) => {
+            console.log('click event');
+            // '비밀번호 변경' 버튼인지 확인
+            if (e.target.classList.contains('btn-change-pw')) {
+              const userId = e.target.dataset.id; // data-id="SUB01" 값을 가져옴
+              this.handlePasswordChange(userId);
+            }
+
+            // '사용자 해지' 버튼인지 확인
+            if (e.target.classList.contains('btn-remove-user')) {
+              const userId = e.target.dataset.id;
+              this.handleUserRemove(userId);
+            }
+          });
+        },
+
+        handleChangePermisstionToCancel: async function (emp, toChangePermission) {
+          const url = REST_APIS.MEMBER.getPathVariableUrl(REST_APIS.MEMBER.EMPLOYEE_PERMISSION_CANCEL_CHANGE, emp.memberId);
+          console.log(url);
+          let changePermissionCancel = {
+            permissionToCancel: toChangePermission,
+          };
+          const data = await qrpaySdk.fetchPostAsync(url, changePermissionCancel);
+          console.log(JSON.stringify(data))
+          if (data.ok) {
+            const { memberId, loginId, permissionToCancel, suspended } = data.data;
+            this.updateById(memberId, { memberId, loginId, permissionToCancel, suspended });
+          } else {
+            const status = data.status;
+            if (status === 401) {
+              console.log('로그인이 필요합니다.', JSON.stringify(data));
+              const auth_loginId = this.state.authLoginId || 'test';
+              PasswordModal.open({
+                loginId: auth_loginId,
+                onSuccessCallback: function (res) {
+                  handleChangePermisstionToCancel(emp, toChangePermission);
+                },
+                onCancelCallback: function () {
+                  console.log('cancel authentication');
+                },
+              });
+            } else {
+              const errorMsg = data || data.message || '승인취소 권한 변경에 실패했습니다.';
+              alert(errorMsg);
+            }
+          }
+        },
+
+        // 7. HTML 템플릿
+        getTemplate: function (emp) {
+          return `
+                <div class="employee-card mb30" id="emp-card-${emp.memberId}">
+                    <ul class="lst-btm-border mt10">
+                        <li>${emp.loginId}</li>
+                        <li class="row align-items-center">
+                            <div class="col">승인취소 권한</div>
+                            <div class="col-xs-auto">
+                                <label class="switch-chk">
+                                    <input type="checkbox" data-id="${emp.memberId}" class="chk-cancel" ${emp.permissionToCancel ? 'checked' : ''} />
+                                    <i></i>
+                                </label>
+                            </div>
+                        </li>
+                        <li class="row align-items-center">
+                            <div class="col">사용 중지</div>
+                            <div class="col-xs-auto">
+                                <label class="switch-chk">
+                                    <input type="checkbox" data-id="${emp.memberId}" class="chk-suspend" ${emp.suspended ? 'checked' : ''} />
+                                    <i></i>
+                                </label>
+                            </div>
+                        </li>
+                    </ul>
+                    <div class="row mt15">
+                        <div class="col pr5">
+                            <button type="button" data-id="${emp.memberId}" class="btn btn-outline-dark btn-block">비밀번호 변경</button>
+                        </div>
+                        <div class="col pl5">
+                            <button type="button" data-id="${emp.memberId}" class="btn btn-outline-dark btn-block">사용자 해지</button>
+                        </div>
+                    </div>
+                </div>`;
+        },
+
+        handleAuthSuccess: function (result) {
+          alert(`${result.loginId}님 인증 성공!`);
+          // 성공 후 로직 수행
+        },
+      };
+
+      // DOM 로드 완료 후 시작
+      document.addEventListener('DOMContentLoaded', () => EmployeeManager.init());
+    </script>
   </body>
 </html>

@@ -172,6 +172,12 @@ const REST_APIS = {
   },
   MEMBER: {
     ID_DUP_CHECK: '/qrpay/api/v1/member/id-check',
+    EMPLOYEE_STATUS_CHANGE: '/qrpay/api/v1/member/{memberId}/employee-status-change',
+    EMPLOYEE_PERMISSION_CANCEL_CHANGE: '/qrpay/api/v1/member/{memberId}/employee-cancel-permission-change',
+    EMPLOYEE_CANCEL: '/qrpay/api/v1/member/{memberId}/employee-cancel',
+    getPathVariableUrl: function (url, memberId) {
+      return url.replace('{memberId}', memberId);
+    },
   },
   QR_KIT: {},
 };

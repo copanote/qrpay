@@ -1,10 +1,12 @@
 package com.bccard.qrpay.controller.api.dtos;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
 public class CancelPermissionUpdateReqResDto {
-    private final boolean permissionToCancel;
+    private boolean permissionToCancel;
 
     public CancelPermissionUpdateReqResDto(boolean permissionToCancel) {
         this.permissionToCancel = permissionToCancel;

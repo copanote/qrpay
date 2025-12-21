@@ -12,7 +12,7 @@ public class EmployeesInfoDto {
     private String memberId;
     private String loginId;
     private Boolean permissionToCancel;
-    private MemberStatus status;
+    private Boolean suspended;
 
 
     public static EmployeesInfoDto from(Member member) {
@@ -20,7 +20,7 @@ public class EmployeesInfoDto {
                 .memberId(member.getMemberId())
                 .loginId(member.getLoginId())
                 .permissionToCancel(member.getPermissionToCancel())
-                .status(member.getStatus())
+                .suspended(member.getStatus() == MemberStatus.SUSPENDED)
                 .build();
     }
 }

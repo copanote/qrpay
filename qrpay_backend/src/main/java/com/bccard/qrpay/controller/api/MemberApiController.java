@@ -42,7 +42,7 @@ public class MemberApiController {
             throw new MemberException(QrpayErrorCode.LOGIN_ID_CONFLICT);
         }
 
-        return ResponseEntity.ok(QrpayApiResponse.ok());
+        return ResponseEntity.ok(QrpayApiResponse.ok(member));
     }
 
 
@@ -72,7 +72,7 @@ public class MemberApiController {
             throw new MemberException(QrpayErrorCode.PASSWORD_CONFIRM_MISMATCH);
         }
         Member m = memberService.updatePassword(toChangeMember, reqDto.getNewPassword());
-        return ResponseEntity.ok(QrpayApiResponse.ok(ChangePasswordResDto.of(m)));
+        return ResponseEntity.ok(QrpayApiResponse.ok(member, ChangePasswordResDto.of(m)));
     }
 
 
@@ -100,10 +100,10 @@ public class MemberApiController {
 
         Member m = memberService.updatePassword(toChangeMember, reqDto.getNewPassword());
 
-        return ResponseEntity.ok(QrpayApiResponse.ok(ChangePasswordResDto.of(m)));
+        return ResponseEntity.ok(QrpayApiResponse.ok(member, ChangePasswordResDto.of(m)));
     }
 
-    @RequestMapping(value = "/v1/member/{memberId}/cancel-permission-change")
+    @RequestMapping(value = "/v1/member/{memberId}/employee-cancel-permission-change")
     @ResponseBody
     public ResponseEntity<?> changePermissionToCancel(
             @LoginMember Member member,
@@ -121,10 +121,12 @@ public class MemberApiController {
         }
 
         toChangeMember = memberService.updatePermissionToCancel(toChangeMember, reqDto.isPermissionToCancel());
-        return ResponseEntity.ok(QrpayApiResponse.ok(CancelPermissionUpdateReqResDto.of(toChangeMember.getPermissionToCancel())));
+        return ResponseEntity.ok(
+                QrpayApiResponse.ok(member, EmployeesInfoDto.from(toChangeMember))
+        );
     }
 
-    @RequestMapping(value = "/v1/member/{memberId}/status-change")
+    @RequestMapping(value = "/v1/member/{memberId}/employee-status-change")
     @ResponseBody
     public ResponseEntity<?> changeMemberStatus(
             @LoginMember Member member,
@@ -145,13 +147,33 @@ public class MemberApiController {
         toChangeMember = memberService.updateStatus(toChangeMember, reqDto.getRequestStatus());
 
         return ResponseEntity.ok(
-                QrpayApiResponse.ok(
-                        ChangeMemberStatusResDto.of(
-                                toChangeMember.getStatus(),
-                                toChangeMember.getLastModifiedAt()
-                        )
-                )
+                QrpayApiResponse.ok(member, EmployeesInfoDto.from(toChangeMember))
         );
     }
+
+    @RequestMapping(value = "/v1/member/{memberId}/employee-cancel")
+    @ResponseBody
+    public ResponseEntity<?> cancelEmployee(
+            @LoginMember Member member,
+            @PathVariable("memberId") String memberId
+    ) {
+        log.info("Member={}", member.getMemberId());
+
+        if (member.getRole() != MemberRole.MASTER) {
+            throw new AuthException(QrpayErrorCode.INVALID_AUTHORIZATION);
+        }
+
+        Member toChangeMember = memberService.findByMemberId(memberId);
+        if (!member.getMerchant().getMerchantId().equals(toChangeMember.getMerchant().getMerchantId())) {
+            throw new AuthException(QrpayErrorCode.UNMATCHED_AUTHENTICATE);
+        }
+
+        toChangeMember = memberService.cancel(toChangeMember);
+
+        return ResponseEntity.ok(
+                QrpayApiResponse.ok(member, ChangeMemberStatusResDto.of(toChangeMember.getStatus(), toChangeMember.getWithdrawalAt()))
+        );
+    }
+
 
 }

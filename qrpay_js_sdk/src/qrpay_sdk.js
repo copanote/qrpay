@@ -62,7 +62,7 @@ const QRPAY_SDK = () => {
       console.error('Logout failed:', data);
     }
     qrpay_storage.remove('accessToken');
-    qrpay_storage.remove('accessTokenExpiresIn', accessTokenExpiresIn);
+    qrpay_storage.remove('accessTokenExpiresIn');
     qrpay_storage.remove('refreshToken');
     return true;
   };
@@ -176,8 +176,8 @@ const QRPAY_SDK = () => {
       return { ok: false, ...QRPAY_CODE.FETCH_ERROR, error: error };
     }
   }
-  async function fetchGetAsync(url, accessToken) {
-    if (accessToken === undefined) accessToken = getAccessToken().accessToken;
+  async function fetchGetAsync(url) {
+    const accessToken = getAccessToken().accessToken;
 
     const authHeader = accessToken ? { Authorization: `Bearer ${accessToken}` } : {};
 
@@ -200,7 +200,35 @@ const QRPAY_SDK = () => {
       console.log('Http status:', response.status, response.statusText);
       console.log('Error body:', errorBody);
 
-      return { ok: false, status: response.status, statusText: response.statusText, error: errorBody };
+      if (response.status === 401) {
+        const refresh_result = await refresh();
+        if (refresh_result.ok) {
+          accessToken = getAccessToken().accessToken;
+          const authHeader = accessToken ? { Authorization: `Bearer ${accessToken}` } : {};
+
+          const response = await fetch(url, {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+              'Content-Type': 'application/json',
+              ...authHeader,
+            },
+            body: JSON.stringify(data),
+          });
+          if (response.ok) {
+            const data = await response.json();
+            return { ok: true, ...data };
+          }
+
+          const errorBody = await response.json().catch(() => ({}));
+          console.log('Http status:', response.status, response.statusText);
+          console.log('Error body:', errorBody);
+          return { ok: false, status: response.status, statusText: response.statusText, error: errorBody };
+        }
+        return { ok: false, status: response.status, statusText: response.statusText, error: errorBody };
+      } else {
+        return { ok: false, status: response.status, statusText: response.statusText, error: errorBody };
+      }
     } catch (error) {
       //Promise 자체가 rejected (network error, CORS 등)
       console.error('Fetch error:', error);
