@@ -13,7 +13,6 @@ import com.bccard.qrpay.exception.code.QrpayErrorCode;
 import com.bccard.qrpay.utils.MpmDateTimeUtils;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.domain.Persistable;
@@ -115,8 +114,12 @@ public class Member extends BaseEntity implements Persistable<String> {
         return memberId;
     }
 
-    @Builder(builderMethodName = "createEmployee")
-    public Member(String memberId, Merchant merchant, String loginId, String hashedPassword, Boolean permissionToCancel) {
+
+    public static Member createNewEmployee(String memberId, Merchant merchant, String loginId, String hashedPassword, Boolean permissionToCancel) {
+        return new Member(memberId, merchant, loginId, hashedPassword, permissionToCancel);
+    }
+
+    private Member(String memberId, Merchant merchant, String loginId, String hashedPassword, Boolean permissionToCancel) {
         this.memberId = memberId;
         this.merchant = merchant;
         this.loginId = loginId;
@@ -128,8 +131,11 @@ public class Member extends BaseEntity implements Persistable<String> {
         this.affiCoId = "BCQRCPAY";
     }
 
-    @Builder(builderMethodName = "createMasterMemeber")
-    public Member(String memberId, Merchant merchant, String loginId, String hashedPassword, String termsAgreeInfo, String referrerId, String email) {
+    public static Member createMasterMember(String memberId, Merchant merchant, String loginId, String hashedPassword, String termsAgreeInfo, String referrerId, String email) {
+        return new Member(memberId, merchant, loginId, hashedPassword, termsAgreeInfo, referrerId, email);
+    }
+
+    private Member(String memberId, Merchant merchant, String loginId, String hashedPassword, String termsAgreeInfo, String referrerId, String email) {
         this.memberId = memberId;
         this.merchant = merchant;
         this.loginId = loginId;

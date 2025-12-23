@@ -11,7 +11,17 @@ const PasswordModal = {
     this.onSuccess = onSuccessCallback;
     this.onCancel = onCancelCallback;
 
-    $('#pw-modal-loginId').text(this.currentId);
+    // $('#pw-modal-loginId').text(this.currentId);
+    function getCookie(name) {
+      const value = `; ${document.cookie}`;
+      const parts = value.split(`; ${name}=`);
+      if (parts.length === 2) return parts.pop().split(';').shift();
+    }
+
+    // 사용 예시
+    const savedId = this.currentId || getCookie('loginId');
+    this.currentId = savedId;
+    document.getElementById('pw-modal-loginId').innerText = savedId || '';
     $('#passwordModal').show(); // 또는 fadeIn
   },
 

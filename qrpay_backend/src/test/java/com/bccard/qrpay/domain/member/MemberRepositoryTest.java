@@ -134,16 +134,7 @@ public class MemberRepositoryTest {
 
         long seq = memberQueryRepository.getNextSequenceValue();
 
-        Member newMember = Member.createMasterMemeber()
-                .memberId(String.valueOf(seq))
-                .loginId("test01")
-                .hashedPassword("enc")
-                .email("abc@gmail.com")
-                .termsAgreeInfo("1.3")
-                .referrerId("")
-                .merchant(saved)
-                .build();
-
+        Member newMember = Member.createMasterMember(seq + "", merchant, "test01", "encpass", "1.3", "", "test@gmail.com");
         memberRepository.save(newMember);
         em.flush();
         em.clear();
@@ -164,5 +155,10 @@ public class MemberRepositoryTest {
         List<Member> allMembers = memberQueryRepository.findAllMembers(merchant.get());
         System.out.println(allMembers.size());
         System.out.println(allMembers);
+    }
+
+    @Test
+    void test_cancelALL() {
+        memberRepository.updateStatusToCancelByMerchantId("111", "111");
     }
 }

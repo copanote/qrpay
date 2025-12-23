@@ -10,6 +10,7 @@
     <script src="/js/bootstrap.min.js"></script>
     <link href="/css/common.css" rel="stylesheet" />
     <script src="/js/common.js"></script>
+    <script src="/js/password-modal.js"></script>
 
     <th:block th:if="${#arrays.contains(@environment.getActiveProfiles(), 'local')}">
       <script th:src="@{/js/qrpay_sdk.dev.js}"></script>
@@ -230,7 +231,15 @@
         if (!data.ok) {
           const status = data.status;
           if (status === 401) {
-            alert('로그인이 필요합니다.');
+            PasswordModal.open({
+              loginId: auth_loginId || '',
+              onSuccessCallback: function (res) {
+                changePassword();
+              },
+              onCancelCallback: function () {
+                console.log('cancel authentication');
+              },
+            });
             return;
           } else {
             const errorMsg = data || data.message || '시스템오류';

@@ -157,7 +157,10 @@ const PAGES_APIS = {
   PAGES_TERMS_SERVICE_CANCEL: '/pages/settings/terms-service/cancel',
   PAGES_EMPLOYEE_ADD: '/pages/member/employee/add',
   PAGES_EMPLOYEE_LIST: '/pages/member/employee/list',
-  PAGES_EMPLOYEE_PW_CHANGE: '/pages/member/employee/change-pw',
+  PAGES_EMPLOYEE_PW_CHANGE: '/pages/member/{}/employee/change-pw',
+  getPathVariableUrl: function (url, memberId) {
+    return url.replace('{}', memberId);
+  },
 };
 
 const REST_APIS = {
@@ -175,6 +178,7 @@ const REST_APIS = {
     EMPLOYEE_STATUS_CHANGE: '/qrpay/api/v1/member/{memberId}/employee-status-change',
     EMPLOYEE_PERMISSION_CANCEL_CHANGE: '/qrpay/api/v1/member/{memberId}/employee-cancel-permission-change',
     EMPLOYEE_CANCEL: '/qrpay/api/v1/member/{memberId}/employee-cancel',
+    EMPLOYEES_CHAGE_PASSWORD: '/qrpay/api/v1/member/{memberId}/employee-password-change',
     getPathVariableUrl: function (url, memberId) {
       return url.replace('{memberId}', memberId);
     },

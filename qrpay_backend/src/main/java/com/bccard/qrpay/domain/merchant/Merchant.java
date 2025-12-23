@@ -3,6 +3,7 @@ package com.bccard.qrpay.domain.merchant;
 import com.bccard.qrpay.domain.common.code.*;
 import com.bccard.qrpay.domain.common.converter.*;
 import com.bccard.qrpay.domain.common.entity.BaseEntity;
+import com.bccard.qrpay.utils.MpmDateTimeUtils;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.domain.Persistable;
@@ -194,4 +195,12 @@ public class Merchant extends BaseEntity implements Persistable<String>, Seriali
         }
         this.tipRate = tipRate;
     }
+
+    public void cancel() {
+        if (MerchantStatus.CANCELLED != this.merchantStatus) {
+            this.merchantStatus = MerchantStatus.CANCELLED;
+            this.secessionDate = MpmDateTimeUtils.generateDtmNow(MpmDateTimeUtils.PATTERN_YEAR_TO_DATE);
+        }
+    }
+
 }

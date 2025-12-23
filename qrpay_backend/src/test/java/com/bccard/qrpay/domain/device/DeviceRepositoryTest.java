@@ -31,11 +31,8 @@ public class DeviceRepositoryTest {
 
         Merchant merchant = Merchant.createNewMerchant().merchantId("m999").build();
 
-        Member member = Member.createEmployee()
-                .memberId("999")
-                .merchant(merchant)
-                .loginId("test123")
-                .build();
+
+        Member member = Member.createNewEmployee("999", merchant, "test123", "", true);
 
         DeviceMeta deviceMeta = DeviceMeta.builder()
                 .deviceToken("dtoken")

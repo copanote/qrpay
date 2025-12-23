@@ -9,6 +9,7 @@ import com.bccard.qrpay.domain.merchant.Merchant;
 import com.bccard.qrpay.exception.MemberException;
 import com.bccard.qrpay.exception.code.QrpayErrorCode;
 import com.bccard.qrpay.utils.IdValidator;
+import com.bccard.qrpay.utils.MpmDateTimeUtils;
 import com.bccard.qrpay.utils.PasswordValidator;
 import com.bccard.qrpay.utils.security.HashCipher;
 import lombok.RequiredArgsConstructor;
@@ -78,6 +79,7 @@ public class MemberService {
         return memberQueryRepository.findAllMembers(merchant)
                 .stream()
                 .filter(member -> member.getStatus() != MemberStatus.CANCELLED)
+                .sorted()
                 .toList();
     }
 
@@ -108,57 +110,56 @@ public class MemberService {
     }
 
     @Transactional
-    public Member cancel(Member member) {
-        Member m = memberQueryRepository.findById(member.getMemberId()).orElseThrow(
+    public Member cancelEmployee(Member requestor, String memberId) {
+        Member toCancelMember = memberQueryRepository.findById(memberId).orElseThrow(
                 () -> new MemberException(QrpayErrorCode.MEMBER_NOT_FOUND)
         );
 
-        if (m.getStatus() != MemberStatus.CANCELLED) {
-            m.cancel();
+        if (!requestor.getMerchant().getMerchantId().equals(toCancelMember.getMerchant().getMerchantId())) {
+            throw new MemberException(QrpayErrorCode.MEMBER_CANCEL_REQUESTOR_INVALID_AUTHORIZATION);
         }
 
-        return m;
+        if (toCancelMember.getRole() != MemberRole.EMPLOYEE) {
+            throw new MemberException(QrpayErrorCode.MEMBER_CANCEL_NOT_EMPLOYEE);
+        }
+
+
+        if (toCancelMember.getStatus() != MemberStatus.CANCELLED) {
+            toCancelMember.cancel();
+        }
+
+        return toCancelMember;
+    }
+
+    @Transactional
+    public int cancelAll(Merchant merchant) {
+        String canceledAt = MpmDateTimeUtils.generateDtmNow(MpmDateTimeUtils.PATTERN_YEAR_TO_DATE);
+        return memberCUDRepository.updateStatusToCancelByMerchantId(merchant.getMerchantId(), canceledAt);
     }
 
 
     @Transactional
-    public Member updatePassword(Member member, String password) {
+    public Member updatePassword(Member member, String newPassword) {
         Member m = memberQueryRepository.findById(member.getMemberId()).orElseThrow(
                 () -> new MemberException(QrpayErrorCode.MEMBER_NOT_FOUND)
         );
 
-        if (!PasswordValidator.isValid(password)) {
+        if (!PasswordValidator.isValid(newPassword)) {
             throw new MemberException(QrpayErrorCode.PASSWORD_POLICY_VIOLATION);
         }
 
-        String toChangePassword = customPasswordEncoder.encode(password);
+        String toChangePassword = customPasswordEncoder.encode(newPassword);
 
         if (m.getHashedPassword().equals(toChangePassword)) {
             throw new MemberException(QrpayErrorCode.DISALLOW_CURRENT_PASSWORD_REUSE);
         }
 
-        m.updatePassword(customPasswordEncoder.encode(password));
+        m.updatePassword(customPasswordEncoder.encode(newPassword));
         return m;
     }
-
-    @Transactional
-    public Member updatePassword(Member member, String currentPassword, String encodedPassword) {
-        Member m = memberQueryRepository.findById(member.getMemberId()).orElseThrow(
-                () -> new MemberException(QrpayErrorCode.MEMBER_NOT_FOUND)
-        );
-
-        if (!m.getHashedPassword().equals(customPasswordEncoder.encode(currentPassword))) {
-//            throw new
-        }
-
-        m.updatePassword(encodedPassword);
-        return m;
-    }
-
 
     @Transactional
     public Member addEmployee(Merchant merchant, String employeeLoginId, String password, boolean permissionToCancel) {
-
 
         if (!IdValidator.isValid(employeeLoginId)) {
             throw new MemberException(QrpayErrorCode.LOGIN_ID_POLICY_VIOLATION);
@@ -173,24 +174,14 @@ public class MemberService {
         }
 
         String newMemberId = createNewMemberId();
-        Member newMem = Member.createEmployee()
-                .merchant(merchant)
-                .memberId(newMemberId)
-                .loginId(employeeLoginId)
-                .hashedPassword(customPasswordEncoder.encode(password))
-                .permissionToCancel(permissionToCancel)
-                .build();
-        // [테스트 코드 추가]
-        long count = memberCUDRepository.count();
-        System.out.println("저장 직 데이터 개수: " + count);
-        Member save = memberCUDRepository.save(newMem);
-        memberCUDRepository.flush(); // DB에 즉시 반영
-
-        // [테스트 코드 추가]
-        long count2 = memberCUDRepository.count();
-        System.out.println("저장 직후 데이터 개수: " + count2);
-        return save;
-
+        Member newMem = Member.createNewEmployee(
+                newMemberId,
+                merchant,
+                employeeLoginId,
+                customPasswordEncoder.encode(password),
+                permissionToCancel
+        );
+        return memberCUDRepository.save(newMem);
     }
 
 

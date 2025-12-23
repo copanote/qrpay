@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Slf4j
@@ -36,12 +37,17 @@ public class MemberPageController {
 
         model.addAttribute("authLoginId", member.getLoginId());
         model.addAttribute("authMemberId", member.getMemberId());
-        
+
         return "member/employee/employee-list";
     }
 
-    @GetMapping("/member/employee/change-pw")
-    public String employee_pw_change(Model model) {
+    @GetMapping("/member/{memberId}/employee/change-pw")
+    public String employee_pw_change(Model model,
+                                     @PathVariable(value = "memberId") String memberId) {
+
+        Member byMemberId = memberService.findByMemberId(memberId);
+        model.addAttribute("toChangePwLoginId", byMemberId.getLoginId());
+        model.addAttribute("toChangePwMemberId", byMemberId.getMemberId());
         return "member/employee/employee-change-password";
     }
 

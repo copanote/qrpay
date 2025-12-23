@@ -69,11 +69,19 @@ public class AuthController {
                 .sameSite("Lax") // CSRF 방어를 위한 SameSite 설정 (선택 사항)
                 .build();
 
+        ResponseCookie cookie_loginId = ResponseCookie.from("loginId", member.getLoginId())
+                .httpOnly(false) // JavaScript 접근 방지 (XSS 공격 방어)
+                .secure(false)   // HTTPS 통신에서만 전송 (Secure 속성)
+                .path("/")      // 쿠키가 유효한 경로 설정 (전체 경로)
+                .maxAge(60 * 60 * 365) // 쿠키 유효기간 설정 (예: 1Year)
+                .sameSite("Lax") // CSRF 방어를 위한 SameSite 설정 (선택 사항)
+                .build();
+
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.SET_COOKIE, cookie_ac.toString());
         headers.add(HttpHeaders.SET_COOKIE, cookie_rt.toString());
         headers.add(HttpHeaders.SET_COOKIE, cookie_memId.toString());
-
+        headers.add(HttpHeaders.SET_COOKIE, cookie_loginId.toString());
 
         return ResponseEntity.ok().headers(headers).body(jwt);
     }
@@ -108,7 +116,7 @@ public class AuthController {
         log.info("{}", refreshToken);
         authService.logout(refreshToken.getRefreshToken());
         //history
-        
+
         return ResponseEntity.ok().build();
     }
 

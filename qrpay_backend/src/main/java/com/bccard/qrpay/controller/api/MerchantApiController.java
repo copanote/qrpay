@@ -15,6 +15,7 @@ import com.bccard.qrpay.domain.mpmqr.EmvMpmQrService;
 import com.bccard.qrpay.domain.mpmqr.MpmQrPublication;
 import com.bccard.qrpay.domain.mpmqr.dto.PublishBcEmvMpmQrReqDto;
 import com.bccard.qrpay.exception.AuthException;
+import com.bccard.qrpay.exception.MpmQrException;
 import com.bccard.qrpay.exception.code.QrpayErrorCode;
 import com.bccard.qrpay.utils.ZxingQrcode;
 import lombok.RequiredArgsConstructor;
@@ -37,6 +38,24 @@ public class MerchantApiController {
     private final MemberService memberService;
     private final EmvMpmQrService emvMpmQrService;
 
+    @RequestMapping(value = "v1/member/{memberId}/employee-cancel11")
+    @ResponseBody
+    public ResponseEntity<?> cancel(@LoginMember Member member,
+                                    @PathVariable(value = "memberId") String memberId) {
+        log.info("Member={}", member.getMemberId());
+
+        if (member.getRole() != MemberRole.MASTER) {
+            throw new AuthException(QrpayErrorCode.INVALID_AUTHORIZATION);
+        }
+
+        Member byMemberId = memberService.findByMemberId(memberId);
+
+//        memberService.cancel();
+
+        return ResponseEntity.ok(QrpayApiResponse.ok(member, EmployeesInfoDto.from(null)));
+    }
+
+
     @RequestMapping(value = "/v1/merchant/add-employee")
     @ResponseBody
     public ResponseEntity<?> addEmployee(
@@ -57,7 +76,7 @@ public class MerchantApiController {
         boolean permissionCancel = permissions.contains(Permission.CANCEL);
 
         Member newEmployee = memberService.addEmployee(merchant, reqDto.getLoginId(), reqDto.getPassword(), permissionCancel);
-        
+
         return ResponseEntity.ok(QrpayApiResponse.ok(member, EmployeesInfoDto.from(newEmployee)));
     }
 
@@ -78,7 +97,6 @@ public class MerchantApiController {
 
         return ResponseEntity.ok(QrpayApiResponse.ok(member, EmployeesInfoResDto.of(result)));
     }
-
 
     @RequestMapping(value = "/v1/merchant/info")
     @ResponseBody
@@ -154,7 +172,8 @@ public class MerchantApiController {
         );
 
         MpmQrPublication staticMpmQr = emvMpmQrService.publishBcEmvMpmQr(reqEmvMpm);
-        MpmQrInfoResDto out = MpmQrInfoResDto.staticMpmQrInfo(merchant.getMerchantName(), ZxingQrcode.base64EncodedQrImageForQrpay(staticMpmQr.getQrData()));
+        MpmQrInfoResDto out = MpmQrInfoResDto.staticMpmQrInfo(merchant.getMerchantName(),
+                ZxingQrcode.base64EncodedQrImageForQrpay(staticMpmQr.getQrData()));
 
         return ResponseEntity.ok().body(out);
     }
@@ -199,7 +218,7 @@ public class MerchantApiController {
             emvmpmQr = emvMpmQrService.findStaticMpmQrOrCreate(member.getMemberId(), merchant);
             out = MpmQrInfoResDto.staticMpmQrInfo(merchant.getMerchantName(), ZxingQrcode.base64EncodedQrImageForQrpay(emvmpmQr.getQrData()));
         } else {
-            //thorw
+            throw new MpmQrException(QrpayErrorCode.NOT_SUPPORT_PIM);
         }
         return ResponseEntity.ok().body(out);
     }

@@ -59,12 +59,7 @@ public class MpmQrPublicationRepositoryTest {
 
         Merchant merchant = Merchant.createNewMerchant().merchantId("m999").build();
 
-        Member member = Member.createEmployee()
-                .memberId("999")
-                .merchant(merchant)
-                .loginId("test123")
-                .hashedPassword("123")
-                .build();
+        Member member = Member.createNewEmployee("999", merchant, "test123", "encpw", true);
 
         MpmQrPublication newMpmQr = MpmQrPublication.createMpmqrPublication()
                 .qrReferenceId("qrref1")
@@ -85,14 +80,11 @@ public class MpmQrPublicationRepositoryTest {
         em.clear();
 
         Optional<MpmQrPublication> qrref1 = mpmQrPublicationQueryRepository.findById("qrref1");
-
         Optional<MpmQrPublication> qrref2 = mpmQrPublicationQueryRepository.findById("qrref2");
-
         System.out.println(qrref1.get().getQrReferenceId());
         System.out.println(qrref2.isPresent());
     }
-
-
+    
     @Test
     void test_findStaticmpmQR() {
         Merchant merchant = Merchant.createNewMerchant().merchantId("m999").build();

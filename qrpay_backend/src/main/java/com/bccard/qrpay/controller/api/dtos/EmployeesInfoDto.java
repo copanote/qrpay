@@ -13,6 +13,7 @@ public class EmployeesInfoDto {
     private String loginId;
     private Boolean permissionToCancel;
     private Boolean suspended;
+    private String joinedAt;
 
 
     public static EmployeesInfoDto from(Member member) {
@@ -21,6 +22,7 @@ public class EmployeesInfoDto {
                 .loginId(member.getLoginId())
                 .permissionToCancel(member.getPermissionToCancel())
                 .suspended(member.getStatus() == MemberStatus.SUSPENDED)
+                .joinedAt(member.getCreatedAt())
                 .build();
     }
 }

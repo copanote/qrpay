@@ -23,7 +23,12 @@ public enum QrpayErrorCode implements ErrorCode {
     //MEMBER
     MEMBER_NOT_FOUND(404, "", "회원정보를 찾을 수 없습니다."),
     MEMBER_CANCELED(409, "", "탈회한 사용자"),
+    MEMBER_SUSPENDED(409, "", "일시정지(사용중지) 사용자"),
+
     MEMBER_STATUS_CHANGE_NOT_ALLOWED(405, "", "탈회회원은 회원상태변경 불가)"),
+
+    MEMBER_CANCEL_REQUESTOR_INVALID_AUTHORIZATION(403, "ME403", "해지요청자(가맹점주)와 사용자의 가맹점 불일치"),
+    MEMBER_CANCEL_NOT_EMPLOYEE(405, "ME405", "일반사용자가 아닙니다"),
 
     DISALLOW_CURRENT_PASSWORD_REUSE(409, "ME409", "비밀번호 재사용 금지"),
     PASSWORD_CONFIRM_MISMATCH(409, "ME409", "확인비밀번호 불일치"),
@@ -32,10 +37,13 @@ public enum QrpayErrorCode implements ErrorCode {
     LOGIN_ID_CONFLICT(409, "ME4441", "동일ID 등록불가"),
     LOGIN_ID_POLICY_VIOLATION(409, "ME4441", "ID 정책위반(4~12자리의 영문/숫자/영문+숫자 조합)"),
 
-
     //MERCHANT
     MERCHANT_NOT_FOUND(404, "", "가맹점정보를 찾을 수 없습니다."),
     MERCHANT_CANCELED(409, "", "탈회한 가맹점"),
+
+
+    //MPMQR
+    NOT_SUPPORT_PIM(405, "EMQ101", "지원하지 않는 MPMQR PIM(STATIC, DYNAMIC)"),
 
     //COMMON, SYSYEM
     SYSTEM_ERROR(500, "MP9999", "System오류"),

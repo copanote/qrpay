@@ -159,34 +159,81 @@
               const id = card.id.replace('emp-card-', '');
               const field = e.target.classList.contains('chk-cancel') ? 'permissionToCancel' : 'suspended';
 
-              // 데이터 상태 동기화 (실제로는 여기서 서버 API 호출)
               const emp = this.state.employees.find((item) => item.memberId === id);
               if (field == 'permissionToCancel') {
                 console.log(`${id}의 ${field} 변경시도: ${e.target.checked}`);
                 console.log(emp);
                 this.handleChangePermisstionToCancel(emp, e.target.checked);
+              } else if (field == 'suspended') {
+                console.log(`${id}의 ${field} 변경시도: ${e.target.checked}`);
+                console.log(emp);
+                this.handleChangeStatusToSuspend(emp, e.target.checked);
               }
 
-              // const emp = this.state.employees.find((item) => item.memberId === id);
-              //if (emp) emp[field] = e.target.checked;
             }
           });
 
           container.addEventListener('click', (e) => {
-            console.log('click event');
+            console.log('click event delegation:', e.target);
+            const clickedId = e.target.id;
+
             // '비밀번호 변경' 버튼인지 확인
-            if (e.target.classList.contains('btn-change-pw')) {
+            if (clickedId === 'btn-change-pw') {
               const userId = e.target.dataset.id; // data-id="SUB01" 값을 가져옴
-              this.handlePasswordChange(userId);
+              console.log(userId)
+              this.handleChangePassword(userId);
             }
 
             // '사용자 해지' 버튼인지 확인
-            if (e.target.classList.contains('btn-remove-user')) {
+            if (clickedId === 'btn-cancel-employee') {
               const userId = e.target.dataset.id;
+                            console.log(userId);
+
               this.handleUserRemove(userId);
             }
           });
         },
+        handleChangePassword: function (memberId) {
+          const url = PAGES_APIS.getPathVariableUrl(PAGES_APIS.PAGES_EMPLOYEE_PW_CHANGE, memberId);
+          console.log('Change password for:', memberId, 'URL:', url);
+          pageMove(url);
+        },
+
+        handleEmployeeCancel: async function (memberId) {
+          const url = REST_APIS.MEMBER.getPathVariableUrl(REST_APIS.MEMBER.EMPLOYEE_CANCEL, memberId);
+          console.log(url);
+
+          const data = await qrpaySdk.fetchGetAsync(url, changePermissionCancel);
+          console.log(JSON.stringify(data))
+          if (data.ok) {
+            const { status, changedAt } = data.data;
+            if (status === 'CANCELLED') {
+              this.deleteById(memberId);
+            } else {
+              alert('사용자 해지에 실패했습니다.');
+            }
+          } else {
+            const status = data.status;
+            if (status === 401) {
+              console.log('로그인이 필요합니다.', JSON.stringify(data));
+              const auth_loginId = this.state.authLoginId || '';
+              PasswordModal.open({
+                loginId: auth_loginId,
+                onSuccessCallback: function (res) {
+                  handleEmployeeCancel(memberId);
+                },
+                onCancelCallback: function () {
+                  console.log('cancel authentication');
+                },
+              });
+            } else {
+              const errorMsg = data || data.message || '추가 사용자 해지에 실패했습니다.';
+              alert(errorMsg);
+            }
+          }
+        },
+
+
 
         handleChangePermisstionToCancel: async function (emp, toChangePermission) {
           const url = REST_APIS.MEMBER.getPathVariableUrl(REST_APIS.MEMBER.EMPLOYEE_PERMISSION_CANCEL_CHANGE, emp.memberId);
@@ -208,6 +255,37 @@
                 loginId: auth_loginId,
                 onSuccessCallback: function (res) {
                   handleChangePermisstionToCancel(emp, toChangePermission);
+                },
+                onCancelCallback: function () {
+                  console.log('cancel authentication');
+                },
+              });
+            } else {
+              const errorMsg = data || data.message || '승인취소 권한 변경에 실패했습니다.';
+              alert(errorMsg);
+            }
+          }
+        },
+        handleChangeStatusToSuspend: async function (emp, toSuspend) {
+          const url = REST_APIS.MEMBER.getPathVariableUrl(REST_APIS.MEMBER.EMPLOYEE_STATUS_CHANGE, emp.memberId);
+          console.log(url);
+          let changeStatusReq = {
+            requestStatus: toSuspend && 'SUSPENDED' || 'ACTIVE',
+          };
+          const data = await qrpaySdk.fetchPostAsync(url, changeStatusReq);
+          console.log(JSON.stringify(data))
+          if (data.ok) {
+            const { memberId, loginId, permissionToCancel, suspended } = data.data;
+            this.updateById(memberId, { memberId, loginId, permissionToCancel, suspended });
+          } else {
+            const status = data.status;
+            if (status === 401) {
+              console.log('로그인이 필요합니다.', JSON.stringify(data));
+              const auth_loginId = this.state.authLoginId || 'test';
+              PasswordModal.open({
+                loginId: auth_loginId,
+                onSuccessCallback: function (res) {
+                  handleChangeStatusToSuspend(emp, toChangePermission);
                 },
                 onCancelCallback: function () {
                   console.log('cancel authentication');
@@ -247,10 +325,10 @@
                     </ul>
                     <div class="row mt15">
                         <div class="col pr5">
-                            <button type="button" data-id="${emp.memberId}" class="btn btn-outline-dark btn-block">비밀번호 변경</button>
+                            <button type="button" id="btn-change-pw" data-id="${emp.memberId}" class="btn btn-outline-dark btn-block">비밀번호 변경</button>
                         </div>
                         <div class="col pl5">
-                            <button type="button" data-id="${emp.memberId}" class="btn btn-outline-dark btn-block">사용자 해지</button>
+                            <button type="button" id="btn-cancel-employee" data-id="${emp.memberId}" class="btn btn-outline-dark btn-block">사용자 해지</button>
                         </div>
                     </div>
                 </div>`;

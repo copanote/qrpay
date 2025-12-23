@@ -1,5 +1,6 @@
 package com.bccard.qrpay.domain.merchant;
 
+import com.bccard.qrpay.domain.member.MemberService;
 import com.bccard.qrpay.domain.merchant.repository.MerchantQueryRepository;
 import com.bccard.qrpay.domain.merchant.repository.MerchantRepository;
 import com.bccard.qrpay.exception.MerchantException;
@@ -19,6 +20,7 @@ public class MerchantService {
     private final MerchantQueryRepository merchantQueryRepository;
     private final MerchantRepository merchantRepository;
 
+    private final MemberService memberService;
 
     public Optional<Merchant> findById(String merchantId) {
         return merchantQueryRepository.findById(merchantId);
@@ -60,5 +62,17 @@ public class MerchantService {
         return fetchedMerchant;
     }
 
+    @Transactional
+    public Merchant cancel(Merchant merchant) {
 
+        //TODO:: 카드사연결해지부분
+        Merchant fetchedMerchant = merchantQueryRepository.findById(merchant.getMerchantId()).orElseThrow(
+                () -> new MerchantException(QrpayErrorCode.MERCHANT_NOT_FOUND)
+        );
+        int count = memberService.cancelAll(merchant);
+        log.info("canceled Member={}", count);
+        merchant.cancel();
+
+        return fetchedMerchant;
+    }
 }
