@@ -38,7 +38,6 @@ public class NoticeTermsController {
 
     @GetMapping("/settings/terms-service/cancel")
     public String cancel(Model model) {
-        //TODO AOS/IOS 판별
         return "settings/terms/details/service-cancel";
     }
 

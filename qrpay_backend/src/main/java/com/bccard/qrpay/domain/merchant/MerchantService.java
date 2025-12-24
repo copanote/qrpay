@@ -33,6 +33,10 @@ public class MerchantService {
                 () -> new MerchantException(QrpayErrorCode.MERCHANT_NOT_FOUND)
         );
 
+        if (updatedMerchantName.length() > 14) {
+            throw new MerchantException(QrpayErrorCode.MERCHANT_NAME_LENGTH_POLICY_VIOLATION);
+        }
+
         if (!fetchedMerchant.getMerchantName().equals(updatedMerchantName)) {
             fetchedMerchant.updateMerchantName(updatedMerchantName);
         }

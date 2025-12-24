@@ -1,6 +1,5 @@
 package com.bccard.qrpay.controller.page;
 
-import com.bccard.qrpay.domain.common.code.MemberStatus;
 import com.bccard.qrpay.domain.member.Member;
 import com.bccard.qrpay.domain.member.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -30,11 +29,10 @@ public class MemberPageController {
     public String employee_list(Model model,
                                 @CookieValue(value = "memId", required = false) String memId) {
         Member member = memberService.findBy(memId).orElseGet(() -> null);
-        if (member == null || member.getStatus() != MemberStatus.ACTIVE) {
+        if (member == null) {
             log.info("Needs Authenticate");
             return "/home/login";
         }
-
         model.addAttribute("authLoginId", member.getLoginId());
         model.addAttribute("authMemberId", member.getMemberId());
 
@@ -49,6 +47,22 @@ public class MemberPageController {
         model.addAttribute("toChangePwLoginId", byMemberId.getLoginId());
         model.addAttribute("toChangePwMemberId", byMemberId.getMemberId());
         return "member/employee/employee-change-password";
+    }
+
+
+    @GetMapping("/member/master/change-pw")
+    public String master_pw_change(Model model, @CookieValue(value = "memId", required = false) String memId) {
+
+        Member member = memberService.findBy(memId).orElseGet(() -> null);
+        if (member == null) {
+            log.info("Needs Authenticate");
+            return "/home/login";
+        }
+
+        model.addAttribute("authLoginId", member.getLoginId());
+        model.addAttribute("authMemberId", member.getMemberId());
+
+        return "member/master/master-change-password";
     }
 
 

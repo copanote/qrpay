@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
@@ -189,7 +189,7 @@
               const userId = e.target.dataset.id;
                             console.log(userId);
 
-              this.handleUserRemove(userId);
+              this.handleEmployeeCancel(userId);
             }
           });
         },
@@ -203,7 +203,7 @@
           const url = REST_APIS.MEMBER.getPathVariableUrl(REST_APIS.MEMBER.EMPLOYEE_CANCEL, memberId);
           console.log(url);
 
-          const data = await qrpaySdk.fetchGetAsync(url, changePermissionCancel);
+          const data = await qrpaySdk.fetchGetAsync(url);
           console.log(JSON.stringify(data))
           if (data.ok) {
             const { status, changedAt } = data.data;

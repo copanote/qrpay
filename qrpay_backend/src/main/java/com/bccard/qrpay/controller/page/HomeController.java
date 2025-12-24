@@ -37,7 +37,7 @@ public class HomeController {
     @GetMapping("/login")
     public String loginView(Model model) {
         model.addAttribute("data", "hello!!");
-        return "/home/login";
+        return "home/login";
     }
 
     @GetMapping("/home/mpmqr")
@@ -49,12 +49,12 @@ public class HomeController {
     ) throws Exception {
         if (memId == null || memId.isBlank()) {
             //Needs Authenticate
-            return "/home/login";
+            return "home/login";
         }
         Member member = memberService.findBy(memId).orElseGet(() -> null);
         if (member == null || member.getStatus() != MemberStatus.ACTIVE) {
             log.info("Needs Authenticate");
-            return "/home/login";
+            return "home/login";
         }
 
         Merchant merchant = member.getMerchant();
@@ -82,7 +82,7 @@ public class HomeController {
         log.info("mpmqr/main-mpmqr");
 
         model.addAttribute("homeMpmqrResDto", homeMpmqrResDto);
-        return "/home/mpmqr/main-mpmqr";
+        return "home/mpmqr/main-mpmqr";
     }
 
 

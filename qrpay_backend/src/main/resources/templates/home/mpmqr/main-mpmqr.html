@@ -62,7 +62,9 @@
               <li class="dep" th:if="${homeMpmqrResDto.homeMpmqrNavi.isAdmin}">
                 <h3>사용자 관리</h3>
                 <ul class="dep2">
-                  <li><a href="#">대표 사용자 비밀번호 변경</a></li>
+                  <li onclick="location.href='/pages/member/master/change-pw'">
+                    <a href="javascript:void(0)">대표 사용자 비밀번호 변경</a>
+                  </li>
                   <li onclick="location.href='/pages/member/employee/add'">
                     <a href="javascript:void(0)">추가 사용자 등록</a>
                   </li>
@@ -77,8 +79,8 @@
               <li class="dep" th:if="${homeMpmqrResDto.homeMpmqrNavi.isAdmin}">
                 <h3>거래 설정</h3>
                 <ul class="dep2">
-                  <li><a href="#">부가세 설정</a></li>
-                  <li><a href="#">봉사료 설정</a></li>
+                  <li onclick="location.href='/pages/merchant/vat'"><a href="javascript:void(0)">부가세 설정</a></li>
+                  <li onclick="location.href='/pages/merchant/tip'"><a href="javascript:void(0)">봉사료 설정</a></li>
                 </ul>
               </li>
               <li class="dep">
@@ -429,7 +431,7 @@
       const data = await qrpaySdk.fetchPostAsync(qrpaySdk.REST_APIS.MERCHANT.CHANGE_NAME, { name: changedName });
       console.log(data);
       if (data.ok) {
-        const { pim, qrBase64Image, merchantName, amount, installment } = data;
+        const { pim, qrBase64Image, merchantName, amount, installment } = data.data;
         onQrInfoUpdate({ pim, merchantName, qrBase64Image, amount, installment });
       } else {
         const status = data.status;
@@ -446,7 +448,7 @@
             },
           });
         } else {
-          const errorMsg = data || data.message || '가맹점명 변경에 실패했습니다.';
+          const errorMsg = data.error.message || '가맹점명 변경에 실패했습니다.';
           alert(errorMsg);
         }
       }

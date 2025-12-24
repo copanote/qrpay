@@ -130,7 +130,14 @@ public class MerchantApiController {
         }
         Merchant changed = merchantService.updateVat(merchant, updateVat);
 
-        return ResponseEntity.ok().build();
+        TipTaxInfoDto resDto = TipTaxInfoDto
+                .builder()
+                .tipRate(changed.getTipRate() == null ? BigDecimal.ZERO : changed.getTipRate())
+                .vatRate(changed.getVatRate() == null ? BigDecimal.ZERO : changed.getVatRate())
+                .build();
+
+
+        return ResponseEntity.ok(QrpayApiResponse.ok(member, resDto));
     }
 
     @PostMapping(value = "/v1/merchant/change-tip")
@@ -147,9 +154,15 @@ public class MerchantApiController {
         if (reqDto.isEnableTip()) {
             updateVat = BigDecimal.valueOf(reqDto.getTipRate());
         }
-
         Merchant changed = merchantService.updateTip(member.getMerchant(), updateVat);
-        return ResponseEntity.ok().build();
+
+        TipTaxInfoDto resDto = TipTaxInfoDto
+                .builder()
+                .tipRate(changed.getTipRate() == null ? BigDecimal.ZERO : changed.getTipRate())
+                .vatRate(changed.getVatRate() == null ? BigDecimal.ZERO : changed.getVatRate())
+                .build();
+
+        return ResponseEntity.ok(QrpayApiResponse.ok(member, resDto));
     }
 
     @PostMapping(value = "/v1/merchant/change-name")
@@ -175,7 +188,7 @@ public class MerchantApiController {
         MpmQrInfoResDto out = MpmQrInfoResDto.staticMpmQrInfo(merchant.getMerchantName(),
                 ZxingQrcode.base64EncodedQrImageForQrpay(staticMpmQr.getQrData()));
 
-        return ResponseEntity.ok().body(out);
+        return ResponseEntity.ok().body(QrpayApiResponse.ok(member, out));
     }
 
     @PostMapping(value = "/v1/merchant/mpmqr")

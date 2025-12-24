@@ -130,6 +130,12 @@ jQuery(function ($) {
     .trigger('scroll');
 });
 
+function getCookie(name) {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop().split(';').shift();
+}
+
 const goLogin = () => {
   window.location.href = PAGES_APIS.PAGES_LOGIN;
 };
@@ -139,7 +145,14 @@ const goHome = () => {
 };
 
 const goBack = () => {
-  window.history.back();
+  const referrer = document.referrer;
+  console.log('referrer:', referrer);
+  if (!referrer || referrer.includes(PAGES_APIS.PAGES_LOGIN)) {
+    // 이전 페이지가 로그인 페이지라면 메인 홈으로 이동
+    goHome();
+  } else {
+    window.history.back();
+  }
 };
 
 const pageMove = (url) => {
@@ -158,6 +171,7 @@ const PAGES_APIS = {
   PAGES_EMPLOYEE_ADD: '/pages/member/employee/add',
   PAGES_EMPLOYEE_LIST: '/pages/member/employee/list',
   PAGES_EMPLOYEE_PW_CHANGE: '/pages/member/{}/employee/change-pw',
+  PAGES_MASTER_PW_CHANGE: '/pages/member/master/change-pw',
   getPathVariableUrl: function (url, memberId) {
     return url.replace('{}', memberId);
   },
@@ -179,6 +193,7 @@ const REST_APIS = {
     EMPLOYEE_PERMISSION_CANCEL_CHANGE: '/qrpay/api/v1/member/{memberId}/employee-cancel-permission-change',
     EMPLOYEE_CANCEL: '/qrpay/api/v1/member/{memberId}/employee-cancel',
     EMPLOYEES_CHAGE_PASSWORD: '/qrpay/api/v1/member/{memberId}/employee-password-change',
+    MASTER_MEMBER_CHAGE_PASSWORD: '/qrpay/api/v1/member/{memberId}/password-change',
     getPathVariableUrl: function (url, memberId) {
       return url.replace('{memberId}', memberId);
     },
