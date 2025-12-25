@@ -33,7 +33,7 @@ public class QrKitApiController {
     private final EmvMpmQrService emvMpmQrService;
 
 
-    @PostMapping(value = "/v1/merchant/{merchantId}/qrkit/apply")
+    @PostMapping(value = "/v1/merchant/qr-kit/apply")
     @ResponseBody
     public ResponseEntity<?> qrkitApply(
             @LoginMember Member member,
@@ -71,11 +71,9 @@ public class QrKitApiController {
         return ResponseEntity.ok().body(res);
     }
 
-    @GetMapping(value = "/v1/merchant/{merchantId}/qrkit/applications")
+    @GetMapping(value = "/v1/qr-kit/status")
     @ResponseBody
-    public ResponseEntity<?> qrkitHistory(
-            @LoginMember Member member,
-            @PathVariable("merchantId") String merchantId) throws Exception {
+    public ResponseEntity<?> qrkitHistory(@LoginMember Member member) throws Exception {
 
         log.info("Member={}", member.getMemberId());
 
@@ -83,17 +81,11 @@ public class QrKitApiController {
             throw new AuthException(QrpayErrorCode.INVALID_AUTHORIZATION);
         }
 
-        Merchant merchant = member.getMerchant();
-        if (!merchant.getMerchantId().equals(merchantId)) {
-            throw new AuthException(QrpayErrorCode.UNMATCHED_AUTHENTICATE);
-        }
-
         List<MpmQrKitApplication> mpmQrKitApplications = qrKitService.find(member);
         List<QrKitApplicationDto> list = mpmQrKitApplications.stream()
                 .map(QrKitApplicationDto::from).toList();
 
         QrpayApiResponse<QrKitApplicationResDto> res = QrpayApiResponse.ok(member, QrKitApplicationResDto.of(list));
-
         return ResponseEntity.ok().body(res);
     }
 

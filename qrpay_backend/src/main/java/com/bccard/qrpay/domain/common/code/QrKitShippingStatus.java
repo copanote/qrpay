@@ -8,9 +8,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum QrKitShippingStatus implements DatabaseCodeConvertable {
 
-    APPLICATION_RECEIVED("10", "신청접수완료"),
-    VENDOR_REQUEST_COMPLETE("20", "업체요청완료"),
-    VENDOR_SHIPPED_REGISTERED("30", "업체등기발송완료"),
+    APPLIED("10", "신청접수완료"),
+    PREPARING("20", "업체요청완료"),
+    SHIPPED("30", "업체등기발송완료"),
     ;
 
     private final String dbCode;

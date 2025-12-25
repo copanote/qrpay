@@ -219,10 +219,10 @@
               const auth_loginId = this.state.authLoginId || '';
               PasswordModal.open({
                 loginId: auth_loginId,
-                onSuccessCallback: function (res) {
+                onSuccessCallback: (res) => {
                   handleEmployeeCancel(memberId);
                 },
-                onCancelCallback: function () {
+                onCancelCallback: () => {
                   console.log('cancel authentication');
                 },
               });

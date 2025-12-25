@@ -172,6 +172,10 @@ const PAGES_APIS = {
   PAGES_EMPLOYEE_LIST: '/pages/member/employee/list',
   PAGES_EMPLOYEE_PW_CHANGE: '/pages/member/{}/employee/change-pw',
   PAGES_MASTER_PW_CHANGE: '/pages/member/master/change-pw',
+  PAGES_MERCHANT_VAT: '/pages/merchant/vat',
+  PAGES_MERCHANT_TIP: '/pages/merchant/tip',
+  PAGES_QRKIT_APPLY: '/pages/qrkit/apply',
+  PAGES_QRKIT_STATUS: '/pages/qrkit/status',
   getPathVariableUrl: function (url, memberId) {
     return url.replace('{}', memberId);
   },
@@ -198,5 +202,8 @@ const REST_APIS = {
       return url.replace('{memberId}', memberId);
     },
   },
-  QR_KIT: {},
+  QR_KIT: {
+    APPLY: '/qrpay/api/v1/qr-kit/apply',
+    STATUS: '/qrpay/api/v1/qr-kit/status',
+  },
 };

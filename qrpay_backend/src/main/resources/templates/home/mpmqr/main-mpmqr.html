@@ -10,7 +10,7 @@
     <script src="/js/bootstrap.min.js"></script>
     <link href="/css/common.css" rel="stylesheet" />
     <script src="/js/common.js"></script>
-    <script src="/js/password-modal.js"></script>
+
     <th:block th:if="${#arrays.contains(@environment.getActiveProfiles(), 'local')}">
       <script th:src="@{/js/qrpay_sdk.dev.js}"></script>
     </th:block>
@@ -79,14 +79,14 @@
               <li class="dep" th:if="${homeMpmqrResDto.homeMpmqrNavi.isAdmin}">
                 <h3>거래 설정</h3>
                 <ul class="dep2">
-                  <li onclick="location.href='/pages/merchant/vat'"><a href="javascript:void(0)">부가세 설정</a></li>
-                  <li onclick="location.href='/pages/merchant/tip'"><a href="javascript:void(0)">봉사료 설정</a></li>
+                  <li onclick="none"><a href="javascript:void(0)">부가세 설정</a></li>
+                  <li onclick="pageMove(PAGES_APIS.PAGES_MERCHANT_TIP)"><a href="javascript:void(0)">봉사료 설정</a></li>
                 </ul>
               </li>
               <li class="dep">
                 <h3>이용 가이드</h3>
                 <ul class="dep2">
-                  <li onclick="location.href='/pages/settings/guide'">
+                  <li onclick="pageMove(PAGES_APIS.PAGES_NOTICE)">
                     <a href="javascript:void(0)">
                       <p>이용 가이드</p>
                       <small>추가 문의는 BC QR 가맹점 <br />상담센터 (02-330-5777)에서 도와드립니다.</small>
@@ -99,14 +99,14 @@
                 <h3>QR키트</h3>
                 <!-- 2019-07-25 -->
                 <ul class="dep2">
-                  <li>
-                    <a href="#">
+                  <li onclick="pageMove(PAGES_APIS.PAGES_QRKIT_APPLY)">
+                    <a href="javascript:void(0)">
                       <p>신청 하기</p>
                       <small>QR키트를 무료로 신청할 수 있습니다.</small>
                     </a>
                   </li>
-                  <li>
-                    <a href="#">
+                  <li onclick="pageMove(PAGES_APIS.PAGES_QRKIT_STATUS)">
+                    <a href="javascript:void(0)">
                       <p>배송조회</p>
                       <small>QR키트 배송 진행상황을 확인할 수 있습니다.</small>
                     </a>
@@ -399,7 +399,9 @@
         };
       </script>
     </div>
-    <div th:replace="~{fragments/modals/passwordModal :: passwordContent}"></div>
+    <div th:replace="~{fragments/modals/common-modal :: passwordContent}"></div>
+    <div th:replace="~{fragments/modals/common-modal :: confirmModal}"></div>
+    <div th:replace="~{fragments/modals/common-modal :: loadingModal}"></div>
   </body>
 
   <script type="text/javascript">

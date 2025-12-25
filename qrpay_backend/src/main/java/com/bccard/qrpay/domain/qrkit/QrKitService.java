@@ -63,7 +63,7 @@ public class QrKitService {
                 .phoneNo(reqDto.getPhoneNo())
                 .qrReferenceId(mpmQrPublication.getQrReferenceId())
                 .extraApplication(true)
-                .status(QrKitShippingStatus.APPLICATION_RECEIVED)
+                .status(QrKitShippingStatus.APPLIED)
                 .applicationChannel(QrKitApplicationChannel.QRPAY_APP)
                 .build();
 

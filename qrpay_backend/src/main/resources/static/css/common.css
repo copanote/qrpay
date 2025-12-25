@@ -4,15 +4,125 @@
 @import url(https://fonts.googleapis.com/css?family=Lato);
 @import url(util.css);
 
+/* 모달 전체 라운드 및 그림자 */
+.custom-modal .modal-content {
+  border-radius: 20px;
+  border: none;
+  overflow: hidden;
+  z-index: 9500 !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+/* 제목 스타일 */
+.modal-title-custom {
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.4;
+  color: #111;
+  text-align: center;
+}
+
+/* 설명문 스타일 */
+.modal-desc {
+  font-size: 15px;
+  color: #666;
+  text-align: center;
+  line-height: 1.6;
+  word-break: keep-all;
+}
+
+/* 푸터 버튼 배치 (가로로 꽉 차게) */
+.modal-footer-custom {
+  display: flex;
+  border-top: 1px solid #f0f0f0;
+}
+
+.btn-modal {
+  flex: 1;
+  padding: 18px 0;
+  border: none;
+  font-size: 16px;
+  font-weight: 600;
+  background: #fff;
+  cursor: pointer;
+  outline: none;
+}
+
+/* 취소 버튼 */
+.btn-cancel {
+  color: #888;
+  border-right: 1px solid #f0f0f0;
+}
+
+/* 확인 버튼 (BC Red 포인트) */
+.btn-confirm {
+  color: #e10011; /* BC카드 레드 */
+}
+
+.btn-modal:active {
+  background-color: #f9f9f9;
+}
+
+.p30 {
+  padding: 30px;
+}
+.mt20 {
+  margin-top: 20px;
+}
+
+/* 로딩 오버레이: 전체 화면 차단 */
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.7); /* 살짝 투명한 화이트 */
+  z-index: 10000; /* 최상단 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.spinner-container {
+  text-align: center;
+}
+
+/* BC카드 레드 스피너 */
+.bc-spinner {
+  width: 45px;
+  height: 45px;
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #e10011; /* BC Red */
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin: 0 auto 15px;
+}
+
+.loading-text {
+  font-size: 15px;
+  color: #333;
+  font-weight: 500;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
 /* 전체 화면 모달 스타일 */
-.custom-modal-wrapper {
+.password-modal-wrapper {
   position: fixed;
   top: 0;
   left: 0;
   width: 100vw; /* 가로 꽉 차게 */
   height: 100vh; /* 세로 꽉 차게 */
   background-color: #ffffff; /* 배경을 흰색으로 */
-  z-index: 9999;
+  z-index: 1049;
   display: none; /* 기본은 숨김 */
   overflow-y: auto; /* 내용이 길어지면 스크롤 생성 */
 }

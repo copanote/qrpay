@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <th:block th:fragment="confirmModal">
+    <div class="modal fade custom-modal" id="confirm-modal" tabindex="-1" role="dialog">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-body p30">
+            <h5 id="modal-title" class="modal-title-custom"></h5>
+            <p id="modal-desc" class="modal-desc mt20"></p>
+          </div>
+          <div class="modal-footer-custom">
+            <button type="button" class="btn-modal btn-cancel" data-dismiss="modal">취소</button>
+            <button type="button" class="btn-modal btn-confirm" id="modal-confirm-btn">확인</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script th:inline="javascript">
+      const ConfirmModal = {
+        confirmCallback: null,
+
+        open: function (params = {}) {
+          document.getElementById('modal-title').innerHTML = params.title || '알림';
+          document.getElementById('modal-desc').innerHTML = params.desc || '';
+          this.confirmCallback = params.onConfirm || null;
+
+          // 취소 버튼 텍스트 변경이 필요한 경우 대응
+          if (params.cancelText) {
+            document.querySelector('.btn-cancel').innerText = params.cancelText;
+          }
+
+          if (params.hideCancel) {
+            document.querySelector('.btn-cancel').style.display = 'none';
+          } else {
+            document.querySelector('.btn-cancel').style.display = 'inline-block';
+          }
+
+          $('#confirm-modal').modal('show');
+        },
+
+        openAlert: function (params) {
+          params.hideCancel = true;
+          this.open(params);
+        },
+
+        init: function () {
+          const _self = this;
+          const confirmBtn = document.getElementById('modal-confirm-btn');
+          if (confirmBtn) {
+            confirmBtn.onclick = function () {
+              if (typeof _self.confirmCallback === 'function') {
+                _self.confirmCallback();
+              }
+              $('#confirm-modal').modal('hide');
+            };
+          }
+        },
+      };
+
+      $(document).ready(function () {
+        ConfirmModal.init();
+      });
+    </script>
+  </th:block>
+
+  <th:block th:fragment="loadingModal">
+    <div id="common-loading-modal" class="loading-overlay" style="display: none">
+      <div class="spinner-container">
+        <div class="bc-spinner"></div>
+        <p class="loading-text">처리 중입니다...</p>
+      </div>
+    </div>
+    <script th:inline="javascript">
+      const Loading = {
+        timer: null,
+        show: function (duration) {
+          const el = document.getElementById('common-loading-modal');
+          if (!el) return;
+
+          // 기존에 예약된 타이머가 있다면 제거 (중첩 방지)
+          if (this.timer) clearTimeout(this.timer);
+          el.style.display = 'flex';
+
+          // duration 인자가 전달된 경우에만 실행
+          if (duration && duration > 0) {
+            this.timer = setTimeout(() => {
+              this.hide();
+            }, duration);
+          }
+        },
+
+        hide: function () {
+          const el = document.getElementById('common-loading-modal');
+          if (el) el.style.display = 'none';
+
+          if (this.timer) {
+            clearTimeout(this.timer);
+            this.timer = null;
+          }
+        },
+      };
+    </script>
+  </th:block>
+
+  <th:block th:fragment="passwordContent">
+    <div id="passwordModal" class="password-modal-wrapper" style="display: none">
+      <div class="modal-overlay" onclick="PasswordModal.close()"></div>
+      <div class="modal-content-area">
+        <header id="hd">
+          <div class="container">
+            <h1>비밀번호 입력</h1>
+            <button type="button" class="btn-cls" onclick="PasswordModal.close()">닫기</button>
+          </div>
+        </header>
+
+        <div id="ct">
+          <div class="password-cnt-wrp">
+            <div class="cnt row align-items-center">
+              <div class="col">
+                <div class="text-center">
+                  <p class="mb20">아이디 : <span class="text-underline" id="pw-modal-loginId">Su***********</span></p>
+                  <h2 class="h5 mb20">비밀번호를 입력해주세요.</h2>
+                  <div class="password-wrp">
+                    <div class="password-bg-wrp" id="pw-dots">
+                      <span></span>
+                      <span></span>
+                      <span></span>
+                      <span></span>
+                      <span></span>
+                      <span></span>
+                    </div>
+                    <p class="password-txt" style="cursor: pointer">비밀번호 찾기</p>
+                  </div>
+                  <div class="keypad-test mt-4">
+                    <button type="button" onclick="PasswordModal.pushKey('1')">1</button>
+                    <button type="button" onclick="PasswordModal.pushKey('2')">2</button>
+                    <button type="button" onclick="PasswordModal.pushKey('3')">3</button>
+                    <button type="button" onclick="PasswordModal.pushKey('4')">4</button>
+                    <button type="button" onclick="PasswordModal.pushKey('5')">5</button>
+                    <button type="button" onclick="PasswordModal.pushKey('6')">6</button>
+                    <button type="button" onclick="PasswordModal.pushKey('7')">7</button>
+                    <button type="button" onclick="PasswordModal.pushKey('8')">8</button>
+                    <button type="button" onclick="PasswordModal.pushKey('9')">9</button>
+                    <button type="button" onclick="PasswordModal.pushKey('0')">0</button>
+                    <button type="button" onclick="PasswordModal.deleteKey()">DEL</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <script th:inline="javascript">
+        const PasswordModal = {
+          currentId: null,
+          onSuccess: null, // 성공 시 실행할 함수 저장소
+          onCancel: null, // 취소/닫기 시 실행할 함수 저장소
+          password: '',
+          maxLen: 6,
+
+          // open 함수에서 콜백들을 받음
+          open: function ({ loginId, onSuccessCallback, onCancelCallback }) {
+            this.currentId = loginId;
+            this.onSuccess = onSuccessCallback;
+            this.onCancel = onCancelCallback;
+
+            // $('#pw-modal-loginId').text(this.currentId);
+            function getCookie(name) {
+              const value = `; ${document.cookie}`;
+              const parts = value.split(`; ${name}=`);
+              if (parts.length === 2) return parts.pop().split(';').shift();
+            }
+
+            // 사용 예시
+            const savedId = this.currentId || getCookie('loginId');
+            this.currentId = savedId;
+            document.getElementById('pw-modal-loginId').innerText = savedId || '';
+            $('#passwordModal').show(); // 또는 fadeIn
+          },
+
+          // [중요] 인증 버튼을 눌렀을 때 실행되는 함수
+          verify: function () {
+            Loading.show();
+            setTimeout(() => {}, 10000); // 로딩 스피너가 보이도록 약간의 지연 추가
+            qrpaySdk
+              .authenticate(this.currentId, this.password)
+              .then((data) => {
+                console.log('인증 응답:', data);
+
+                if (data.ok) {
+                  // 토큰이 SDK 내부에 저장됨
+                  console.log('로그인 성공');
+
+                  // 1. 인증 성공 시: 모달 닫고 성공 콜백 호출
+                  this.success_close();
+                } else {
+                  const errorMsg = data.message || data.error?.message || '로그인에 실패했습니다.';
+                  ConfirmModal.openAlert({
+                    title: '인증 실패',
+                    desc: errorMsg,
+                  });
+                  this.clearAll();
+                }
+              })
+              .catch((error) => {
+                console.error('로그인 오류:', error);
+                alert('로그인 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
+              })
+              .finally(() => {
+                Loading.hide();
+              });
+          },
+
+          success_close: function () {
+            $('#passwordModal').hide();
+            // 닫을 때 취소 콜백이 있다면 실행
+            if (typeof this.onSuccess === 'function') this.onSuccess(true);
+
+            // 메모리 누수 방지를 위해 콜백 비우기
+            this.onSuccess = null;
+            this.onCancel = null;
+            this.clearAll();
+          },
+
+          close: function () {
+            $('#passwordModal').hide();
+            // 닫을 때 취소 콜백이 있다면 실행
+            if (typeof this.onCancel === 'function') this.onCancel();
+
+            // 메모리 누수 방지를 위해 콜백 비우기
+            this.onSuccess = null;
+            this.onCancel = null;
+            this.clearAll();
+          },
+
+          pushKey: function (num) {
+            if (this.password.length < this.maxLen) {
+              this.password += num;
+              this.updateDots();
+
+              // 6자리 다 입력되면 자동 검증
+              if (this.password.length === this.maxLen) {
+                this.verify();
+              }
+            }
+          },
+
+          // 지우기 버튼 클릭 시 호출
+          deleteKey: function () {
+            this.password = this.password.slice(0, -1);
+            this.updateDots();
+          },
+
+          clearAll: function () {
+            this.password = '';
+            this.updateDots();
+          },
+
+          // UI 점(dot) 업데이트
+          updateDots: function () {
+            const dots = $('#pw-dots span');
+            dots.removeClass('active');
+            for (let i = 0; i < this.password.length; i++) {
+              $(dots[i]).addClass('active');
+            }
+          },
+        };
+      </script>
+    </div>
+  </th:block>
+</html>

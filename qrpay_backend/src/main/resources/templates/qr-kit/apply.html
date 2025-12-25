@@ -4,12 +4,23 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <title>BC</title>
-    <link rel="stylesheet" href="css/bootstrap.min.css" />
-    <script src="js/jquery-3.3.1.slim.min.js.js"></script>
-    <script src="js/popper.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <link href="css/common.css" rel="stylesheet" />
-    <script src="js/common.js"></script>
+    <link rel="stylesheet" href="/css/bootstrap.min.css" />
+    <script src="/js/jquery-3.3.1.slim.min.js.js"></script>
+    <script src="/js/popper.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <link href="/css/common.css" rel="stylesheet" />
+    <script src="/js/common.js"></script>
+    <th:block th:if="${#arrays.contains(@environment.getActiveProfiles(), 'local')}">
+      <script th:src="@{/js/qrpay_sdk.dev.js}"></script>
+    </th:block>
+
+    <th:block th:if="${#arrays.contains(@environment.getActiveProfiles(), 'dev')}">
+      <script th:src="@{/js/qrpay_sdk.dev.js}"></script>
+    </th:block>
+
+    <th:block th:if="${#arrays.contains(@environment.getActiveProfiles(), 'prod')}">
+      <script th:src="@{/js/qrpay_sdk.prod.js}"></script>
+    </th:block>
   </head>
 
   <body>
@@ -17,10 +28,9 @@
       <!-- header -->
       <header id="hd">
         <div class="container">
-          <button type="button" class="icon-back">이전 페이지 이동</button>
+          <button type="button" class="icon-back" onclick="goBack()">이전 페이지 이동</button>
           <h1>QR키트 신청</h1>
-          <!--// 2019-07-18 -->
-          <a class="icon-home" href="/">홈으로 이동</a>
+          <a class="icon-home" href="javascript:void(0)" onclick="goHome()">홈으로 이동</a>
         </div>
       </header>
 
@@ -51,7 +61,9 @@
           <div class="container mt30">
             <div class="text-center">
               <div class="qrkit-wrp">
-                <img class="img-fluid" src="images/qrkit_join2.png" alt="" />
+                <img class="img-fluid" src="/images/qrkit_join2.png" alt="" />
+                <!--페이북QR이미지 -->
+                <!-- <img class="img-fluid" src="images/qrkit_join.png" alt="" />  카드사공동QR이미지-->
                 <p class="store-name">가맹점명</p>
                 <button type="button" class="btn-pos-right"><i class="icon-pen mr5 mt3"></i>변경</button>
               </div>
@@ -131,7 +143,7 @@
           </div>
           <div class="btm-fixed-btn">
             <!-- <a href="#" class="btn btn-muted btn-block">신청 및 가입완료</a> -->
-            <a href="#" class="btn btn-primary btn-block">다음</a>
+            <a href="javascript:void(0)" class="btn btn-primary btn-block">다음</a>
           </div>
         </div>
         <!--// 페이지 끝 -->
