@@ -18,6 +18,7 @@ public class JacksonConfig {
 
         objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         objectMapper.configure(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES, false);
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         objectMapper.configure(MapperFeature.ACCEPT_CASE_INSENSITIVE_ENUMS, true);
 //        objectMapper.enable(DeserializationFeature.ACCEPT_CASE_INSENSITIVE_ENUMS);
 

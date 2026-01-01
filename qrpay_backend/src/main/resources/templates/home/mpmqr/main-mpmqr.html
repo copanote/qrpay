@@ -79,7 +79,7 @@
               <li class="dep" th:if="${homeMpmqrResDto.homeMpmqrNavi.isAdmin}">
                 <h3>거래 설정</h3>
                 <ul class="dep2">
-                  <li onclick="none"><a href="javascript:void(0)">부가세 설정</a></li>
+                  <li onclick="pageMove(PAGES_APIS.PAGES_MERCHANT_VAT)"><a href="javascript:void(0)">부가세 설정</a></li>
                   <li onclick="pageMove(PAGES_APIS.PAGES_MERCHANT_TIP)"><a href="javascript:void(0)">봉사료 설정</a></li>
                 </ul>
               </li>
@@ -132,7 +132,7 @@
         <div id="fixedToolbar">
           <ul class="row">
             <li class="col-4 active">
-              <a href="#">
+              <a href="/pages/home/mpmqr">
                 <i class="icon-toolbar1"></i>
                 <p>QR 코드</p>
               </a>

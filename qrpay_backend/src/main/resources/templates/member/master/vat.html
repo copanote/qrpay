@@ -125,12 +125,14 @@
           </div>
 
           <div class="btm-fixed-btn">
-            <a class="btn btn-primary btn-block" href="javascript:void(0)" id="btnConfirm">확인</a>
+            <button class="btn btn-primary btn-block" href="javascript:void(0)" id="btnConfirm">확인</button>
           </div>
         </div>
       </div>
     </div>
-    <div th:replace="~{fragments/modals/passwordModal :: passwordContent}"></div>
+    <div th:replace="~{fragments/modals/common-modal :: passwordContent}"></div>
+    <div th:replace="~{fragments/modals/common-modal :: confirmModal}"></div>
+    <div th:replace="~{fragments/modals/common-modal :: loadingModal}"></div>
   </body>
   <script th:inline="javascript">
     const tipRate = [[${tipRate}]];
@@ -144,6 +146,7 @@
       },
       setState(tipRate, vatRate) {
         console.log('setState', tipRate, vatRate);
+
         this.state.tipRate = tipRate;
         this.state.vatRate = vatRate;
         this.render();
@@ -164,6 +167,8 @@
       render() {
         const vatSwitch = document.getElementById('switch-vat');
         const vatRateInput = document.getElementById('input-vatRate');
+        const btnConfirm = document.getElementById('btnConfirm');
+
         if (this.useVat()) {
           vatSwitch.checked = true;
           vatRateInput.value = this.getVatRate();
@@ -173,6 +178,7 @@
           vatRateInput.value = '';
           vatRateInput.disabled = true;
         }
+
       },
       bindEvents() {
 
@@ -186,12 +192,19 @@
 
         if (enableVat) {
           if (reqVatRate < 1 || reqVatRate > 99) {
-            alert('부가세율은 1~99 사이의 값이어야 합니다.');
+            ConfirmModal.open({
+              desc: '부가세율은 1~99 사이의 값이어야 합니다.',
+              hideCancel: true,
+            });
+
             return;
           }
 
           if (Number(reqVatRate) + this.getTipRate() > 99) {
-            alert('부가세율과 봉사료율의 합은 99를 초과할 수 없습니다.' + reqVatRate + this.getTipRate());
+            ConfirmModal.open({
+              desc: '부가세율과 봉사료율의 합은 99를 초과할 수 없습니다.' + reqVatRate + this.getTipRate(),
+              hideCancel: true,
+            });
             return;
           }
         } else {
@@ -211,6 +224,14 @@
           if (data.ok) {
             const { tipRate, vatRate } = data.data;
             this.setState(tipRate,vatRate );
+            ConfirmModal.open({
+              desc: '부가세율이 변경되었습니다.',
+              hideCancel: true,
+              onConfirm: () => {
+                console.log('부가세율 변경 확인');
+              },
+            });
+
           } else {
             const status = data.status;
             if (status === 401) {
@@ -238,12 +259,19 @@
 
         if (enableTip) {
           if (reqTipRate < 1 || reqTipRate > 99) {
-            alert('봉사료율은 1~99 사이의 값이어야 합니다.');
+            ConfirmModal.open({
+              desc: '봉사료율은 1~99 사이의 값이어야 합니다.',
+              hideCancel: true,
+            });
+
             return;
           }
 
-          if (reqTipRate + this.getVatRate() > 99) {
-            alert('부가세율과 봉사료율의 합은 99를 초과할 수 없습니다.');
+          if (Number(reqTipRate) + this.getVatRate() > 99) {
+            ConfirmModal.open({
+              desc: '부가세율과 봉사료율의 합은 99를 초과할 수 없습니다.' + reqTipRate + this.getVatRate(),
+              hideCancel: true,
+            });
             return;
           }
         } else {
@@ -308,17 +336,3 @@
     });
   </script>
 </html>
-
-<div class="modal fade" id="modal1">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-body">
-        <h5 class="h4 text-center">설정을 취소하시겠습니까?</h5>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-md btn-radius0 btn-block" data-dismiss="modal">취소</button>
-        <button type="button" class="btn btn-md btn-radius0 btn-block" data-dismiss="modal" id="btnCacel">확인</button>
-      </div>
-    </div>
-  </div>
-</div>

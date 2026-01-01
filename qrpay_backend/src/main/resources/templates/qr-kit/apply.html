@@ -21,6 +21,11 @@
     <th:block th:if="${#arrays.contains(@environment.getActiveProfiles(), 'prod')}">
       <script th:src="@{/js/qrpay_sdk.prod.js}"></script>
     </th:block>
+    <style>
+      div[id^='__daum__layer_'] {
+        z-index: 1002 !important;
+      }
+    </style>
   </head>
 
   <body>
@@ -28,7 +33,7 @@
       <!-- header -->
       <header id="hd">
         <div class="container">
-          <button type="button" class="icon-back" onclick="goBack()">이전 페이지 이동</button>
+          <button type="button" class="icon-back" onclick="goHome()">이전 페이지 이동</button>
           <h1>QR키트 신청</h1>
           <a class="icon-home" href="javascript:void(0)" onclick="goHome()">홈으로 이동</a>
         </div>
@@ -64,26 +69,37 @@
                 <img class="img-fluid" src="/images/qrkit_join2.png" alt="" />
                 <!--페이북QR이미지 -->
                 <!-- <img class="img-fluid" src="images/qrkit_join.png" alt="" />  카드사공동QR이미지-->
-                <p class="store-name">가맹점명</p>
-                <button type="button" class="btn-pos-right"><i class="icon-pen mr5 mt3"></i>변경</button>
+                <p id="qrkit-merchant-name" class="store-name" th:text="${qrkitApplyPageDto.merchantName}">가맹점명</p>
+                <button type="button" onclick="changeMerchantName();" class="btn-pos-right"><i class="icon-pen mr5 mt3"></i>변경</button>
               </div>
             </div>
             <div class="frm mt25">
               <div class="form-group">
                 <span class="tit">수령주소</span>
                 <div class="pr">
-                  <input type="text" class="form-control" placeholder="주소를 입력해주세요" value="서울특별시 마포구 성암로 301" disabled />
-                  <button type="button" class="btn-pos-right"><i class="icon-pen mr5 mt3"></i>변경</button>
+                  <input type="text" id="qrkit_address" class="form-control" placeholder="주소를 입력해주세요" th:value="${qrkitApplyPageDto.address1}" disabled />
+                  <button type="button" class="btn-pos-right" onclick="sample3_execDaumPostcode()"><i class="icon-pen mr5 mt3"></i>변경</button>
                 </div>
-                <input type="text" class="form-control" placeholder="" value="2층 203호" disabled /><!--// 2019-08-14 -->
+                <input type="text" id="qrkit_detailAddress" class="form-control" placeholder="" th:value="${qrkitApplyPageDto.address2}" /><!--// 2019-08-14 -->
+              </div>
+              <input type="hidden" id="qrkit_postcode" placeholder="우편주소" th:value="${qrkitApplyPageDto.postNo}" /><br />
+              <input type="hidden" id="qrkit_extraAddress" placeholder="참고항목" />
+              <div id="wrap_kakao_address" style="display: none; border: 1px solid; width: 100%; height: 300px; margin: 5px 0; position: relative">
+                <img
+                  src="//t1.daumcdn.net/postcode/resource/images/close.png"
+                  id="btnFoldWrap"
+                  style="cursor: pointer; position: absolute; right: 0px; top: -1px; z-index: 1"
+                  onclick="foldDaumPostcode()"
+                  alt="접기 버튼"
+                />
               </div>
               <div class="form-group">
                 <span class="tit">휴대폰번호</span>
-                <input type="text" class="form-control" placeholder="휴대폰번호를 입력해주세요" value="010-1111-1234" />
+                <input type="text" id="qrkit-phone" class="form-control" placeholder="휴대폰번호를 입력해주세요" th:value="${qrkitApplyPageDto.phoneNo}" maxlength="13" />
               </div>
               <div class="form-group mt30">
                 <label class="input-type-round">
-                  <input type="checkbox" />
+                  <input type="checkbox" id="qrkit-all-terms" />
                   <span class="mr5"></span>
                   약관 전체 동의 (필수)
                 </label>
@@ -93,7 +109,7 @@
                   <div class="row">
                     <div class="col-xs-auto">
                       <label class="input-type-check">
-                        <input type="checkbox" />
+                        <input type="checkbox" id="qrkit-terms1" />
                         <span></span>
                       </label>
                     </div>
@@ -117,7 +133,7 @@
                   <div class="row">
                     <div class="col-xs-auto">
                       <label class="input-type-check">
-                        <input type="checkbox" />
+                        <input type="checkbox" id="qrkit-terms2" />
                         <span></span>
                       </label>
                     </div>
@@ -143,12 +159,271 @@
           </div>
           <div class="btm-fixed-btn">
             <!-- <a href="#" class="btn btn-muted btn-block">신청 및 가입완료</a> -->
-            <a href="javascript:void(0)" class="btn btn-primary btn-block">다음</a>
+            <button id="btn-qrkit-apply" onclick="onQrKitApply()" class="btn btn-primary btn-block" disabled>다음</button>
           </div>
         </div>
         <!--// 페이지 끝 -->
         <!--// 2019-07-18 -->
+        <div th:replace="~{fragments/modals/common-modal :: passwordContent}"></div>
+        <div th:replace="~{fragments/modals/common-modal :: confirmModal}"></div>
+        <div th:replace="~{fragments/modals/common-modal :: loadingModal}"></div>
+        <div th:replace="~{fragments/modals/common-modal :: updateModal}"></div>
       </div>
     </div>
+
+    <script th:inline="javascript">
+        const merchantId = [[${qrkitApplyPageDto.merchantId}]];
+        document.addEventListener('DOMContentLoaded', function () {
+          // phtone Number formatting
+          const phoneInput = document.getElementById('qrkit-phone')
+          const allTerms = document.getElementById('qrkit-all-terms');
+          const termItems = [document.getElementById('qrkit-terms1'), document.getElementById('qrkit-terms2')];
+          const addressInput = document.getElementById('qrkit_address');
+          const detailAddressInput = document.getElementById('qrkit_detailAddress');
+          const postcodeInput = document.getElementById('qrkit_postcode');
+          const applyBtn = document.getElementById('btn-qrkit-apply');
+
+          // 초기 전화번호 포맷팅
+          phoneInput.value = formatPhoneNumber(phoneInput.value);
+          phoneInput.addEventListener('input', function (e) {
+            e.target.value = formatPhoneNumber(e.target.value);
+          });
+
+
+
+          // 1. '전체 동의' 체크박스 이벤트
+          allTerms.addEventListener('change', function () {
+            termItems.forEach((item) => {
+              item.checked = allTerms.checked;
+            });
+          });
+
+          // 2. '개별 약관' 체크박스 이벤트
+          termItems.forEach((item) => {
+            item.addEventListener('change', function () {
+              // 개별 항목 중 하나라도 해제되면 전체 동의 해제, 모두 체크되면 전체 동의 체크
+              const isAllChecked = termItems.every((term) => term.checked);
+              allTerms.checked = isAllChecked;
+            });
+          });
+
+          // 3. 신청 버튼 활성화 로직
+          const updateApplyButtonState = () => {
+            const isAllTermsChecked = termItems.every((term) => term.checked);
+            const isAddressFilled = addressInput.value.trim() !== '' && detailAddressInput.value.trim() !== '';
+            const isPhoneFilled = phoneInput.value.trim() !== '';
+            applyBtn.disabled = !(isAllTermsChecked && isAddressFilled && isPhoneFilled);
+          };
+          // 체크박스 및 입력 필드 변경 시 버튼 상태 업데이트
+          allTerms.addEventListener('change', updateApplyButtonState);
+          termItems.forEach((item) => {
+            item.addEventListener('change', updateApplyButtonState)
+          });
+          addressInput.addEventListener('input', updateApplyButtonState);
+          detailAddressInput.addEventListener('input', updateApplyButtonState);
+          phoneInput.addEventListener('input', updateApplyButtonState);
+
+        });
+
+
+        const changeMerchantName = () => {
+
+          UpdateModal.open({
+            title: '가맹점명 변경',
+            desc: '변경할 가맹점명을 입력해주세요.<br />(최대 14자)',
+            placeholder: '가맹점명 입력',
+            maxLength: 14,
+            hideCancel: false,
+            value: document.getElementById('qrkit-merchant-name').textContent,
+            onConfirm: (newMerchantName) => {
+              console.log('Changing merchant name to:', newMerchantName);
+              onMerchantNameChange(newMerchantName);
+            }
+          });
+        };
+
+      const onMerchantNameChange = async (newMerchantName) => {
+        const currentName = document.getElementById('qrkit-merchant-name').textContent;
+        const changedName = newMerchantName;
+
+        console.log(currentName, changedName);
+
+        if (currentName === changedName) {
+          console.log('no changes detected');
+          return;
+        }
+
+        const data = await qrpaySdk.fetchPostAsync(qrpaySdk.REST_APIS.MERCHANT.CHANGE_NAME, { name: changedName });
+        console.log(data);
+        if (data.ok) {
+          const { pim, qrBase64Image, merchantName, amount, installment } = data.data;
+          document.getElementById('qrkit-merchant-name').textContent = merchantName;
+        } else {
+          const status = data.status;
+          if (status === 401) {
+            console.log('로그인이 필요합니다.', JSON.stringify(data));
+            PasswordModal.open({
+              loginId: '',
+              onSuccessCallback: function (res) {
+                onMerchantNameChange(newMerchantName);
+              },
+              onCancelCallback: function () {
+                console.log('cancel authentication');
+              },
+            });
+          } else {
+            const errorMsg = data.error.message || '가맹점명 변경에 실패했습니다.';
+            alert(errorMsg);
+          }
+        }
+      };
+
+      const onQrKitApply = async () => {
+          const phoneInput = document.getElementById('qrkit-phone')
+          const addressInput = document.getElementById('qrkit_address');
+          const detailAddressInput = document.getElementById('qrkit_detailAddress');
+          const postcodeInput = document.getElementById('qrkit_postcode');
+
+          let reqApplyQkit = {
+            merchantId: merchantId,
+            merchantName: document.getElementById('qrkit-merchant-name').textContent,
+            address1: addressInput.value,
+            address2: detailAddressInput.value,
+            zip: postcodeInput.value,
+            phoneNo: phoneInput.value.replace(/-/g, ''),
+          };
+
+          console.log(JSON.stringify(reqApplyQkit));
+          const data = await qrpaySdk.fetchPostAsync(REST_APIS.QR_KIT.APPLY, reqApplyQkit);
+          console.log(data);
+          if (data.ok) {
+            const { merchantId, applicationAt, shippingStatus, registeredMailNo } = data.data;
+            ConfirmModal.open({
+              desc: 'QR키트 신청이 완료되었습니다.<br/>빠른 시일 내에 배송해드리겠습니다.',
+              hideCancel: true,
+              onConfirm: () => {
+                console.log('QR키트 신청 완료 확인');
+                pageMove(PAGES_APIS.PAGES_QRKIT_STATUS);
+              },
+            });
+          } else {
+            const status = data.status;
+          if (status === 401) {
+            console.log('로그인이 필요합니다.', JSON.stringify(data));
+            PasswordModal.open({
+              loginId: '',
+              onSuccessCallback: (res) => {
+                onQrKitApply(newMerchantName);
+              },
+              onCancelCallback: () => {
+                console.log('cancel authentication');
+              },
+            });
+          } else {
+            const errorMsg = data.error.message || 'QR키트 신청에 실패했습니다.';
+              ConfirmModal.open({
+              desc: errorMsg,
+              hideCancel: true,
+            });
+          }
+        }
+      };
+
+        function formatPhoneNumber(value) {
+          // 1. 숫자 이외의 문자 제거
+          var phone = value.replace(/[^0-9]/g, '');
+
+          // 2. 길이에 따른 하이픈 삽입 (정규식)
+          if (phone.length < 4) {
+            return phone;
+          } else if (phone.length < 7) {
+            return phone.substr(0, 3) + '-' + phone.substr(3);
+          } else if (phone.length < 11) {
+            return phone.substr(0, 3) + '-' + phone.substr(3, 3) + '-' + phone.substr(6);
+          } else {
+            return phone.substr(0, 3) + '-' + phone.substr(3, 4) + '-' + phone.substr(7);
+          }
+        }
+    </script>
+
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <script>
+      // 우편번호 찾기 찾기 화면을 넣을 element
+      var element_wrap = document.getElementById('wrap_kakao_address');
+
+      function foldDaumPostcode() {
+        // iframe을 넣은 element를 안보이게 한다.
+        element_wrap.style.display = 'none';
+      }
+
+      function sample3_execDaumPostcode() {
+        // 현재 scroll 위치를 저장해놓는다.
+        var currentScroll = Math.max(document.body.scrollTop, document.documentElement.scrollTop);
+        element_wrap.style.display = 'block';
+
+        new daum.Postcode({
+          oncomplete: function (data) {
+            // 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+
+            // 각 주소의 노출 규칙에 따라 주소를 조합한다.
+            // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+            var addr = ''; // 주소 변수
+            var extraAddr = ''; // 참고항목 변수
+
+            //사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
+            if (data.userSelectedType === 'R') {
+              // 사용자가 도로명 주소를 선택했을 경우
+              addr = data.roadAddress;
+            } else {
+              // 사용자가 지번 주소를 선택했을 경우(J)
+              addr = data.jibunAddress;
+            }
+
+            // 사용자가 선택한 주소가 도로명 타입일때 참고항목을 조합한다.
+            if (data.userSelectedType === 'R') {
+              // 법정동명이 있을 경우 추가한다. (법정리는 제외)
+              // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
+              if (data.bname !== '' && /[동|로|가]$/g.test(data.bname)) {
+                extraAddr += data.bname;
+              }
+              // 건물명이 있고, 공동주택일 경우 추가한다.
+              if (data.buildingName !== '' && data.apartment === 'Y') {
+                extraAddr += extraAddr !== '' ? ', ' + data.buildingName : data.buildingName;
+              }
+              // 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
+              if (extraAddr !== '') {
+                extraAddr = ' (' + extraAddr + ')';
+              }
+              // 조합된 참고항목을 해당 필드에 넣는다.
+              document.getElementById('qrkit_extraAddress').value = extraAddr;
+            } else {
+              document.getElementById('qrkit_extraAddress').value = '';
+            }
+
+            // 우편번호와 주소 정보를 해당 필드에 넣는다.
+            document.getElementById('qrkit_postcode').value = data.zonecode;
+            document.getElementById('qrkit_address').value = addr;
+            // 커서를 상세주소 필드로 이동한다.
+            document.getElementById('qrkit_detailAddress').focus();
+
+            // iframe을 넣은 element를 안보이게 한다.
+            // (autoClose:false 기능을 이용한다면, 아래 코드를 제거해야 화면에서 사라지지 않는다.)
+            element_wrap.style.display = 'none';
+
+            // 우편번호 찾기 화면이 보이기 이전으로 scroll 위치를 되돌린다.
+            document.body.scrollTop = currentScroll;
+          },
+          // 우편번호 찾기 화면 크기가 조정되었을때 실행할 코드를 작성하는 부분. iframe을 넣은 element의 높이값을 조정한다.
+          onresize: function (size) {
+            element_wrap.style.height = size.height + 'px';
+          },
+          width: '100%',
+          height: '100%',
+        }).embed(element_wrap);
+
+        // iframe을 넣은 element를 보이게 한다.
+        // element_wrap.style.display = 'block';
+      }
+    </script>
   </body>
 </html>

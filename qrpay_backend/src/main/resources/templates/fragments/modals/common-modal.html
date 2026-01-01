@@ -1,5 +1,73 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+  <th:block th:fragment="updateModal">
+    <div class="modal fade custom-modal" id="update-modal" tabindex="-1" role="dialog">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-body p30">
+            <h5 id="update-modal-title" class="modal-title-custom fw700">정보 수정</h5>
+            <div class="update-form mt20">
+              <p id="update-modal-desc" class="modal-desc mb10 h6"></p>
+              <input type="text" id="update-modal-input" class="form-control" placeholder="내용을 입력해주세요" />
+              <p id="update-modal-error" class="text-danger h6 mt10" style="display: none">내용을 입력해 주세요.</p>
+            </div>
+          </div>
+          <div class="modal-footer-custom">
+            <button type="button" class="btn-modal btn-cancel" data-dismiss="modal">취소</button>
+            <button type="button" class="btn-modal btn-confirm" id="update-modal-confirm-btn">확인</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script th:inline="javascript">
+      const UpdateModal = {
+        updateCallback: null,
+
+        open: function (params = {}) {
+          document.getElementById('update-modal-title').innerHTML = params.title || '수정';
+          document.getElementById('update-modal-desc').innerHTML = params.desc || '';
+
+          const inputEl = document.getElementById('update-modal-input');
+          inputEl.value = params.value || ''; // 기존 값 세팅
+          inputEl.placeholder = params.placeholder || '내용을 입력해주세요';
+
+          document.getElementById('update-modal-error').style.display = 'none';
+          this.updateCallback = params.onConfirm || null;
+
+          $('#update-modal').modal('show');
+        },
+
+        init: function () {
+          const _self = this;
+          const confirmBtn = document.getElementById('update-modal-confirm-btn');
+          const inputEl = document.getElementById('update-modal-input');
+
+          if (confirmBtn) {
+            confirmBtn.onclick = function () {
+              const inputValue = inputEl.value.trim();
+
+              // 유효성 검사 (비어있을 경우)
+              if (!inputValue) {
+                document.getElementById('update-modal-error').style.display = 'block';
+                return;
+              }
+
+              if (typeof _self.updateCallback === 'function') {
+                // 입력값을 콜백 함수로 전달
+                _self.updateCallback(inputValue);
+              }
+              $('#update-modal').modal('hide');
+            };
+          }
+        },
+      };
+
+      $(document).ready(function () {
+        UpdateModal.init();
+      });
+    </script>
+  </th:block>
   <th:block th:fragment="confirmModal">
     <div class="modal fade custom-modal" id="confirm-modal" tabindex="-1" role="dialog">
       <div class="modal-dialog modal-dialog-centered" role="document">

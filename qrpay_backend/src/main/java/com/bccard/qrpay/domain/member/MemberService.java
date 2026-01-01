@@ -6,6 +6,7 @@ import com.bccard.qrpay.domain.common.code.MemberStatus;
 import com.bccard.qrpay.domain.member.repository.MemberQueryRepository;
 import com.bccard.qrpay.domain.member.repository.MemberRepository;
 import com.bccard.qrpay.domain.merchant.Merchant;
+import com.bccard.qrpay.exception.AuthException;
 import com.bccard.qrpay.exception.MemberException;
 import com.bccard.qrpay.exception.code.QrpayErrorCode;
 import com.bccard.qrpay.utils.IdValidator;
@@ -41,7 +42,7 @@ public class MemberService {
     }
 
 
-    public Member findMyLoginId(String loginId) {
+    public Member findByLoginId(String loginId) {
         return memberQueryRepository.findByLoginId(loginId)
                 .orElseThrow(() -> new MemberException(QrpayErrorCode.MEMBER_NOT_FOUND));
     }
@@ -54,6 +55,25 @@ public class MemberService {
     public void passwordFail(String memberId) {
         Member member = findByMemberId(memberId);
         member.onPasswordFail();
+    }
+
+    @Transactional(noRollbackFor = {AuthException.class})
+    public Member authenticate(String loginId, String password) {
+        Member member = memberQueryRepository.findByLoginId(loginId).orElseThrow(() ->
+                new AuthException(QrpayErrorCode.MEMBER_NOT_FOUND));
+
+        if (member.isAccountLock()) {
+            throw new AuthException(QrpayErrorCode.ACCOUNT_LOCKED_POLICY);
+        }
+
+        if (!customPasswordEncoder.matches(password, member.getHashedPassword())) {
+            member.onPasswordFail();
+            throw new AuthException(QrpayErrorCode.INVALID_CREDENTIAL);
+        }
+
+        member.onLogin();
+
+        return member;
     }
 
     public String hashPassword(String password) {

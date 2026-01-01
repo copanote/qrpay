@@ -44,6 +44,11 @@ public class QrKitService {
             throw new MerchantException(QrpayErrorCode.MERCHANT_CANCELED);
         }
 
+        List<MpmQrKitApplication> mpmQrKitApplications = this.find(member);
+        if (mpmQrKitApplications.size() >= 3) {
+            throw new MerchantException(QrpayErrorCode.QRKIT_MAX_LIMIT_EXCEEDED);
+        }
+
         if (!reqDto.getReqMerchantName().equals(merchant.getMerchantName())) {
             merchant = merchantService.updateMerchantName(merchant, reqDto.getReqMerchantName());
         }
@@ -52,7 +57,6 @@ public class QrKitService {
         MpmQrPublication mpmQrPublication = emvMpmQrService.publishBcEmvMpmQr(emvmpmQrReq);
 
         Long id = mpmQrKitQueryRepository.getNextSequenceValue();
-
         MpmQrKitApplication newQrKit = MpmQrKitApplication.newQrKit()
                 .id(id)
                 .merchantId(merchant.getMerchantId())

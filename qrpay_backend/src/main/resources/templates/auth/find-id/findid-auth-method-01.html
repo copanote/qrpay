@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>BC</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css" />
+    <script src="/js/jquery-3.3.1.slim.min.js.js"></script>
+    <script src="/js/popper.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <link href="/css/common.css" rel="stylesheet" />
+    <script src="/js/common.js"></script>
+  </head>
+
+  <body>
+    <div id="wrap">
+      <!-- header -->
+      <header id="hd">
+        <div class="container">
+          <button type="button" class="icon-back" onclick="goBack()">이전 페이지 이동</button>
+          <h1>아이디 찾기 - 본인인증</h1>
+          <a class="icon-home" href="javascript:void(0)" onclick="goHome()">홈으로 이동</a>
+        </div>
+      </header>
+
+      <!-- container -->
+      <div id="ct">
+        <!-- 페이지 시작 -->
+        <div class="cnt-btm-wrp">
+          <ol class="lst-step-circle">
+            <li class="active">1단계</li>
+            <li>2단계</li>
+            <li>3단계</li>
+          </ol>
+          <div class="container find-id pos-middle">
+            <div class="row align-items-center">
+              <div class="col">
+                <label class="input-type-round">
+                  <input type="radio" name="radio1" checked />
+                  <span class="d-block"></span>
+                  <div class="find-phone-img"></div>
+                  <h2 class="h4 text-center">휴대폰</h2>
+                </label>
+              </div>
+            </div>
+          </div>
+          <div class="btm-fixed-btn">
+            <!--		<a class="btn btn-muted btn-block" href="#">다음</a> 비활성화 -->
+            <button class="btn btn-primary btn-block" onclick="onNiceSmsCallbackMock()">다음</button>
+          </div>
+        </div>
+        <!--// 페이지 끝 -->
+      </div>
+    </div>
+  </body>
+  <script th:inline="javascript">
+    // 추가 기능 구현 필요
+    const niceSmsEncData = /*[[${niceSmsEncData}]]*/ '';
+    const niceSmsUrl = /*[[${niceSmsUrl}]]*/ '';
+    const niceSmsRefId = /*[[${smsRefId}]]*/ '';
+
+    const createNiceSmsForm = (encData, url) => {
+      const form = document.createElement('form');
+      form.setAttribute('method', 'post');
+      form.setAttribute('action', url);
+
+      const input = document.createElement('input');
+      input.setAttribute('type', 'hidden');
+      input.setAttribute('name', 'EncodeData');
+      input.setAttribute('value', encData);
+
+      const input2 = document.createElement('input');
+      input2.setAttribute('type', 'hidden');
+      input2.setAttribute('name', 'm');
+      input2.setAttribute('value', 'checkplusService');
+
+      form.appendChild(input);
+      form.appendChild(input2);
+      document.body.appendChild(form);
+      return form;
+    };
+
+    const onSubmitNiceSmsForm = () => {
+      const form = createNiceSmsForm(niceSmsEncData, niceSmsUrl);
+      form.submit();
+    };
+
+    const onNiceSmsCallbackMock = () => {
+      const url = '/external/nice/sms/result';
+
+      const EncodeData =
+        'AgAFQkU2NDKSrMTziNqNeu2qg16thDAg0u7ByadrIyNsDsCc1qIHda53Q2ewpiAPjCZaNh0CimYVE/sbOrPgMJluHMQoiGhdkNiD2+AAFGOwSza0ZulhoRlsBYW76Z+PQaZVuBw/h79IR3dfjX6fDnhSdEdutX+SgCi3AUsVxrIlOYLQOEzYEQNvy7akFULWKCOb6x/qzXB3tmvkee6JfbxrBxxm2zkxz1mHLSDlmNUnQU5rzHsx7poGwnEpnRCBOccfOvKtvwDIy5MjNONQAzVyO9WaaioyuTUXecUR/HRY/Gvj/6id2u9zTErk0Z1OfXuJyVx+trOayGd02ZE2gJhSUW7ROtKNKOaXsVs92ijLjqSeRS7uzT01DeJZeJHFXmUgglfc4W9GVh7uKiOovewC7dfNqqbQ7igYJexHORiaLe0PXwROYDDmfHljM4nIdbZLxJcPvSDj6wE9qAMS2NrdcEMa823rTkN9hjjHs82vi+GIQ0yCQDocE7idcFeLMAIRdL/el45iB2oTOBmY/meJi5OHglb0+CP7LwcNNnm05xV7wpx/yQgmIoMUBAEhzHIUdna33dksIsCuAkU4kPboJpUx52tZEE/TIaBxhQJ0mjqMxon2bYyhHqvoyUGzOLFeQgHnGh/yei3iri5hND1xZKmWaVAiJanlwN49DdyDEHYhzHnry/4dvQv4zkRW71bH7cQzRfaCB6u7zCt63JwVkHGl5DHI';
+
+      const form = document.createElement('form');
+      form.setAttribute('method', 'get');
+      form.setAttribute('action', url);
+
+      const input = document.createElement('input');
+      input.setAttribute('type', 'hidden');
+      input.setAttribute('name', 'EncodeData');
+      input.setAttribute('value', EncodeData);
+
+      const input2 = document.createElement('input');
+      input2.setAttribute('type', 'hidden');
+      input2.setAttribute('name', 'smsRefId');
+      input2.setAttribute('value', niceSmsRefId);
+      form.appendChild(input);
+      form.appendChild(input2);
+      document.body.appendChild(form);
+
+      form.submit();
+    };
+  </script>
+</html>

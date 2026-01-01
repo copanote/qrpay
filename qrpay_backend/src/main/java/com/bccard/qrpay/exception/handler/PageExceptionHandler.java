@@ -19,6 +19,7 @@ public class PageExceptionHandler {
     @ExceptionHandler(Exception.class)
     public String handleException(Exception ex, Model model) {
         log.info("ControllerAdvice");
+        log.error("error", ex);
         model.addAttribute("error", "데이터가 존재하지 않습니다.");
         return "error/404"; // error/400.html (또는 .jsp) 뷰 반환
     }

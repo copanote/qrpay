@@ -3,15 +3,17 @@ package com.bccard.qrpay.interceptor;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
+@Slf4j
 @Component
 public class LoginRedirectInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
-        // 쿠키나 세션에서 회원 정보 확인 (여기서는 예시로 쿠키 체크)
+        // 쿠키에서 회원 정보 확인
         Cookie[] cookies = request.getCookies();
         String memId = null;
         if (cookies != null) {
@@ -28,4 +30,6 @@ public class LoginRedirectInterceptor implements HandlerInterceptor {
         }
         return true;
     }
+
+
 }

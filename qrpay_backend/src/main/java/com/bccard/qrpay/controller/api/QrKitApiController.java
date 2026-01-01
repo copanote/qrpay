@@ -33,11 +33,10 @@ public class QrKitApiController {
     private final EmvMpmQrService emvMpmQrService;
 
 
-    @PostMapping(value = "/v1/merchant/qr-kit/apply")
+    @PostMapping(value = "/v1/qr-kit/apply")
     @ResponseBody
     public ResponseEntity<?> qrkitApply(
             @LoginMember Member member,
-            @PathVariable("merchantId") String merchantId,
             @RequestBody ApiQrKitApplyReqDto reqDto
     ) throws Exception {
 
@@ -48,7 +47,7 @@ public class QrKitApiController {
         }
 
         Merchant merchant = member.getMerchant();
-        if (!merchant.getMerchantId().equals(merchantId)) {
+        if (!merchant.getMerchantId().equals(reqDto.getMerchantId())) {
             throw new AuthException(QrpayErrorCode.UNMATCHED_AUTHENTICATE);
         }
 
@@ -62,7 +61,6 @@ public class QrKitApiController {
                 .phoneNo(reqDto.getPhoneNo())
                 .build();
 
-        //TODO 3개까지 신청 가능??
         MpmQrKitApplication newQrKit = qrKitService.apply(serviceQrKitReqDto);
         QrKitApplicationDto from = QrKitApplicationDto.from(newQrKit);
 

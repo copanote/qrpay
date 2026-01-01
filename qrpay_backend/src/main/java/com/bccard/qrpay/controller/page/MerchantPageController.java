@@ -28,13 +28,13 @@ public class MerchantPageController {
 
         if (memId == null) {
             log.info("Needs Authenticate");
-            return "home/login";
+            return "auth/login";
         }
 
         Member member = memberService.findBy(memId).orElseGet(() -> null);
         if (member == null || member.getStatus() != MemberStatus.ACTIVE) {
             log.info("Needs Authenticate");
-            return "home/login";
+            return "auth/login";
         }
 
         Merchant merchant = member.getMerchant();
@@ -50,7 +50,7 @@ public class MerchantPageController {
         if (member == null || member.getStatus() != MemberStatus.ACTIVE) {
             log.info("Needs Authenticate");
             model.addAttribute("returnKey", "");
-            return "/home/login";
+            return "auth/login";
         }
 
         Merchant merchant = member.getMerchant();

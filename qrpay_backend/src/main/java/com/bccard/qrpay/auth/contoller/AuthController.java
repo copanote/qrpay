@@ -2,7 +2,6 @@ package com.bccard.qrpay.auth.contoller;
 
 import com.bccard.qrpay.auth.contoller.dto.RequestLogin;
 import com.bccard.qrpay.auth.contoller.dto.ResponseRevoke;
-import com.bccard.qrpay.auth.domain.CustomUserDetails;
 import com.bccard.qrpay.auth.domain.JwtToken;
 import com.bccard.qrpay.auth.service.AuthService;
 import com.bccard.qrpay.domain.member.Member;
@@ -13,8 +12,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,14 +31,29 @@ public class AuthController {
 
         log.info("login={}", requestLogin);
 
-        UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(requestLogin.getLoginId(), requestLogin.getPassword());
+//        UsernamePasswordAuthenticationToken authenticationToken =
+//                new UsernamePasswordAuthenticationToken(requestLogin.getLoginId(), requestLogin.getPassword());
+//
+//        Authentication authentication;
+//        try {
+//            authentication = authenticationManager.authenticate(authenticationToken);
+//        } catch (BadCredentialsException e) {
+//            log.error("BadCredentialsException={}", e, e.getMessage());
+//            Member byLoginId = memberService.findByLoginId(requestLogin.getLoginId());
+//            throw e;
+//        } catch (UsernameNotFoundException e) {
+//            // 아이디가 존재하지 않을 때
+//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("존재하지 않는 아이디입니다.");
+//        } catch (Exception e) {
+//            // 기타 인증 관련 예외
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("인증 중 오류가 발생했습니다.");
+//        }
+//        log.info("{}", authentication);
+//        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
 
-        Authentication authentication = authenticationManager.authenticate(authenticationToken);
-        log.info("{}", authentication);
-        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+//        Member member = userDetails.qrpayMember();
 
-        Member member = userDetails.qrpayMember();
+        Member member = authService.login(requestLogin.getLoginId(), requestLogin.getPassword());
         JwtToken jwt = authService.createJwt(member.getMemberId(), member.getRole().toString());
         log.info("{}", jwt.toString());
 

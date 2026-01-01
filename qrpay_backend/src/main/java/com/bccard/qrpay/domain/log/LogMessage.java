@@ -17,7 +17,7 @@ import java.nio.charset.StandardCharsets;
 public class LogMessage {
 
     private static final int BODY_LENGTH = 4000;
-    
+
     private String standardHeader;
     private String header;
     private String body;
@@ -31,5 +31,9 @@ public class LogMessage {
         if (!StringUtils.isEmpty(this.body) && this.body.getBytes(StandardCharsets.UTF_8).length > BODY_LENGTH) {
             this.body = MpmStringUtils.safeSubstringByBytes(this.body, BODY_LENGTH, StandardCharsets.UTF_8);
         }
+    }
+
+    public void updateBody(String updatedValue) {
+        this.body = updatedValue;
     }
 }

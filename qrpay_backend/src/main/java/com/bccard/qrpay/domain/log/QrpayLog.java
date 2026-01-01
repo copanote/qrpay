@@ -7,23 +7,22 @@ import com.bccard.qrpay.domain.common.converter.QrTransactionTypeConverter;
 import com.bccard.qrpay.domain.common.entity.BaseEntity;
 import com.bccard.qrpay.utils.MpmDateTimeUtils;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.domain.Persistable;
 
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 @Entity
 @Table(name = "TBMPMQRPAYPSTCLOG")
+@Builder
 public class QrpayLog extends BaseEntity implements Persistable<Long> {
 
     @Id
     @Column(name = "TRNS_SEQ_NO", nullable = false, length = 10)
     private Long id;
-    
+
     @Column(name = "REG_MLSC_ATON", length = 17)
     private String createdAtSss;
     @Column(name = "CHNL_TRNS_UNIQ_NO", length = 14)
@@ -66,29 +65,37 @@ public class QrpayLog extends BaseEntity implements Persistable<Long> {
     })
     private LogMessage logMessage;
 
-    @Builder
-    public QrpayLog(Long id) {
-        this.id = id;
+//    public QrpayLog(String transactionId, String affiliateTransactionId, String unifiedQrTransactionId, String instituteCode,
+//                    String messageId, MessageType messageType, String responseCode, String merchantId, String internalResponseCode,
+//                    QrTransactionType qrTransactionType, LogMessage fepFldMessage, LogMessage logMessage) {
+//        this.createdAtSss = MpmDateTimeUtils.generateDtmNow(MpmDateTimeUtils.PATTERN_YEAR_TO_MICROSEC);
+//        this.transactionId = transactionId;
+//        this.affiliateTransactionId = affiliateTransactionId;
+//        this.unifiedQrTransactionId = unifiedQrTransactionId;
+//        this.instituteCode = instituteCode;
+//        this.messageId = messageId;
+//        this.messageType = messageType;
+//        this.responseCode = responseCode;
+//        this.merchantId = merchantId;
+//        this.internalResponseCode = internalResponseCode;
+//        this.qrTransactionType = qrTransactionType;
+//        this.fepFldMessage = fepFldMessage;
+//        this.logMessage = logMessage;
+//    }
+
+    public static QrpayLog smsNice(Long id, String log) {
+
+        LogMessage logMessage = LogMessage.create()
+                .body(log)
+                .build();
+
+        return QrpayLog.builder()
+                .id(id)
+                .createdAtSss(MpmDateTimeUtils.generateDtmNow(MpmDateTimeUtils.PATTERN_YEAR_TO_MICROSEC))
+                .logMessage(logMessage)
+                .build();
     }
 
-    @Builder(builderMethodName = "create")
-    public QrpayLog(String transactionId, String affiliateTransactionId, String unifiedQrTransactionId, String instituteCode,
-                    String messageId, MessageType messageType, String responseCode, String merchantId, String internalResponseCode,
-                    QrTransactionType qrTransactionType, LogMessage fepFldMessage, LogMessage logMessage) {
-        this.createdAtSss = MpmDateTimeUtils.generateDtmNow(MpmDateTimeUtils.PATTERN_YEAR_TO_MICROSEC);
-        this.transactionId = transactionId;
-        this.affiliateTransactionId = affiliateTransactionId;
-        this.unifiedQrTransactionId = unifiedQrTransactionId;
-        this.instituteCode = instituteCode;
-        this.messageId = messageId;
-        this.messageType = messageType;
-        this.responseCode = responseCode;
-        this.merchantId = merchantId;
-        this.internalResponseCode = internalResponseCode;
-        this.qrTransactionType = qrTransactionType;
-        this.fepFldMessage = fepFldMessage;
-        this.logMessage = logMessage;
-    }
 
     @Override
     public Long getId() {

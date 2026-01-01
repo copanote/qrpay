@@ -1,9 +1,11 @@
 package com.bccard.qrpay.external.nice;
 
 import NiceID.Check.CPClient;
+import com.bccard.qrpay.external.nice.dto.NiceSmsResultDto;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
+import java.util.UUID;
 
 public class NiceTest {
 
@@ -13,11 +15,11 @@ public class NiceTest {
     @Test
     void test() {
         System.out.println("11");
-        String reqNo = "QRPAY0001";
+        String reqNo = UUID.randomUUID().toString();
         CPClient niceCheck = new CPClient();
-        String sRequestNumber = niceCheck.getRequestNO(reqNo);
+//        String sRequestNumber = niceCheck.getRequestNO(reqNo);
 
-        System.out.println(sRequestNumber);
+        System.out.println(reqNo);
 
         String sAuthType = "";
 
@@ -29,7 +31,7 @@ public class NiceTest {
         String sReturnUrl = "http://www.test.co.kr/checkplus_success.jsp";
         String sErrorUrl = "http://www.test.co.kr/checkplus_fail.jsp";
 
-        String sPlainData = "7:REQ_SEQ" + sRequestNumber.getBytes().length + ":" + sRequestNumber +
+        String sPlainData = "7:REQ_SEQ" + reqNo.getBytes().length + ":" + reqNo +
                 "8:SITECODE" + siteCode.getBytes().length + ":" + siteCode +
                 "9:AUTH_TYPE" + sAuthType.getBytes().length + ":" + sAuthType +
                 "7:RTN_URL" + sReturnUrl.getBytes().length + ":" + sReturnUrl +
@@ -41,6 +43,12 @@ public class NiceTest {
         int i = niceCheck.fnEncode(siteCode, pass, sPlainData);
         System.out.println(i);
         System.out.println(niceCheck.getCipherData());
+        CPClient niceCheck2 = new CPClient();
+        int iReturn = niceCheck2.fnDecode(siteCode, pass, niceCheck.getCipherData());
+        System.out.println(iReturn);
+
+        System.out.println(niceCheck2.getPlainData());
+        System.out.println(niceCheck2.getCipherDateTime());
 
     }
 
@@ -58,10 +66,14 @@ public class NiceTest {
         System.out.println(niceCheck.getPlainData());
         System.out.println(niceCheck.getCipherDateTime());
 
+
         HashMap hashMap = niceCheck.fnParse(niceCheck.getPlainData());
+        System.out.println(hashMap.get("CI"));
+
         for (Object o : hashMap.keySet()) {
-            System.out.println("key: " + o + " value: " + hashMap.get(o));
+            System.out.println("key: " + o + ", value: " + hashMap.get(o));
         }
+
 
         /**
          * key: REQ_SEQ value: BE642_2025121710140967524
@@ -77,6 +89,12 @@ public class NiceTest {
          * key: AUTH_TYPE value: M
          * key: NAME value: 신동욱
          */
+
+
+        NiceSmsService niceSmsService = new NiceSmsService();
+
+        NiceSmsResultDto niceSmsResultDto = niceSmsService.decodeNiceSmsEncData(rre);
+        System.out.println(niceSmsResultDto);
 
     }
 
@@ -107,7 +125,7 @@ public class NiceTest {
             paramValue = paramValue.replaceAll("-", "");
             paramValue = paramValue.replaceAll(",", "");
 
-            if (gubun != "encodeData") {
+            if (!gubun.equals("encodeData")) {
                 paramValue = paramValue.replaceAll("\\+", "");
                 paramValue = paramValue.replaceAll("/", "");
                 paramValue = paramValue.replaceAll("=", "");

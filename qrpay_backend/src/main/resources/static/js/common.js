@@ -145,8 +145,16 @@ const goHome = () => {
 };
 
 const goBack = () => {
+  document;
   const referrer = document.referrer;
+  const currentPath = window.location.pathname; // 현재 URL 경로 가져오기
   console.log('referrer:', referrer);
+
+  if (currentPath.includes('/pages/auth')) {
+    window.history.back();
+    return; // 함수 종료
+  }
+
   if (!referrer || referrer.includes(PAGES_APIS.PAGES_LOGIN)) {
     // 이전 페이지가 로그인 페이지라면 메인 홈으로 이동
     goHome();
@@ -158,6 +166,30 @@ const goBack = () => {
 const pageMove = (url) => {
   window.location.href = url;
 };
+
+const qr_debounce = (fn, ms) => {
+  let timeoutId;
+  return function (...args) {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => fn.apply(this, args), ms);
+  };
+};
+
+function qr_throttleLeading(func, wait) {
+  let timer = null;
+
+  return function (...args) {
+    // 타이머가 없을 때만(즉, 처음이거나 대기가 끝났을 때만) 실행
+    if (!timer) {
+      func.apply(this, args);
+
+      // 실행 후 타이머를 설정해 'wait' 시간 동안 차단
+      timer = setTimeout(() => {
+        timer = null;
+      }, wait);
+    }
+  };
+}
 
 const PAGES_APIS = {
   PAGES_LOGIN: '/pages/login',
@@ -176,6 +208,20 @@ const PAGES_APIS = {
   PAGES_MERCHANT_TIP: '/pages/merchant/tip',
   PAGES_QRKIT_APPLY: '/pages/qrkit/apply',
   PAGES_QRKIT_STATUS: '/pages/qrkit/status',
+
+  PAGES_SIGNUP_TERMS: '/pages/auth/signup/terms',
+  PAGES_SIGNUP_AUTH_METHOD: '/pages/auth/signup/auth-method',
+  PAGES_SIGNUP_MERCHANT: '/pages/auth/signup/merchant',
+  PAGES_SIGNUP_MEMBER: '/pages/auth/signup/member',
+
+  PAGES_FINDID_AUTH_METHOD: '/pages/auth/findid/auth-method',
+  PAGES_FINDID_MERCHANT: '/pages/auth/findid/merchant',
+  PAGES_FINDID_CONFIRM: '/pages/auth/findid/confirm',
+
+  PAGES_FINDPW_CHECK_ID: '/pages/auth/findpw/check-id',
+  PAGES_FINDPW_AUTH_METHOD: '/pages/auth/findpw/auth-method',
+  PAGES_FINDPW_CHANGE: '/pages/auth/findpw/change',
+
   getPathVariableUrl: function (url, memberId) {
     return url.replace('{}', memberId);
   },
@@ -192,7 +238,7 @@ const REST_APIS = {
     CHANGE_VAT: '/qrpay/api/v1/merchant/change-vat',
   },
   MEMBER: {
-    ID_DUP_CHECK: '/qrpay/api/v1/member/id-check',
+    ID_DUP_CHECK: '/qrpay/api/open/v1/member/id-check',
     EMPLOYEE_STATUS_CHANGE: '/qrpay/api/v1/member/{memberId}/employee-status-change',
     EMPLOYEE_PERMISSION_CANCEL_CHANGE: '/qrpay/api/v1/member/{memberId}/employee-cancel-permission-change',
     EMPLOYEE_CANCEL: '/qrpay/api/v1/member/{memberId}/employee-cancel',
@@ -205,5 +251,10 @@ const REST_APIS = {
   QR_KIT: {
     APPLY: '/qrpay/api/v1/qr-kit/apply',
     STATUS: '/qrpay/api/v1/qr-kit/status',
+  },
+
+  OPEN: {
+    PW_RESET: '/qrpay/api/open/v1/member/password-reset',
+    BC_MERCHANTS: '/qrpay/api/open/v1/bc/merchants',
   },
 };

@@ -1,18 +1,19 @@
 package com.bccard.qrpay.auth.service;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import com.bccard.qrpay.auth.domain.JwtToken;
 import com.bccard.qrpay.auth.domain.RefreshToken;
 import com.bccard.qrpay.auth.repository.RefreshTokenQueryRepository;
 import com.bccard.qrpay.auth.security.JwtProvider;
 import com.bccard.qrpay.domain.member.MemberService;
-import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @Transactional
@@ -45,7 +46,7 @@ class AuthServiceTest {
         //        Member member = memberService.findMyLoginId(loginId);
 
         // when
-        JwtToken jwtToken = authService.login(loginId, password);
+        JwtToken jwtToken = null;
 
         // then
         assertThat(jwtToken).isNotNull();
@@ -66,7 +67,7 @@ class AuthServiceTest {
         //        Member member = memberService.findMyLoginId(loginId);
 
         // when
-        JwtToken jwtToken = authService.login(loginId, password);
+        JwtToken jwtToken = null;
 
         authService.logout(jwtToken.getRefreshToken());
     }
@@ -82,7 +83,7 @@ class AuthServiceTest {
         //        Member member = memberService.findMyLoginId(loginId);
 
         // when
-        JwtToken jwtToken = authService.login(loginId, password);
+        JwtToken jwtToken = null;
 
         JwtToken refresh = authService.refresh(jwtToken.getRefreshToken());
 

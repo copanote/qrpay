@@ -20,7 +20,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.util.List;
@@ -30,6 +29,7 @@ import java.util.List;
 @Service
 public class AuthService {
 
+
     private final JwtProvider jwtProvider;
     private final MemberService memberService;
     private final MerchantService merchantService;
@@ -37,52 +37,8 @@ public class AuthService {
     private final RefreshTokenRepository refreshTokenRepository;
     private final RefreshTokenQueryRepository refreshTokenQueryRepository;
 
-    @Transactional
-    public JwtToken login(String userId, String password) {
-
-        Member member;
-        try {
-            member = memberService.findMyLoginId(userId);
-        } catch (MemberException e) {
-            throw new AuthException(QrpayErrorCode.INVALID_CREDENTIAL);
-        }
-
-        //Todo:: auth policy
-        if (member.getPasswordErrorCount() > 3) {
-            throw new AuthException(QrpayErrorCode.ACCOUNT_LOCKED_POLICY);
-        }
-
-        String hashed = memberService.hashPassword(password);
-        if (!member.getHashedPassword().equals(hashed)) {
-            member.onPasswordFail();
-//            memberService.passwordFail(member.getMemberId());
-            throw new AuthException(QrpayErrorCode.INVALID_CREDENTIAL);
-        }
-
-        String at = jwtProvider.generateToken(member.getMemberId(), member.getRole().toString());
-        String rt = jwtProvider.generateRefreshToken(member.getMemberId());
-
-
-        Instant now = Instant.now();
-
-        RefreshToken newRefreshToken = RefreshToken.createNew()
-                .memberId(member.getMemberId())
-                .tokenHash(refreshTokenService.hashRefreshToken(rt))
-                .issuedAt(now.toEpochMilli())
-                .expiresAt(now.plusMillis(jwtProvider.getJwtProperties().getRefreshTokenExpiration()).toEpochMilli())
-                .deviceId("")
-                .build();
-
-        RefreshToken saved = refreshTokenRepository.save(newRefreshToken);
-
-        Long accessTokenExpiresIn = now.plusMillis(jwtProvider.getJwtProperties().getAccessTokenExpiration()).toEpochMilli();
-
-
-        return JwtToken.builder()
-                .accessToken(at)
-                .accessTokenExpiresIn(accessTokenExpiresIn)
-                .refreshToken(rt)
-                .build();
+    public Member login(String userId, String password) {
+        return memberService.authenticate(userId, password);
     }
 
     public JwtToken createJwt(String memberId, String role) {

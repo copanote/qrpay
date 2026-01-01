@@ -34,6 +34,15 @@ public class QrpayApiResponse<T> {
                 data);
     }
 
+    public static <T> QrpayApiResponse<T> ok(T data) {
+        return new QrpayApiResponse<>(
+                QrpayErrorCode.SUCCESS.getCode(),
+                QrpayErrorCode.SUCCESS.getMessage(),
+                "",
+                "",
+                data);
+    }
+
     public static <T> QrpayApiResponse<T> ok(Member loginMember) {
         return new QrpayApiResponse<>(
                 QrpayErrorCode.SUCCESS.getCode(),
@@ -41,6 +50,13 @@ public class QrpayApiResponse<T> {
                 loginMember.getMemberId(),
                 loginMember.getLoginId(),
                 null);
+    }
+
+    public static <T> QrpayApiResponse<T> ok() {
+        return new QrpayApiResponse<>(
+                QrpayErrorCode.SUCCESS.getCode(),
+                QrpayErrorCode.SUCCESS.getMessage()
+        );
     }
 
     public static <T> QrpayApiResponse<T> error(String code, String message) {

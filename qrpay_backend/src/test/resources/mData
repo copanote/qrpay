@@ -1,2 +1,68 @@
 "data":{"rspnCdV1":"1","merNmV60":"클레브/kleve","rsvrNmV20":"김*진","biznoV10":"7025401146","feeRtV5":"2.300","dpsFdtV40":"2영업일 입금","merMgDeptNmV20":"대구지점","mgBbrNmV30":"비씨카드 대구센","accOpenBbrNmV30":"카카오뱅크","accNoV21":"33333546*****","merSaleLimV20":"제한없음","merKeyinLimV20":"2000만원","zpV6":"42433","addrV100":"대구 남구 대봉로38길 28*******","tpnoRgnNoV4":"***","tpnoHnoV4":"****","tpnoRapsNoV4":"****","acciDsV40":"","merJnDateV8":"20251117","cnlDateV8":" ","insYnV20":"할부가능","spcrDvV1":"","tpbuzNmV40":"맞춤복 점","chkCardFeeRtV5":"  1.350","topMerYnV1":"0","bbrNoV6":"0504108","spcrTypNmV40":"EDC","saleAuthLimV20":"0 만원","keyinAuthLimV20":"0 만원","merSaleLimBlcV20":"제한없음","merKeyinAuthBlcV20":"          2,000 만원","dpsoNmV40":"김*진","tchfMerYnV1":"","tpbuzCdV5":"4210","bizrDvV1":"1","chkCardFeeRtTm2V5":"  1.520","bizlNwolAddrDvCdV1":"4","bizlAddrV100":"대구 남구********","bizlDtAddrV100":"1층*****","sbmallTpnoV20":"","sbmallEmlV100":"","applFeeRtV5":"00.000","atakSpcrMerYnV1":"","atakVrtlAccMemcNoV2":"","atakVrtlAccNoV21":"","rsvrSsnV7":"*******","cpnoV12":"","hpNoV12":"0106441****","nhChkFeeRtV5":"  1.450","upiChkFeeRtV5":"  3.500","pubSslpSpcrYnV1":"0","cstmrInoV15":"3809291******","accOpenBnkV3":"090","rsvrEmlV40":"","cprnBizrDvCdV1":" ","rsvrZpV6":"41216","rsvrTelRgnNoV4":"053","rsvrTelHnoV4":"1111","rsvrTelRapsNoV4":"****","rsvrHomNwolAddrDvCdV1":"4","rsvrHomAddrV100":"대구 동구*******","rsvrDtAddrV100":"109동*********","crInfpcnDvCdV3":"111","merEnmV40":"KEULREBEU/kleve","merCtyNmV40":"대구 남구","merCtyEnmV40":"DAEGU NAM-GU","merMccCdV4":"5697","spcrYnV1":"0","elctSaleTypCd":"41","rsvrCiV88":"f+DefL6*********************************************************************************","merDvCdV2":"01","memcNoV3":"","objGrpYnV1":"N","cinfSupAgriYn":"Y","cinfSupAgriDate":"20251117","cinfUseAgriYn":"Y","cinfUseAgriDate":"20251117","cinfInqrAgriYn":"Y","cinfInqrAgriDate":"20251117"}}
 "data":{"rspnCd":"01","arrCntN5":2,"merInfoCpInfoInqrSubIO":[{"merNm":"지에스(GS)25 도남엘에이치(LH)점/상품권","cstmrHnm":"홍*한","merNo":"731948061","crFeeRtV5":"1","loDpsFdtDcntNmV500":"1영업일 입금","deptNm":"대구지점","bbrNm":"KB국민카드 영업기획부","fbkFnstNm":"KB국민은행","accNo":"956801000*****","merSaleLimV20":"10000만원","merKeyinLimV20":"2000만원","bizlZp":"41408","bizlAddr":"대구 북구 도남길 96 상가 S001동 6호 (국우동, 대구도남 A-1BL****","bizlTelRgnNo":"053","bizlTelHno":"000","bizlTelRapsNo":"****","merAcciTypNm":"","regDate":"20221219","cnlDate":"","insAbleCdNmV100":"할부불가","tpbuzNm":"상품권 전문판매","oabChkFeeRtV5":".75","topMerYn":"0","bbrNo":"0504108","spcrTypNm":"EDI","saleAuthLimV20":"0 만원","keyinAuthLimV20":"0 만원","merSaleLimBlcV20":"         10,000 만원","merKeyinLimBlcV20":"          2,000 만원","bizno":"5033874232","merTpbuzNo":"4081","sibChkFeeRtV5":".75","bizlNwolAddrDvCd":"4","bizlBsAddr":"대구 북구 도남길**","bizlDtAddr":"상가 S001동 6호 (국우동, 대구도남 A-1BL****","rsvrSsnV13":"9409181******","cpno":"","hpNoV12":"01049316794","affiMerSpcrTypNo":"08","merDvCdV2":"01","objGrpYnV1":"N"},{"merNm":"지에스(GS)25 도남엘에이치(LH)점","cstmrHnm":"홍*한","merNo":"731942482","crFeeRtV5":"1","loDpsFdtDcntNmV500":"1영업일 입금","deptNm":"대구지점","bbrNm":"KB국민카드 영업기획부","fbkFnstNm":"KB국민은행","accNo":"476101010*****","merSaleLimV20":"제한없음","merKeyinLimV20":"2000만원","bizlZp":"41408","bizlAddr":"대구 북구 도남길 96 상가S 001동 6호 (국우동, 대구도남 A-1BL****","bizlTelRgnNo":"053","bizlTelHno":"000","bizlTelRapsNo":"****","merAcciTypNm":"","regDate":"20221219","cnlDate":"","insAbleCdNmV100":"할부가능","tpbuzNm":"편 의 점","oabChkFeeRtV5":".75","topMerYn":"0","bbrNo":"0504108","spcrTypNm":"EDI","saleAuthLimV20":"0 만원","keyinAuthLimV20":"0 만원","merSaleLimBlcV20":"제한없음","merKeyinLimBlcV20":"          2,000 만원","bizno":"5033874232","merTpbuzNo":"4010","sibChkFeeRtV5":".75","bizlNwolAddrDvCd":"4","bizlBsAddr":"대구 북구 도남길**","bizlDtAddr":"상가S 001동 6호 (국우동, 대구도남 A-1BL****","rsvrSsnV13":"9409181******","cpno":"","hpNoV12":"01049316794","affiMerSpcrTypNo":"08","merDvCdV2":"01","objGrpYnV1":"N"}]}}
+
+
+
+
+MCDQCOOAMO01560
+"data":{"merNoV9":"715670816","biznoV10":""}
+"data":{"rspnCdV1":"1","merNmV60":"신동욱 비사업자가맹점","rsvrNmV20":"신*욱","biznoV10":"0017999997",
+"feeRtV5":".500","dpsFdtV40":"2영업일 입금","merMgDeptNmV20":"가맹점마케팅2팀",
+"mgBbrNmV30":"신한카드 시너지","accOpenBbrNmV30":"신한은행","accNoV21":"1102479*****","merSaleLimV20":"0만원","merKeyinLimV20":"100만원",
+"zpV6":"04548","addrV100":"서울 중구 을지로**********","tpnoRgnNoV4":"**","tpnoHnoV4":"****",
+"tpnoRapsNoV4":"****","acciDsV40":"가맹점요청 임의 해지","merJnDateV8":"20191008","cnlDateV8":"20230414",
+"insYnV20":"할부가능","spcrDvV1":"","tpbuzNmV40":"사업자미등록개인","chkCardFeeRtV5":"   .250","topMerYnV1":"0",
+"bbrNoV6":"0501554","spcrTypNmV40":"EDC","saleAuthLimV20":"0 만원","keyinAuthLimV20":"0 만원","merSaleLimBlcV20":"              0 만원",
+"merKeyinAuthBlcV20":"            100 만원","dpsoNmV40":"신*욱","tchfMerYnV1":"","tpbuzCdV5":"9931","bizrDvV1":"1",
+"chkCardFeeRtTm2V5":"   .250","bizlNwolAddrDvCdV1":"4","bizlAddrV100":"서울 중구******","bizlDtAddrV100":"(을지로4가)","sbmallTpnoV20":"",
+"sbmallEmlV100":"","applFeeRtV5":"00.000","atakSpcrMerYnV1":"","atakVrtlAccMemcNoV2":"","atakVrtlAccNoV21":"","rsvrSsnV7":"*******",
+"cpnoV12":"","hpNoV12":"0108973****","nhChkFeeRtV5":"   .250","upiChkFeeRtV5":"  3.500","pubSslpSpcrYnV1":"0",
+"cstmrInoV15":"3602135******","accOpenBnkV3":"021","rsvrEmlV40":"","cprnBizrDvCdV1":" ","rsvrZpV6":"04548","rsvrTelRgnNoV4":"000",
+"rsvrTelHnoV4":"0000","rsvrTelRapsNoV4":"****","rsvrHomNwolAddrDvCdV1":"4","rsvrHomAddrV100":"서울 중구******",
+"rsvrDtAddrV100":"(을지로4가)","crInfpcnDvCdV3":"001","merEnmV40":"SINDONGUG BISAEOPJAGAMAEN","merCtyNmV40":"서울 중구",
+"merCtyEnmV40":"SEOUL JUNG-GU","merMccCdV4":"5131","spcrYnV1":"0","elctSaleTypCd":"41",
+"rsvrCiV88":"snNuXx0*********************************************************************************","merDvCdV2":"02","memcNoV3":"",
+"objGrpYnV1":"N","cinfSupAgriYn":"N","cinfUseAgriYn":"N",
+"cinfInqrAgriYn":"Y","cinfInqrAgriDate":"20191008"}
+
+MCDQCOOAMO01560
+"data":{"subjNo":"0017999979","merNo":"000000000","regDate":"00000000"}
+"data":{"rspnCd":"01","arrCntN5":1,"merInfoCpInfoInqrSubIO":[{"merNm":"신동욱 비사업자가맹점","cstmrHnm":"신*욱","merNo":"715670816","crFeeRtV5":".5","loDpsFdtDcntNmV500":"2영업일 입금","deptNm":"가맹점마케팅2팀","bbrNm":"신한카드 시너지영업추진본부",
+"fbkFnstNm":"신한은행","accNo":"1102479*****","merSaleLimV20":"0만원","merKeyinLimV20":"100만원","bizlZp":"04548",
+"bizlAddr":"서울 중구 을지로 170*******","bizlTelRgnNo":"02","bizlTelHno":"0000","bizlTelRapsNo":"****","merAcciTypNm":"",
+"regDate":"20191008","cnlDate":"20230414","insAbleCdNmV100":"할부가능","tpbuzNm":"사업자미등록개인","oabChkFeeRtV5":".25",
+"topMerYn":"0","bbrNo":"0501554","spcrTypNm":"EDC","saleAuthLimV20":"0 만원","keyinAuthLimV20":"0 만원","merSaleLimBlcV20":"              0 만원",
+"merKeyinLimBlcV20":"            100 만원","bizno":"0017999997","merTpbuzNo":"9931","sibChkFeeRtV5":".25","bizlNwolAddrDvCd":"4",
+"bizlBsAddr":"서울 중구 을지로***","bizlDtAddr":"(을지로4가)","rsvrSsnV13":"8806221******","cpno":"","hpNoV12":"01089733575","affiMerSpcrTypNo":"41"
+,"merDvCdV2":"02","objGrpYnV1":"N"}]
+
+
+                                @SuppressWarnings("unchecked")
+                                List<Map<String, Object>> list = (List<Map<String, Object>>) res01561Data.get(MCDQCOOAMO01561.ResParams.MER_INFO_CP_INFO_INQR_SUB_IO.getEimsMappingName());
+                                for (Map<String, Object> map : list) {
+                                           Map<String, Object> merchant = new HashMap<String, Object>();
+                                           merchant.put("MER_NM"                                  ,map.get(MCDQCOOAMO01561.ResParams.MER_NM.getEimsMappingName())               ); //가맹점명
+                                           merchant.put("RSV_NM"                                   ,map.get(MCDQCOOAMO01561.ResParams.CSTMR_HNM.getEimsMappingName())            ); //대표자명
+                                           merchant.put("CARD_CO_MER_NO"            ,map.get(MCDQCOOAMO01561.ResParams.MER_NO.getEimsMappingName())               ); //카드사 가맹점번호
+                                           merchant.put("BUZ_ZP"                                    ,map.get(MCDQCOOAMO01561.ResParams.BIZL_ZP.getEimsMappingName())              ); //우편번호
+                                           String telNo = map.get(MCDQCOOAMO01561.ResParams.BIZL_TEL_RGN_NO.getEimsMappingName()) + "-"
+                                                        + map.get(MCDQCOOAMO01561.ResParams.BIZL_TEL_HNO.getEimsMappingName()   ) + "-"
+                                                                     + map.get(MCDQCOOAMO01561.ResParams.BIZL_TEL_RAPS_NO.getEimsMappingName()                            ); //전화번호DDD + 전화번호(국) + 전화번호(번)
+                                           merchant.put("TEL_NO"                                    ,telNo);                      //전화번호
+                                           merchant.put("NEW_OLD_ADDR_CLSS"           ,map.get(MCDQCOOAMO01561.ResParams.BIZL_NWOL_ADDR_DV_CD.getEimsMappingName()) ); //신/구 주소구분자
+                                           merchant.put("DONG_OVR_NW_ADDR"            ,map.get(MCDQCOOAMO01561.ResParams.BIZL_BS_ADDR.getEimsMappingName())         ); //주소1(동 이상 주소)
+                                           merchant.put("DONG_BLW_NW_ADDR"            ,map.get(MCDQCOOAMO01561.ResParams.BIZL_DT_ADDR.getEimsMappingName())         ); //주소2(동 이하 주소)
+                                           merchant.put("REG_DATE"                                 ,map.get(MCDQCOOAMO01561.ResParams.REG_DATE.getEimsMappingName())             ); //가맹점 등록일자('YYYYMMDD')
+
+                                           if ("41".equals(map.get(MCDQCOOAMO01561.ResParams.AFFI_MER_SPCR_TYP_NO.getEimsMappingName()))) {
+                                                     merchant.put("JONN_ABLE_YN"    ,"Y");
+                                           } else if ("Y".equalsIgnoreCase(map.get(MCDQCOOAMO01561.ResParams.OBJ_GRP_YN.getEimsMappingName()).toString())) {
+                                                     //[KYPARK] 2020-03-17 스마트오더 개발 관련 수정사항
+                                                     //그룹가맹점 Y 이면 회원가입 상태로 표시하도록 출력
+                                                     merchant.put("JONN_ABLE_YN"    ,"Y");
+                                           } else {
+                                                     merchant.put("JONN_ABLE_YN"    ,"N");
+                                           }
+                                           totalMerList.add(merchant);
+
+                                }

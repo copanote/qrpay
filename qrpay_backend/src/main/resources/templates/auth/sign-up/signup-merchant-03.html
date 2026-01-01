@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>BC</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css" />
+    <script src="/js/jquery-3.3.1.slim.min.js.js"></script>
+    <script src="/js/popper.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <link href="/css/common.css" rel="stylesheet" />
+    <script src="/js/common.js"></script>
+
+    <th:block th:if="${#arrays.contains(@environment.getActiveProfiles(), 'local')}">
+      <script th:src="@{/js/qrpay_sdk.dev.js}"></script>
+    </th:block>
+
+    <th:block th:if="${#arrays.contains(@environment.getActiveProfiles(), 'dev')}">
+      <script th:src="@{/js/qrpay_sdk.dev.js}"></script>
+    </th:block>
+
+    <th:block th:if="${#arrays.contains(@environment.getActiveProfiles(), 'prod')}">
+      <script th:src="@{/js/qrpay_sdk.prod.js}"></script>
+    </th:block>
+    <style>
+      /* 리스트 디자인: 여백 강조 */
+      .bx-franchise ul {
+        list-style: none;
+        padding: 0;
+        margin-top: 20px;
+      }
+      .bx-franchise ul li {
+        display: flex;
+        align-items: center;
+        padding: 20px 0;
+        border-bottom: 1px solid #f2f2f2;
+      }
+
+      /* 라디오 버튼 커스텀 (깔끔한 레드) */
+      input[type='radio'] {
+        accent-color: #eb0029;
+        width: 20px;
+        height: 20px;
+        cursor: pointer;
+      }
+
+      /* 상세보기 버튼: 텍스트 링크 스타일 */
+      .btn-detail-view {
+        background: none;
+        border: none;
+        color: #999;
+        font-size: 13px;
+        text-decoration: underline;
+        cursor: pointer;
+      }
+      .btn-detail-view:hover {
+        color: #eb0029;
+      }
+
+      /* 다음 버튼: BC Red */
+      .btn-next-step {
+        background-color: #f4f4f4;
+        color: #ccc;
+        border: none;
+        height: 56px;
+        line-height: 56px;
+        font-weight: 600;
+        transition: 0.3s;
+      }
+      .btn-next-step.active {
+        background-color: #eb0029 !important;
+        color: #fff !important;
+      }
+
+      /* 모달: 군더더기 없는 화이트 톤 */
+      .modal-content {
+        border-radius: 16px;
+        border: none;
+        padding: 10px;
+      }
+      .modal-header {
+        border: none;
+        padding-bottom: 0;
+      }
+      .modal-footer {
+        border: none;
+      }
+      .detail-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 12px 0;
+        border-bottom: 1px id= 'f8f8f8';
+      }
+      .detail-label {
+        color: #888;
+        font-size: 14px;
+      }
+      .detail-value {
+        color: #333;
+        font-weight: 500;
+        text-align: right;
+        font-size: 14px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="wrap">
+      <!-- header -->
+      <header id="hd">
+        <div class="container">
+          <button type="button" class="icon-back" onclick="pageMove(PAGES_APIS.PAGES_SIGNUP_TERMS)">이전 페이지 이동</button>
+          <h1>회원가입 - BC카드 가맹점 확인</h1>
+          <a class="icon-home" href="javascript:void(0)" onclick="goHome()">홈으로 이동</a>
+        </div>
+      </header>
+
+      <!-- container -->
+      <div id="ct">
+        <!-- 페이지 시작 -->
+        <div class="cnt-btm-wrp">
+          <ol class="lst-step-circle">
+            <li>1단계</li>
+            <li>2단계</li>
+            <li class="active">3단계</li>
+            <li>4단계</li>
+          </ol>
+          <div class="container">
+            <div class="frm pt50">
+              <div class="form-group">
+                <span class="tit">사업자등록번호</span>
+                <input id="input-signup-bizno" type="tel" class="form-control" placeholder="사업자등록번호 10자리를 입력해주세요" maxlength="10" />
+              </div>
+              <p class="ti-18 mt20 mb20">※ <span class="fw500">사업자 미등록 개인 가맹점</span>의 경우, ID번호를 입력해주세요.</p>
+              <button id="btn-signup-find-bcmerchant" disabled type="button" class="btn btn-outline-dark btn-block btn-md mt15" data-toggle="modal" data-target="#modal2">가맹점 조회</button>
+            </div>
+            <div class="bx-franchise mt30">
+              <div class="bg-light bx-padding text-center">
+                <p class="h6">
+                  QR결제가 가능한 BC카드 가맹점입니다. <br />
+                  사업자 등록 가맹점의 경우, '카드사 등록' 메뉴에서 BC카드 외 다른 카드사를 추가할 수 있습니다.
+                </p>
+              </div>
+              <ul></ul>
+            </div>
+          </div>
+
+          <div class="btm-fixed-btn">
+            <a class="btn btn-muted btn-block" href="#">다음</a>
+            <!--		<a class="btn btn-primary btn-block" href="#">다음</a> 활성화-->
+          </div>
+        </div>
+        <!--// 페이지 끝 -->
+      </div>
+    </div>
+    <div th:replace="~{fragments/modals/common-modal :: passwordContent}"></div>
+    <div th:replace="~{fragments/modals/common-modal :: confirmModal}"></div>
+    <div th:replace="~{fragments/modals/common-modal :: loadingModal}"></div>
+
+    <script>
+      const MerchantManager = {
+        state: [],
+        page: 1, // 현재 페이지
+        hasNext: false,
+        nextKey: '',
+        isLoading: false, // 중복 호출 방지
+        observer: null, // 스크롤 감시자
+
+        init: function () {
+          const findBtn = document.getElementById('btn-signup-find-bcmerchant');
+          findBtn.addEventListener('click', () => {
+            this.reset(); // 조회 버튼 클릭 시 초기화
+            this.fetchMerchants();
+          });
+
+          const listContainer = document.querySelector('.bx-franchise ul');
+          listContainer.addEventListener('change', (e) => {
+            if (e.target.name === 'merchant-select') {
+              this.handleSelection();
+            }
+          });
+
+          // IntersectionObserver 설정
+          this.observer = new IntersectionObserver(
+            (entries) => {
+              if (entries[0].isIntersecting && !this.isLoading && this.hasNext) {
+                this.fetchMerchants();
+              }
+            },
+            { threshold: 1.0 }
+          );
+        },
+
+        reset: function () {
+          this.state = [];
+          this.page = 1;
+          document.querySelector('.bx-franchise ul').innerHTML = '';
+        },
+
+        fetchMerchants: async function () {
+          if (this.isLoading) return;
+          this.isLoading = true;
+
+          // 가맹점 조회 시 "다음" 버튼 초기화 (첫 페이지인 경우에만)
+          if (this.page === 1) this.toggleNextButton(false);
+
+          const bizNoInput = document.getElementById('input-signup-bizno');
+
+          let reqBcMerchants = {
+            bizNo: bizNoInput.value.trim(),
+            nextKey: this.nextKey,
+          };
+          const data = await qrpaySdk.fetchPostAsync(REST_APIS.OPEN.BC_MERCHANTS, reqBcMerchants);
+          console.log(data);
+          this.page++;
+          this.isLoading = false;
+
+          if (data.ok) {
+            const { hasNext, nextKey, list } = data.data;
+            this.state = [...this.state, ...list];
+            this.hasNext = hasNext;
+            this.render(list);
+            this.nextKey = nextKey;
+          } else {
+            const errorMsg = data.error.message || '시스템오류';
+            ConfirmModal.open({
+              desc: '가맹점 조회에 실패하였습니다[' + errorMsg + ']',
+              hideCancel: true,
+            });
+          }
+
+          // 실제 환경에서는 AJAX 호출이 들어가는 부분입니다.
+          // 가상의 딜레이(500ms)와 함께 데이터를 추가합니다.
+          /*setTimeout(() => {
+              private String merchantName;
+    private String representativeName;
+    private String bcMerchantNo;
+    private String telNo;
+    private String zipCode;
+    private String address;
+    private String registeredAt; //yymmdd
+            const newData = [
+              { merchantNo: `M00${this.page}1`, merchantName: `가맹점_${this.page}_A`, representativeName: '홍길동', address: '서울시 중구 ...', telNo: '010-1234-5678' },
+              { merchantNo: `M00${this.page}2`, merchantName: `가맹점_${this.page}_B`, representativeName: '임꺽정', address: '서울시 종로구 ...', telNo: '010-9876-5432' },
+            ];
+
+            // 최대 5페이지까지만 데이터를 가져오도록 제한 (예시)
+            //if (this.page > 5) {
+            // this.observer.disconnect();
+            //}
+          }, 500);
+          */
+        },
+
+        render: function (items) {
+          const listContainer = document.querySelector('.bx-franchise ul');
+          if (!listContainer) return;
+
+          items.forEach((item) => {
+            const li = document.createElement('li');
+            li.className = 'row align-items-center';
+            li.innerHTML = `
+        <div class="col-xs-auto pr20">
+          <label class="input-type-round">
+            <input type="radio" name="merchant-select" value="${item.merchantNo}" />
+            <span></span>
+          </label>
+        </div>
+        <div class="col">
+          <p class="h5 fw500">${item.merchantName}</p>
+          <span class="text-muted">${item.merchantNo}</span>
+        </div>
+        <div class="col-xs-auto">
+          <button type="button" class="fw500" onclick="MerchantManager.showDetail('${item.merchantNo}')">
+            <i class="icon-list"></i> 상세보기
+          </button>
+        </div>
+      `;
+            listContainer.appendChild(li);
+          });
+
+          // 마지막으로 추가된 요소를 감시 대상으로 등록
+          if (listContainer.lastElementChild) {
+            this.observer.disconnect(); // 이전 감시 해제
+            this.observer.observe(listContainer.lastElementChild); // 새 마지막 요소 감시
+          }
+        },
+
+        // ... 나머지 handleSelection, toggleNextButton, showDetail 함수는 기존과 동일 ...
+        handleSelection: function () {
+          const selected = document.querySelector('input[name="merchant-select"]:checked');
+          if (selected) {
+            this.toggleNextButton(true);
+          }
+        },
+
+        toggleNextButton: function (isActive) {
+          const nextBtn = document.querySelector('.btm-fixed-btn a');
+          if (isActive) {
+            nextBtn.classList.remove('btn-muted');
+            nextBtn.classList.add('btn-primary');
+            nextBtn.style.pointerEvents = 'auto';
+          } else {
+            nextBtn.classList.add('btn-muted');
+            nextBtn.classList.remove('btn-primary');
+            nextBtn.style.pointerEvents = 'none';
+          }
+        },
+
+        showDetail: function (merchantNo) {
+          const data = this.state.find((item) => item.merchantNo === String(merchantNo));
+          if (!data) return;
+          document.getElementById('detail-name').innerText = data.merchantName;
+          document.getElementById('detail-no').innerText = data.merchantNo;
+          document.getElementById('detail-rep').innerText = data.representativeName;
+          document.getElementById('detail-tel').innerText = data.telNo;
+          document.getElementById('detail-addr').innerText = data.address;
+          $('#modal-merchant-detail').modal('show');
+        },
+      };
+    </script>
+
+    <script>
+      /*
+      const MerchantManager = {
+        state: [],
+
+        init: function () {
+          const findBtn = document.getElementById('btn-signup-find-bcmerchant');
+          findBtn.addEventListener('click', () => this.fetchMerchants());
+
+          // 라디오 버튼 클릭 이벤트 위임 (목록이 동적으로 생성되므로 부모에 위임)
+          const listContainer = document.querySelector('.bx-franchise ul');
+          listContainer.addEventListener('change', (e) => {
+            if (e.target.name === 'merchant-select') {
+              this.handleSelection();
+            }
+          });
+        },
+
+        fetchMerchants: function () {
+          // 가맹점 조회 시 "다음" 버튼 초기화
+          this.toggleNextButton(false);
+
+          this.state = [
+            { merchantNo: '1234567890', merchantName: '가맹점명_1', representativeName: '신동욱', address: '서울시 중구 을지로 170', telNo: '02-0000-1234' },
+            { merchantNo: '2345678911', merchantName: '가맹점명_2', representativeName: '김철수', address: '서울시 강남구 테헤란로 123 123123123123123123123서래', telNo: '02-1111-2222' },
+          ];
+          this.render();
+        },
+
+        // 라디오 선택 시 실행되는 로직
+        handleSelection: function () {
+          const selected = document.querySelector('input[name="merchant-select"]:checked');
+          if (selected) {
+            this.toggleNextButton(true);
+          }
+        },
+
+        // 하단 "다음" 버튼 활성화/비활성화
+        toggleNextButton: function (isActive) {
+          const nextBtn = document.querySelector('.btm-fixed-btn a');
+          if (isActive) {
+            nextBtn.classList.remove('btn-muted');
+            nextBtn.classList.add('btn-primary');
+            nextBtn.style.pointerEvents = 'auto'; // 클릭 가능
+          } else {
+            nextBtn.classList.add('btn-muted');
+            nextBtn.classList.remove('btn-primary');
+            nextBtn.style.pointerEvents = 'none'; // 클릭 불가
+          }
+        },
+
+        showDetail: function (merchantNo) {
+          const data = this.state.find((item) => item.merchantNo === String(merchantNo));
+          if (!data) return;
+
+          document.getElementById('detail-name').innerText = data.merchantName;
+          document.getElementById('detail-no').innerText = data.merchantNo;
+          document.getElementById('detail-rep').innerText = data.representativeName;
+          document.getElementById('detail-tel').innerText = data.telNo;
+          document.getElementById('detail-addr').innerText = data.address;
+
+          $('#modal-merchant-detail').modal('show');
+        },
+
+        render: function () {
+          const listContainer = document.querySelector('.bx-franchise ul');
+          if (!listContainer) return;
+
+          let htmlContent = '';
+          this.state.forEach((item) => {
+            htmlContent += `
+        <li class="row align-items-center">
+          <div class="col-xs-auto pr20">
+            <label class="input-type-round">
+              <input type="radio" name="merchant-select" value="${item.merchantNo}" />
+              <span></span>
+            </label>
+          </div>
+          <div class="col">
+            <p class="h5 fw500">${item.merchantName}</p>
+            <span class="text-muted">${item.merchantNo}</span>
+          </div>
+          <div class="col-xs-auto">
+            <button type="button" class="fw500" onclick="MerchantManager.showDetail('${item.merchantNo}')">
+              <i class="icon-list"></i> 상세보기
+            </button>
+          </div>
+        </li>
+      `;
+          });
+          listContainer.innerHTML = htmlContent;
+        },
+      };    */
+    </script>
+
+    <script th:inline="javascript">
+      const niceSmsRefId = /*[[${smsRefId}]]*/ '';
+      /*
+            const MerchantManager = {
+              state: [],
+
+              init: () => {
+                const mockMerchantData = [
+                  { merchantNo: '123456789', merchantName: '가맹정명_1', representativeName: '신동욱', address: '서울시 중구 을지로 170, 을지트윈타워)', telNo: '02-0000-1234' },
+                  { merchantNo: '234567891', merchantName: '가맹정명_2', representativeName: '신동욱', address: '서울시 중구 을지로 170, 을지트윈타워)', telNo: '02-0000-1234' },
+                  { merchantNo: '345678912', merchantName: '가맹정명_3', representativeName: '신동욱', address: '서울시 중구 을지로 170, 을지트윈타워)', telNo: '02-0000-1234' },
+                  { merchantNo: '456789123', merchantName: '가맹정명_4', representativeName: '신동욱', address: '서울시 중구 을지로 170, 을지트윈타워)', telNo: '02-0000-1234' },
+                  { merchantNo: '567891234', merchantName: '가맹정명_5', representativeName: '신동욱', address: '서울시 중구 을지로 170, 을지트윈타워)', telNo: '02-0000-1234' },
+                ];
+              },
+            }; */
+
+      document.addEventListener('DOMContentLoaded', function () {
+        MerchantManager.init();
+        // DOM 요소 참조
+        const bizNoInput = document.getElementById('input-signup-bizno');
+        const findBtn = document.getElementById('btn-signup-find-bcmerchant');
+
+        // 입력 이벤트 리스너 등록
+        bizNoInput.addEventListener('input', function () {
+          const bizNoValue = this.value;
+
+          // 숫자가 아닌 문자를 제거 (선택 사항: 숫자만 입력받도록 강제)
+          // this.value = bizNoValue.replace(/[^0-9]/g, '');
+
+          if (this.value.length === 10) {
+            // 10자리인 경우: 활성화 스타일 적용
+            findBtn.classList.remove('btn-outline-dark');
+            findBtn.classList.add('btn-primary');
+            findBtn.disabled = false;
+          } else {
+            // 10자리가 아닌 경우: 초기 스타일로 복구 및 비활성화
+            findBtn.classList.add('btn-outline-dark');
+            findBtn.classList.remove('btn-primary');
+            findBtn.disabled = true;
+          }
+        });
+      });
+    </script>
+
+    <div class="modal fade" id="modal-merchant-detail" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header bg-white mb-20">
+            <h3 class="modal-title">상세정보</h3>
+          </div>
+          <div class="modal-body p-10">
+            <table class="table mb-20" style="font-size: 15px">
+              <colgroup>
+                <col style="width: 35%; background: #fafafa" />
+                <col />
+              </colgroup>
+              <tbody>
+                <tr>
+                  <th>가맹점명</th>
+                  <td id="detail-name" class="fw500"></td>
+                </tr>
+                <tr>
+                  <th>사업자번호</th>
+                  <td id="detail-no"></td>
+                </tr>
+                <tr>
+                  <th>대표자</th>
+                  <td id="detail-rep"></td>
+                </tr>
+                <tr>
+                  <th>연락처</th>
+                  <td id="detail-tel"></td>
+                </tr>
+                <tr>
+                  <th class="align-middle">주소</th>
+                  <td id="detail-addr"></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="modal-footer border-0">
+            <button type="button" class="btn btn-primary btn-block btn-md" data-dismiss="modal">닫기</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+
+<!-- modal1 -->
+<div class="modal fade modal-agree" id="modal1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header justify-content-center">
+        <h5 class="modal-title">서비스 안내 및 위험고지</h5>
+      </div>
+      <div class="modal-body">
+        <h6 class="h5 fw500">안내사항</h6>
+        <ul class="lst-type-bull01 h6">
+          <li>비씨카드는 귀 가맹점에서 발생한 카드 거래내역을 대표자님의 주민등록번호를 기초로 하여 과세당국에 제공할 수 있습니다.</li>
+          <li>영리를 목적으로 반복&middot;지속적으로 영업을 하실 경우 정식 사업자등록 의무가 있음을 알려 드립니다.</li>
+        </ul>
+        <h6 class="h5 fw500 mt10">위험고지</h6>
+        <p class="h6">
+          비씨카드가 제공하는 사업자 미등록 개인 가맹점에 대한 QR기반 간편결제 서비스(이하 서비스라 칭함)는 시험 운영 중인 서비스로서, 서비스 신청일 이후 당사 사정으로 인한 서비스 제공 일시 중단 또는
+          종료 등 예상하지 못했던 위험이 발생할 수 있습니다.
+        </p>
+        <p class="h5 fw500 mt10">서비스를 제공받는 것에 동의하십니까? (미동의 시 서비스 이용 불가)</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-md btn-radius0 btn-block" data-dismiss="modal">닫기</button>
+        <button type="button" class="btn btn-md btn-radius0 btn-block" data-dismiss="modal">동의</button>
+      </div>
+    </div>
+  </div>
+</div>

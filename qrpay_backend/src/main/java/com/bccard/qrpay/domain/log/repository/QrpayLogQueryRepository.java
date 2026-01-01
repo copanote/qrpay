@@ -36,4 +36,6 @@ public class QrpayLogQueryRepository {
         return Optional.ofNullable(q);
     }
 
+//    public List<QrpayLog> findBy
+
 }

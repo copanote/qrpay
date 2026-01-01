@@ -158,6 +158,14 @@ public class Member extends BaseEntity implements Persistable<String> {
         passwordErrorCount += 1;
     }
 
+    public void onLogin() {
+        lastLoginAt = MpmDateTimeUtils.generateDtmNow(MpmDateTimeUtils.PATTERN_YEAR_TO_DATE);
+    }
+
+    public boolean isAccountLock() {
+        return passwordErrorCount >= 5;
+    }
+
     public void updatePermissionToCancel(boolean permissionToCancel) {
         this.permissionToCancel = permissionToCancel;
     }
@@ -172,6 +180,7 @@ public class Member extends BaseEntity implements Persistable<String> {
     public void updatePassword(String hashedPassword) {
         this.hashedPassword = hashedPassword;
         this.passwordChangedAt = MpmDateTimeUtils.generateDtmNow(MpmDateTimeUtils.PATTERN_YEAR_TO_SEC);
+        this.passwordErrorCount = 0L;
     }
 
     public void cancel() {

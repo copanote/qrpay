@@ -10,7 +10,6 @@
     <script src="/js/bootstrap.min.js"></script>
     <link href="/css/common.css" rel="stylesheet" />
     <script src="/js/common.js"></script>
-    <script src="/js/password-modal.js"></script>
 
     <th:block th:if="${#arrays.contains(@environment.getActiveProfiles(), 'local')}">
       <script th:src="@{/js/qrpay_sdk.dev.js}"></script>
@@ -80,6 +79,9 @@
         </div>
         <!--// 페이지 끝 -->
       </div>
+      <div th:replace="~{fragments/modals/common-modal :: passwordContent}"></div>
+      <div th:replace="~{fragments/modals/common-modal :: confirmModal}"></div>
+      <div th:replace="~{fragments/modals/common-modal :: loadingModal}"></div>
     </div>
     <script>
       let passedIdRule = false;
@@ -131,6 +133,15 @@
           const status = data.status;
           if (status === 401) {
             alert('로그인이 필요합니다.');
+            PasswordModal.open({
+              loginId: '',
+              onSuccessCallback: function (res) {
+                checkIdDuplication();
+              },
+              onCancelCallback: function () {
+                console.log('cancel authentication');
+              },
+            });
             return;
           } else if (status === 409) {
             const errorMsg = '동일 ID가 존재합니다';
@@ -232,9 +243,9 @@
           const status = data.status;
           if (status === 401) {
             PasswordModal.open({
-              loginId: auth_loginId || '',
+              loginId: '',
               onSuccessCallback: function (res) {
-                changePassword();
+                addEmployee();
               },
               onCancelCallback: function () {
                 console.log('cancel authentication');

@@ -10,7 +10,6 @@
     <script src="/js/bootstrap.min.js"></script>
     <link href="/css/common.css" rel="stylesheet" />
     <script src="/js/common.js"></script>
-    <script src="/js/password-modal.js"></script>
     <th:block th:if="${#arrays.contains(@environment.getActiveProfiles(), 'local')}">
       <script th:src="@{/js/qrpay_sdk.dev.js}"></script>
     </th:block>
@@ -128,7 +127,9 @@
         </div>
       </div>
     </div>
-    <div th:replace="~{fragments/modals/passwordModal :: passwordContent}"></div>
+    <div th:replace="~{fragments/modals/common-modal :: passwordContent}"></div>
+    <div th:replace="~{fragments/modals/common-modal :: confirmModal}"></div>
+    <div th:replace="~{fragments/modals/common-modal :: loadingModal}"></div>
   </body>
   <script th:inline="javascript">
     const tipRate = [[${tipRate}]];
@@ -184,12 +185,19 @@
 
         if (enableVat) {
           if (reqVatRate < 1 || reqVatRate > 99) {
-            alert('부가세율은 1~99 사이의 값이어야 합니다.');
+            ConfirmModal.open({
+              desc: '부가세율은 1~99 사이의 값이어야 합니다.',
+              hideCancel: true,
+            });
+
             return;
           }
 
           if (Number(reqVatRate) + this.getTipRate() > 99) {
-            alert('부가세율과 봉사료율의 합은 99를 초과할 수 없습니다.' + reqVatRate + this.getTipRate());
+            ConfirmModal.open({
+              desc: '부가세율과 봉사료율의 합은 99를 초과할 수 없습니다.' + reqVatRate + this.getTipRate(),
+              hideCancel: true,
+            });
             return;
           }
         } else {
@@ -236,12 +244,19 @@
 
         if (enableTip) {
           if (reqTipRate < 1 || reqTipRate > 99) {
-            alert('봉사료율은 1~99 사이의 값이어야 합니다.');
+            ConfirmModal.open({
+              desc: '봉사료율은 1~99 사이의 값이어야 합니다.',
+              hideCancel: true,
+            });
+
             return;
           }
 
-          if (reqTipRate + this.getVatRate() > 99) {
-            alert('부가세율과 봉사료율의 합은 99를 초과할 수 없습니다.');
+          if (Number(reqTipRate) + this.getVatRate() > 99) {
+            ConfirmModal.open({
+              desc: '부가세율과 봉사료율의 합은 99를 초과할 수 없습니다.' + reqTipRate + this.getVatRate(),
+              hideCancel: true,
+            });
             return;
           }
         } else {

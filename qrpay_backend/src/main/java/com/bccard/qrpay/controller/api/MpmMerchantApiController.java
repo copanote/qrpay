@@ -32,7 +32,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/qrpay/api")
-public class MerchantApiController {
+public class MpmMerchantApiController {
 
     private final MerchantService merchantService;
     private final MemberService memberService;

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
@@ -11,6 +11,18 @@
     <script src="/js/bootstrap.min.js"></script>
     <script src="/js/common.js"></script>
     <script src="/js/qrpay_sdk.dev.js"></script>
+    <th:block th:if="${#arrays.contains(@environment.getActiveProfiles(), 'local')}">
+      <script th:src="@{/js/qrpay_sdk.dev.js}"></script>
+    </th:block>
+
+    <th:block th:if="${#arrays.contains(@environment.getActiveProfiles(), 'dev')}">
+      <script th:src="@{/js/qrpay_sdk.dev.js}"></script>
+    </th:block>
+
+    <th:block th:if="${#arrays.contains(@environment.getActiveProfiles(), 'prod')}">
+      <script th:src="@{/js/qrpay_sdk.prod.js}"></script>
+    </th:block>
+
     <script>
       // QRPAY SDK 초기화
       document.addEventListener('DOMContentLoaded', function () {
@@ -108,14 +120,17 @@
               <button type="button" class="btn btn-primary btn-lg btn-block">로그인</button>
             </form>
             <ul class="row lst-login-btm lst-split mt20">
-              <li class="col"><a href="#">아이디 찾기</a></li>
-              <li class="col"><a href="#">비밀번호 찾기</a></li>
-              <li class="col"><a href="#">회원가입</a></li>
+              <li class="col"><a href="/pages/auth/findid/auth-method">아이디 찾기</a></li>
+              <li class="col"><a href="/pages/auth/findpw/check-id">비밀번호 찾기</a></li>
+              <li class="col"><a href="/pages/auth/signup/terms">회원가입</a></li>
             </ul>
           </div>
         </div>
         <!--// 페이지 끝 -->
       </div>
     </div>
+    <div th:replace="~{fragments/modals/common-modal :: passwordContent}"></div>
+    <div th:replace="~{fragments/modals/common-modal :: confirmModal}"></div>
+    <div th:replace="~{fragments/modals/common-modal :: loadingModal}"></div>
   </body>
 </html>

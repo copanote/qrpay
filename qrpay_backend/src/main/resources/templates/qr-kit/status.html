@@ -224,7 +224,7 @@
             PasswordModal.open({
               loginId: auth_loginId,
               onSuccessCallback: (res) => {
-                fetchData();
+                this.fetchData();
               },
               onCancelCallback: () => {
                 console.log('cancel authentication');

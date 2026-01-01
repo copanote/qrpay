@@ -34,11 +34,6 @@ public class HomeController {
     private final MerchantService merchantService;
     private final EmvMpmQrService emvMpmQrService;
 
-    @GetMapping("/login")
-    public String loginView(Model model) {
-        model.addAttribute("data", "hello!!");
-        return "home/login";
-    }
 
     @GetMapping("/home/mpmqr")
     public String home(

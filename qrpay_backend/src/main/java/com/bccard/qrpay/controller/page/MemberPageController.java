@@ -31,8 +31,9 @@ public class MemberPageController {
         Member member = memberService.findBy(memId).orElseGet(() -> null);
         if (member == null) {
             log.info("Needs Authenticate");
-            return "/home/login";
+            return "/auth/login";
         }
+
         model.addAttribute("authLoginId", member.getLoginId());
         model.addAttribute("authMemberId", member.getMemberId());
 
@@ -49,14 +50,13 @@ public class MemberPageController {
         return "member/employee/employee-change-password";
     }
 
-
     @GetMapping("/member/master/change-pw")
     public String master_pw_change(Model model, @CookieValue(value = "memId", required = false) String memId) {
 
         Member member = memberService.findBy(memId).orElseGet(() -> null);
         if (member == null) {
             log.info("Needs Authenticate");
-            return "/home/login";
+            return "/auth/login";
         }
 
         model.addAttribute("authLoginId", member.getLoginId());

@@ -36,7 +36,6 @@ public class SecurityConfig {
     private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
     private final CustomPasswordEncoder customPasswordEncoder;
 
-
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         return web -> web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations());
@@ -48,11 +47,14 @@ public class SecurityConfig {
                 .cors(httpSecurityCorsConfigurer -> corsConfigurationSource())
                 .sessionManagement(sessionConfigurer -> sessionConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(req -> req
-                                .requestMatchers("/auth/**").permitAll()
-                                .requestMatchers("/pages/**").permitAll()
-                                .requestMatchers("/error").permitAll()
-//                        .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
-                                .anyRequest().authenticated()
+                        .requestMatchers("/auth/**").permitAll()
+                        .requestMatchers("/pages/**").permitAll()
+                        .requestMatchers("/qrpay/api/open/**").permitAll()
+                        .requestMatchers("/external/**").permitAll()
+                        .requestMatchers("/error").permitAll()
+                        .requestMatchers("/.well-known/**").permitAll() //브라우저 자동호출 차단
+                        .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
+                        .anyRequest().authenticated()
                 ).exceptionHandling(h -> h
                         .authenticationEntryPoint(customAuthenticationEntryPoint)
                         .accessDeniedHandler(customAccessDeniedHandler))

@@ -24,6 +24,7 @@ public class MemberApiController {
 
     private final MemberService memberService;
 
+
     @RequestMapping(value = "/v1/member/id-check")
     @ResponseBody
     public ResponseEntity<?> idDuplicationCheck(
@@ -44,8 +45,7 @@ public class MemberApiController {
 
         return ResponseEntity.ok(QrpayApiResponse.ok(member));
     }
-
-
+    
     @RequestMapping(value = "/v1/member/{memberId}/password-change")
     @ResponseBody
     public ResponseEntity<?> changePassword(
@@ -74,7 +74,7 @@ public class MemberApiController {
         Member m = memberService.updatePassword(toChangeMember, reqDto.getNewPassword());
         return ResponseEntity.ok(QrpayApiResponse.ok(member, ChangePasswordResDto.of(m)));
     }
-    
+
     @RequestMapping(value = "/v1/member/{memberId}/employee-password-change")
     @ResponseBody
     public ResponseEntity<?> changePasswordEmployee(

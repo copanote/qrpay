@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
@@ -17,9 +17,9 @@
       <!-- header -->
       <header id="hd">
         <div class="container">
-          <button type="button" class="icon-back">이전 페이지 이동</button>
-          <h1>비밀번호 찾기 - 아이디 입력</h1>
-          <a class="icon-home" href="/">홈으로 이동</a>
+          <button type="button" class="icon-back" onclick="goBack()">이전 페이지 이동</button>
+          <h1>아이디 찾기</h1>
+          <a class="icon-home" href="javascript:void(0)" onclick="goHome()">홈으로 이동</a>
         </div>
       </header>
 
@@ -28,22 +28,18 @@
         <!-- 페이지 시작 -->
         <div class="cnt-btm-wrp">
           <ol class="lst-step-circle">
-            <li class="active">1단계</li>
+            <li>1단계</li>
             <li>2단계</li>
-            <li>3단계</li>
+            <li class="active">3단계</li>
           </ol>
-          <div class="container">
-            <div class="frm pt50">
-              <div class="form-group">
-                <span class="tit">아이디</span>
-                <input type="text" class="form-control" placeholder="아이디를 입력해 주세요" />
-              </div>
+          <div class="container find-id pos-middle">
+            <h2 class="h6 text-center" th:text="|${userName}님의 아이디는 다음과 같습니다|">***님의 아이디는 다음과 같습니다</h2>
+            <div class="bx-gray-id pt25 pb25">
+              <span th:text="${userId}">SHOPMASTER</span>
             </div>
           </div>
-
           <div class="btm-fixed-btn">
-            <a class="btn btn-muted btn-block" href="#">다음</a>
-            <!--		<a class="btn btn-primary btn-block" href="#">다음</a> 활성화-->
+            <a class="btn btn-primary btn-block" href="#">로그인</a>
           </div>
         </div>
         <!--// 페이지 끝 -->
