@@ -3,7 +3,6 @@ package com.bccard.qrpay.auth.service;
 import com.bccard.qrpay.auth.domain.RefreshToken;
 import com.bccard.qrpay.auth.repository.RefreshTokenQueryRepository;
 import com.bccard.qrpay.auth.repository.RefreshTokenRepository;
-import com.bccard.qrpay.auth.security.JwtProvider;
 import com.bccard.qrpay.exception.AuthException;
 import com.bccard.qrpay.exception.code.QrpayErrorCode;
 import com.bccard.qrpay.utils.security.HashCipher;
@@ -21,7 +20,6 @@ import java.util.Optional;
 @Service
 public class RefreshTokenService {
 
-    private final JwtProvider jwtProvider;
     private final RefreshTokenRepository refreshTokenCudRepository;
     private final RefreshTokenQueryRepository refreshTokenQueryRepository;
 

@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>BC</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css" />
+    <script src="/js/jquery-3.3.1.slim.min.js.js"></script>
+    <script src="/js/popper.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <link href="/css/common.css" rel="stylesheet" />
+    <script src="/js/common.js"></script>
+
+    <th:block th:if="${#arrays.contains(@environment.getActiveProfiles(), 'local')}">
+      <script th:src="@{/js/qrpay_sdk.dev.js}"></script>
+    </th:block>
+
+    <th:block th:if="${#arrays.contains(@environment.getActiveProfiles(), 'dev')}">
+      <script th:src="@{/js/qrpay_sdk.dev.js}"></script>
+    </th:block>
+
+    <th:block th:if="${#arrays.contains(@environment.getActiveProfiles(), 'prod')}">
+      <script th:src="@{/js/qrpay_sdk.prod.js}"></script>
+    </th:block>
+  </head>
+
+  <body>
+    <div id="wrap">
+      <!-- header -->
+      <header id="hd" class="main">
+        <div class="container">
+          <h1>
+            <a href="javascript:void(0)">
+              <img src="/images/logo_big.png" height="33" alt="BC QR FOR SHOP" /><!-- 2019-05-08 -->
+              <span class="sr-only">BC QR FOR SHOP</span>
+            </a>
+          </h1>
+          <button type="button" class="icon-menu js-mn">메뉴열기</button>
+        </div>
+        <div th:replace="~{fragments/navigation :: menu}"></div>
+      </header>
+      <div th:replace="~{fragments/toolbar :: toolbar('monthly')}"></div>
+
+      <!-- container -->
+      <div id="ct">
+        <!-- 페이지 시작 -->
+        <div id="index">
+          <div class="sub-title">
+            <div class="row container align-items-center">
+              <h2 class="h2 col">
+                <span>월별 매출 합계</span>
+              </h2>
+            </div>
+          </div>
+
+          <ul class="nav tab-type01 row">
+            <li class="col nav-item">
+              <a class="nav-link active" data-toggle="tab" href="#month1">10월</a>
+            </li>
+            <li class="col nav-item">
+              <a class="nav-link" data-toggle="tab" href="#month2">11월</a>
+            </li>
+            <li class="col nav-item">
+              <a class="nav-link" data-toggle="tab" href="#month3">12월</a>
+            </li>
+          </ul>
+          <div class="tab-content">
+            <div class="tab-pane fade show active" id="month1">
+              <ul class="lst-transact lst-total">
+                <li class="row">
+                  <div class="col">
+                    <p class="h6 text-muted">10월 총 매출 합계</p>
+                    <div class="price-wrp"><strong class="price">3,000,000</strong><small>원</small></div>
+                  </div>
+                  <div class="col-xs-auto text-right">
+                    <p class="fw700"><i class="icon-won"></i> 수수료 혜택 금액</p>
+                    <div class="price-wrp text-primary"><strong class="price">4,500</strong><small>원</small></div>
+                  </div>
+                </li>
+              </ul>
+              <div class="container">
+                <ul class="lst-transact">
+                  <li class="row">
+                    <div class="col">
+                      <p class="h6 text-muted"><i class="icon-bc"></i> BC카드 매출 합계</p>
+                      <div class="price-wrp"><strong class="price">1,000,000</strong><small>원</small></div>
+                    </div>
+                    <div class="col-xs-auto text-right">
+                      <p class="fw700"><i class="icon-won"></i> 수수료 혜택 금액</p>
+                      <div class="price-wrp text-primary"><strong class="price">1,400</strong><small>원</small></div>
+                    </div>
+                  </li>
+                  <li class="row">
+                    <div class="col">
+                      <p class="h6 text-muted"><i class="icon-lotte"></i> 롯데카드 매출 합계</p>
+                      <div class="price-wrp"><strong class="price">1,000,000</strong><small>원</small></div>
+                    </div>
+                    <div class="col-xs-auto text-right">
+                      <p class="fw700"><i class="icon-won"></i> 수수료 혜택 금액</p>
+                      <div class="price-wrp text-primary"><strong class="price">1,500</strong><small>원</small></div>
+                    </div>
+                  </li>
+                  <li class="row">
+                    <div class="col">
+                      <p class="h6 text-muted"><i class="icon-shinhan"></i> 신한카드 매출 합계</p>
+                      <div class="price-wrp"><strong class="price">1,000,000</strong><small>원</small></div>
+                    </div>
+                    <div class="col-xs-auto text-right">
+                      <p class="fw700"><i class="icon-won"></i> 수수료 혜택 금액</p>
+                      <div class="price-wrp text-primary"><strong class="price">1,600</strong><small>원</small></div>
+                    </div>
+                  </li>
+                  <!-- 2019-08-29 -->
+                  <li class="row">
+                    <div class="col">
+                      <p class="h6 text-muted"><i class="icon-hyundai01"></i> 현대카드 매출 합계</p>
+                      <div class="price-wrp"><strong class="price">1,000,000</strong><small>원</small></div>
+                    </div>
+                    <div class="col-xs-auto text-right">
+                      <p class="fw700"><i class="icon-won"></i> 수수료 혜택 금액</p>
+                      <div class="price-wrp text-primary"><strong class="price">1,600</strong><small>원</small></div>
+                    </div>
+                  </li>
+                  <!--// 2019-08-29 -->
+                </ul>
+              </div>
+            </div>
+            <div class="tab-pane fade" id="month2">
+              <ul class="lst-transact lst-total">
+                <li class="row">
+                  <div class="col">
+                    <p class="h6 text-muted">11월 총 매출 합계</p>
+                    <div class="price-wrp"><strong class="price">3,000,000</strong><small>원</small></div>
+                  </div>
+                  <div class="col-xs-auto text-right">
+                    <p class="fw700"><i class="icon-won"></i> 수수료 혜택 금액</p>
+                    <div class="price-wrp text-primary"><strong class="price">4,500</strong><small>원</small></div>
+                  </div>
+                </li>
+              </ul>
+              <div class="container">
+                <ul class="lst-transact">
+                  <li class="row">
+                    <div class="col">
+                      <p class="h6 text-muted"><i class="icon-bc"></i> BC카드 매출 합계</p>
+                      <div class="price-wrp"><strong class="price">1,000,000</strong><small>원</small></div>
+                    </div>
+                    <div class="col-xs-auto text-right">
+                      <p class="fw700"><i class="icon-won"></i> 수수료 혜택 금액</p>
+                      <div class="price-wrp text-primary"><strong class="price">1,400</strong><small>원</small></div>
+                    </div>
+                  </li>
+                  <li class="row">
+                    <div class="col">
+                      <p class="h6 text-muted"><i class="icon-lotte"></i> 롯데카드 매출 합계</p>
+                      <div class="price-wrp"><strong class="price">1,000,000</strong><small>원</small></div>
+                    </div>
+                    <div class="col-xs-auto text-right">
+                      <p class="fw700"><i class="icon-won"></i> 수수료 혜택 금액</p>
+                      <div class="price-wrp text-primary"><strong class="price">1,500</strong><small>원</small></div>
+                    </div>
+                  </li>
+                  <li class="row">
+                    <div class="col">
+                      <p class="h6 text-muted"><i class="icon-shinhan"></i> 신한카드 매출 합계</p>
+                      <div class="price-wrp"><strong class="price">1,000,000</strong><small>원</small></div>
+                    </div>
+                    <div class="col-xs-auto text-right">
+                      <p class="fw700"><i class="icon-won"></i> 수수료 혜택 금액</p>
+                      <div class="price-wrp text-primary"><strong class="price">1,600</strong><small>원</small></div>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div class="tab-pane fade" id="month3">
+              <ul class="lst-transact lst-total">
+                <li class="row">
+                  <div class="col">
+                    <p class="h6 text-muted">12월 총 매출 합계</p>
+                    <div class="price-wrp"><strong class="price">3,000,000</strong><small>원</small></div>
+                  </div>
+                  <div class="col-xs-auto text-right">
+                    <p class="fw700"><i class="icon-won"></i> 수수료 혜택 금액</p>
+                    <div class="price-wrp text-primary"><strong class="price">4,500</strong><small>원</small></div>
+                  </div>
+                </li>
+              </ul>
+              <div class="container">
+                <ul class="lst-transact">
+                  <li class="row">
+                    <div class="col">
+                      <p class="h6 text-muted"><i class="icon-bc"></i> BC카드 매출 합계</p>
+                      <div class="price-wrp"><strong class="price">1,000,000</strong><small>원</small></div>
+                    </div>
+                    <div class="col-xs-auto text-right">
+                      <p class="fw700"><i class="icon-won"></i> 수수료 혜택 금액</p>
+                      <div class="price-wrp text-primary"><strong class="price">1,400</strong><small>원</small></div>
+                    </div>
+                  </li>
+                  <li class="row">
+                    <div class="col">
+                      <p class="h6 text-muted"><i class="icon-lotte"></i> 롯데카드 매출 합계</p>
+                      <div class="price-wrp"><strong class="price">1,000,000</strong><small>원</small></div>
+                    </div>
+                    <div class="col-xs-auto text-right">
+                      <p class="fw700"><i class="icon-won"></i> 수수료 혜택 금액</p>
+                      <div class="price-wrp text-primary"><strong class="price">1,500</strong><small>원</small></div>
+                    </div>
+                  </li>
+                  <li class="row">
+                    <div class="col">
+                      <p class="h6 text-muted"><i class="icon-shinhan"></i> 신한카드 매출 합계</p>
+                      <div class="price-wrp"><strong class="price">1,000,000</strong><small>원</small></div>
+                    </div>
+                    <div class="col-xs-auto text-right">
+                      <p class="fw700"><i class="icon-won"></i> 수수료 혜택 금액</p>
+                      <div class="price-wrp text-primary"><strong class="price">1,600</strong><small>원</small></div>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--// 페이지 끝 -->
+      </div>
+    </div>
+    <div th:replace="~{fragments/modals/common-modal :: passwordContent}"></div>
+    <div th:replace="~{fragments/modals/common-modal :: confirmModal}"></div>
+    <div th:replace="~{fragments/modals/common-modal :: loadingModal}"></div>
+
+    <script>
+      /**
+       * 월별 매출 관리 매니저
+       */
+      const MonthlySalesManager = {
+        // API에서 받은 원본 데이터 보관
+        salesData: [],
+
+        init: function () {
+          this.fetchData();
+          this.bindEvents();
+        },
+
+        bindEvents: function () {
+          // 필요한 경우 탭 전환 시 추가 로직을 여기에 작성합니다.
+        },
+
+        // 1. 데이터 호출 (예시용 dummy fetch)
+        fetchData: function () {
+          // 실제 구현 시: $.ajax({ url: '/api/monthly-sales', ... success: (res) => this.render(res) });
+          const dummyResponse = [
+            { yearMonth: '202512', serviceType: 'BC', totalAuthAmount: 1669323, totalRefundAmount: 2318 },
+            { yearMonth: '202512', serviceType: 'HANA', totalAuthAmount: 15075 },
+            { yearMonth: '202511', serviceType: 'BC', totalAuthAmount: 684388, totalRefundAmount: 954 },
+          ];
+
+          this.salesData = dummyResponse;
+          this.render();
+        },
+
+        // 2. 화면 렌더링 메인 로직
+        render: function () {
+          const self = this;
+
+          // 월별로 데이터 그룹화
+          const grouped = this.groupByMonth(this.salesData);
+
+          // HTML의 각 탭 루프 (month1, month2, month3 대응)
+          // 여기서는 예시로 month3가 12월, month2가 11월 순서라고 가정하거나
+          // HTML 내의 href와 yearMonth를 매칭시키는 로직이 필요합니다.
+
+          // 간단하게 데이터가 있는 월에 대해 매칭 (ID 기준으로 매칭하는 로직)
+          Object.keys(grouped).forEach((ym, index) => {
+            const monthData = grouped[ym];
+            const targetId = `month${3 - index}`; // 12월(index 0) -> month3, 11월(index 1) -> month2 방식
+            const $tabPane = $('#' + targetId);
+
+            if ($tabPane.length > 0) {
+              this.updateTabContent($tabPane, monthData, ym);
+            }
+          });
+        },
+
+        // 3. 특정 탭의 HTML 내용 업데이트
+        updateTabContent: function ($pane, dataList, ym) {
+          let totalSales = 0;
+          let listHtml = '';
+
+          dataList.forEach((item) => {
+            const netAmount = item.totalAuthAmount - (item.totalRefundAmount || 0);
+            totalSales += netAmount;
+
+            // 카드사별 아이콘 클래스 매핑 (serviceType 기준)
+            const iconClass = this.getIconClass(item.serviceType);
+
+            listHtml += `
+                <li class="row">
+                    <div class="col">
+                        <p class="h6 text-muted"><i class="${iconClass}"></i> ${item.serviceType} 매출 합계</p>
+                        <div class="price-wrp"><strong class="price">${this.formatNumber(netAmount)}</strong><small>원</small></div>
+                    </div>
+                    <div class="col-xs-auto text-right">
+                        <p class="fw700"><i class="icon-won"></i> 수수료 혜택 금액</p>
+                        <div class="price-wrp text-primary"><strong class="price">-</strong><small>원</small></div>
+                    </div>
+                </li>`;
+          });
+
+          // 총계 영역 업데이트
+          $pane.find('.lst-total .price').text(this.formatNumber(totalSales));
+          $pane.find('.lst-total .text-muted').text(`${parseInt(ym.substring(4))}월 총 매출 합계`);
+
+          // 카드사별 리스트 업데이트
+          $pane.find('.container .lst-transact').html(listHtml);
+        },
+
+        // 유틸리티: 월별 그룹화
+        groupByMonth: function (data) {
+          return data.reduce((acc, obj) => {
+            const key = obj.yearMonth;
+            if (!acc[key]) acc[key] = [];
+            acc[key].push(obj);
+            return acc;
+          }, {});
+        },
+
+        // 유틸리티: 숫자 포맷
+        formatNumber: function (num) {
+          return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        },
+
+        // 유틸리티: 카드사 아이콘 매핑
+        getIconClass: function (type) {
+          const maps = {
+            BC: 'icon-bc',
+            HANA: 'icon-hana', // 적절한 클래스명으로 변경 필요
+            SHINHAN: 'icon-shinhan',
+            LOTTE: 'icon-lotte',
+            HYUNDAI: 'icon-hyundai01',
+          };
+          return maps[type] || 'icon-bc';
+        },
+      };
+
+      // 페이지 로드 시 실행
+      $(document).ready(function () {
+        MonthlySalesManager.init();
+      });
+    </script>
+  </body>
+</html>

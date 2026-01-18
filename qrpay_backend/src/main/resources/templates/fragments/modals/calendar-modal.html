@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <body>
+    <div th:fragment="calendarModal">
+      <style>
+        .tb-calendar {
+          width: 100%;
+          table-layout: fixed;
+        }
+        .tb-calendar tbody tr {
+          height: 45px;
+        } /* 행 높이 고정 */
+        .tb-calendar td {
+          vertical-align: middle;
+          text-align: center;
+        }
+        .modal-calendar .modal-content {
+          min-height: 450px;
+        } /* 모달 전체 최소 높이 고정 */
+      </style>
+
+      <div class="modal fade modal-calendar" id="calendar" tabindex="-1" role="dialog" aria-hidden="true">
+        <input type="hidden" id="initialDate" value="" />
+
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-body">
+              <div class="calendar-title">
+                <a href="javascript:void(0);" class="btn-calendar-page btn-calendar-prev" title="이전 달로 이동">
+                  <img src="/images/icon/icon_calendar_prev.png" alt="이전 달" />
+                </a>
+                <p class="title" id="calendarDisplayTitle">0000년 00월</p>
+                <a href="javascript:void(0);" class="btn-calendar-page btn-calendar-next" title="다음 달로 이동">
+                  <img src="/images/icon/icon_calendar_next.png" alt="다음 달" />
+                </a>
+              </div>
+
+              <table class="tb-calendar mt15">
+                <thead>
+                  <tr>
+                    <th scope="col">일</th>
+                    <th scope="col">월</th>
+                    <th scope="col">화</th>
+                    <th scope="col">수</th>
+                    <th scope="col">목</th>
+                    <th scope="col">금</th>
+                    <th scope="col">토</th>
+                  </tr>
+                </thead>
+                <tbody id="calendarBody"></tbody>
+              </table>
+
+              <div class="modal-btn mt20">
+                <div class="row btn-inline-group">
+                  <div class="col">
+                    <button type="button" class="btn btn-block btn-cancel" data-dismiss="modal">취소</button>
+                  </div>
+                  <div class="col">
+                    <button type="button" class="btn btn-block btn-confirm" id="btnConfirmDate">확인</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <script th:inline="javascript">
+        const CalendarModal = {
+          viewYear: null,
+          viewMonth: null,
+          selectedFullDate: null,
+          callback: null,
+          isInitialized: false, // 이벤트 중복 바인딩 방지 플래그
+
+          // 1. 내부 이벤트 바인딩 함수
+          init: function () {
+            if (this.isInitialized) return; // 이미 초기화됐다면 중단
+
+            const self = this; // 이벤트 핸들러 내부에서 객체 접근을 위해 저장
+
+            // 이전/다음 달 버튼
+            $('.btn-calendar-prev').on('click', function (e) {
+              e.preventDefault();
+              self.changeMonth(-1);
+            });
+
+            $('.btn-calendar-next').on('click', function (e) {
+              e.preventDefault();
+              self.changeMonth(1);
+            });
+
+            // 날짜 선택 (이벤트 위임)
+            $(document).on('click', '.date-item', function () {
+              $('.date-item').removeClass('active');
+              $(this).addClass('active');
+              self.selectedFullDate = $(this).data('date').toString();
+            });
+
+            // 확인 버튼
+            $('#btnConfirmDate').on('click', function () {
+              if (typeof self.callback === 'function') {
+                self.callback(self.selectedFullDate);
+              }
+              $('#calendar').modal('hide');
+            });
+
+            this.isInitialized = true;
+          },
+
+          // 2. 모달 열기
+          openCalendar: function (targetDate, callback) {
+            this.init(); // 호출 시점에 초기화 여부 체크
+
+            this.callback = callback;
+
+            if (!targetDate || targetDate.length !== 8) {
+              const now = new Date();
+              targetDate = now.getFullYear() + String(now.getMonth() + 1).padStart(2, '0') + String(now.getDate()).padStart(2, '0');
+            }
+
+            this.selectedFullDate = targetDate;
+            this.viewYear = parseInt(targetDate.substring(0, 4));
+            this.viewMonth = parseInt(targetDate.substring(4, 6));
+
+            this.render();
+            $('#calendar').modal('show');
+          },
+
+          render: function () {
+            const firstDay = new Date(this.viewYear, this.viewMonth - 1, 1).getDay();
+            const lastDate = new Date(this.viewYear, this.viewMonth, 0).getDate();
+
+            $('#calendarDisplayTitle').text(`${this.viewYear}년 ${this.viewMonth}월`);
+
+            let html = '';
+            let dayCount = 1;
+
+            for (let i = 0; i < 6; i++) {
+              html += '<tr>';
+              for (let j = 0; j < 7; j++) {
+                const cellIndex = i * 7 + j;
+                if (cellIndex < firstDay || dayCount > lastDate) {
+                  html += '<td>&nbsp;</td>';
+                } else {
+                  const currentCellDate = this.viewYear + String(this.viewMonth).padStart(2, '0') + String(dayCount).padStart(2, '0');
+                  const activeClass = currentCellDate === this.selectedFullDate ? 'active' : '';
+                  html += `<td><a href="javascript:void(0);" class="date-item ${activeClass}" data-date="${currentCellDate}">${dayCount}</a></td>`;
+                  dayCount++;
+                }
+              }
+              html += '</tr>';
+            }
+            $('#calendarBody').html(html);
+          },
+
+          changeMonth: function (delta) {
+            this.viewMonth += delta;
+            if (this.viewMonth < 1) {
+              this.viewMonth = 12;
+              this.viewYear--;
+            } else if (this.viewMonth > 12) {
+              this.viewMonth = 1;
+              this.viewYear++;
+            }
+            this.render();
+          },
+        };
+
+        // 페이지 로드 시에는 수동으로 걸어줄 필요 없이,
+        // CalendarModal.openCalendar()가 실행될 때 자동으로 init이 호출됩니다.
+      </script>
+    </div>
+  </body>
+</html>

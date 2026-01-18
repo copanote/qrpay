@@ -1,0 +1,90 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"
+%>
+<%@include file="/view/include/jspCommon.jspf" %>
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, width=device-width">
+<meta name="format-detection" content="telephone=no">
+<title><bc:outMessage name="${locale}" key="CMMN.HTML.TITLE"/></title>
+
+        <%@include file="/view/include/headCommonRenew.jspf" %>
+        <%@include file="/view/include/scriptCommon.jspf" %>
+
+        <style type="text/css">
+        .error-page{position:absolute;top:50%;left:25px;right:25px;margin-top:-46px;transform:translateY(-50%)}
+        .nt-1{position:relative;display:block;padding-top:87px;text-align:center;font-size:15px}
+        .nt-1:before{content:'';position:absolute;top:0;left:50%;margin-left:-34px;width:71px;height:62px;background:url("${webRoot}/images/common/ico-noti.png") no-repeat 0 0;background-size:71px 62px}
+        </style>
+
+        <script type="text/javascript">
+        function back(){
+               history.back(-1);
+        }
+        </script>
+</head>
+<body>
+<div id="wrap">
+        <!-- header -->
+        <header id="hd">
+               <div class="container">
+                       <button type="button" class="icon-back" onclick="back();">이전 페이지 이동</button>
+                       <h1>오 류</h1>
+                       <a class="icon-home" href="javascript:$._Fn.redirect('${wasRoot }/Main.do');">홈으로 이동</a>
+               </div>
+        </header>
+        <!-- S : .contents -->
+        <div class="error-page">
+               <span class="nt-1"><bc:outMessage name="${locale}" key="CMMN.ERROR.404.BODYMSG"/></span>
+        </div>
+        <!-- E : .contents -->
+</div>
+
+<%@include file="/view/include/footer.jspf" %>
+</body>
+</html>
+
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"
+import="com.bccard.mpm.common.MpmSessionEtt"
+%>
+<script>
+function activeToolbar( num ){
+        $("#toolber1").removeClass('active');
+        $("#toolber2").removeClass('active');
+        $("#toolber3").removeClass('active');
+        if(num == 1){
+               $("#toolber1").addClass('active');
+        } else if (num == 2){
+               $("#toolber2").addClass('active');
+        } else if (num == 3){
+               $("#toolber3").addClass('active');
+        }
+}
+</script>
+
+
+<div id="fixedToolbar">
+        <ul class="row">
+               <li id="toolber1" class="col-4 ">
+                       <a href='javascript:$._Fn.redirect("${wasRoot}/SubMain.do");'>
+                              <i class="icon-toolbar1"></i>
+                              <p>QR 코드</p>
+                       </a>
+               </li>
+               <li id="toolber2" class="col-4">
+                       <a href='javascript:$._Fn.redirect("${wasRoot}/TransList.do");'>
+                              <i class="icon-toolbar2"></i>
+                              <p>거래내역</p>
+                       </a>
+               </li>
+               <li id="toolber3" class="col-4">
+
+                       <a href='javascript:$._Fn.redirect("${wasRoot}/TransStatistics.do?exec=transMmlySmy");'>
+                              <i class="icon-toolbar3"></i>
+                              <p>월별매출합계</p>
+                       </a>
+               </li>
+        </ul>
+</div>

@@ -1,5 +1,6 @@
 package com.bccard.qrpay.domain.merchant.repository;
 
+import com.bccard.qrpay.domain.common.code.FinancialInstitution;
 import com.bccard.qrpay.domain.merchant.Merchant;
 import com.bccard.qrpay.domain.merchant.QFinancialInstitutionMerchant;
 import com.bccard.qrpay.domain.merchant.QMerchant;
@@ -42,6 +43,16 @@ public class MerchantQueryRepository {
                 .leftJoin(merchant.fiMerchants, financialInstitutionMerchant).fetchJoin()
                 .where(merchant.merchantId.eq(merchantId))
                 .fetchOne();
+        return Optional.ofNullable(m);
+    }
+
+    public Optional<Merchant> findByFinancialInstitutionAndFiMerchantNo(FinancialInstitution institution, String fiMerchantNo) {
+        Merchant m = queryFactory
+                .selectFrom(merchant)
+                .leftJoin(merchant.fiMerchants, financialInstitutionMerchant).fetchJoin()
+                .where(financialInstitutionMerchant.financialInstitution.eq(institution)
+                        .and(financialInstitutionMerchant.fiMerchantNo.eq(fiMerchantNo)))
+                .fetchFirst();
         return Optional.ofNullable(m);
     }
 

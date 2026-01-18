@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
@@ -10,6 +10,18 @@
     <script src="/js/bootstrap.min.js"></script>
     <link href="/css/common.css" rel="stylesheet" />
     <script src="/js/common.js"></script>
+
+    <th:block th:if="${#arrays.contains(@environment.getActiveProfiles(), 'local')}">
+      <script th:src="@{/js/qrpay_sdk.dev.js}"></script>
+    </th:block>
+
+    <th:block th:if="${#arrays.contains(@environment.getActiveProfiles(), 'dev')}">
+      <script th:src="@{/js/qrpay_sdk.dev.js}"></script>
+    </th:block>
+
+    <th:block th:if="${#arrays.contains(@environment.getActiveProfiles(), 'prod')}">
+      <script th:src="@{/js/qrpay_sdk.prod.js}"></script>
+    </th:block>
   </head>
 
   <body>
@@ -19,7 +31,7 @@
         <div class="container">
           <button type="button" class="icon-back" onclick="goBack()">이전 페이지 이동</button>
           <h1>아이디 찾기</h1>
-          <a class="icon-home" href="javascript:void(0)" onclick="goHome()">홈으로 이동</a>
+          <a class="icon-home" href="javascript:void(0)" onclick="goLogin()">홈으로 이동</a>
         </div>
       </header>
 
@@ -48,23 +60,7 @@
                   다른 카드사를 추가할 수 있습니다.
                 </p>
               </div>
-              <ul>
-                <li class="row align-items-center">
-                  <div class="col-xs-auto pr20">
-                    <label class="input-type-round">
-                      <input type="checkbox" />
-                      <span></span>
-                    </label>
-                  </div>
-                  <div class="col">
-                    <p class="h5 fw500">가맹점명</p>
-                    <span class="text-muted">123-45-67890</span>
-                  </div>
-                  <div class="col-xs-auto">
-                    <button type="button" class="fw500"><i class="icon-list"></i> 상세보기</button>
-                  </div>
-                </li>
-              </ul>
+              <ul></ul>
             </div>
           </div>
 
@@ -75,8 +71,157 @@
         </div>
       </div>
     </div>
+    <div th:replace="~{fragments/modals/common-modal :: passwordContent}"></div>
+    <div th:replace="~{fragments/modals/common-modal :: confirmModal}"></div>
+    <div th:replace="~{fragments/modals/common-modal :: loadingModal}"></div>
+
     <script>
+      const MerchantManager = {
+        state: [],
+        page: 1, // 현재 페이지
+        hasNext: false,
+        nextKey: '',
+        isLoading: false, // 중복 호출 방지
+        observer: null, // 스크롤 감시자
+
+        init: function () {
+          const findBtn = document.getElementById('btn-findid-find-bcmerchant');
+          findBtn.addEventListener('click', () => {
+            this.reset(); // 조회 버튼 클릭 시 초기화
+            this.fetchMerchants();
+          });
+
+          const listContainer = document.querySelector('.bx-franchise ul');
+          listContainer.addEventListener('change', (e) => {
+            if (e.target.name === 'merchant-select') {
+              this.handleSelection();
+            }
+          });
+
+          // IntersectionObserver 설정
+          this.observer = new IntersectionObserver(
+            (entries) => {
+              if (entries[0].isIntersecting && !this.isLoading && this.hasNext) {
+                this.fetchMerchants();
+              }
+            },
+            { threshold: 1.0 }
+          );
+        },
+
+        reset: function () {
+          this.state = [];
+          this.page = 1;
+          document.querySelector('.bx-franchise ul').innerHTML = '';
+        },
+
+        fetchMerchants: async function () {
+          if (this.isLoading) return;
+          this.isLoading = true;
+
+          // 가맹점 조회 시 "다음" 버튼 초기화 (첫 페이지인 경우에만)
+          if (this.page === 1) this.toggleNextButton(false);
+
+          const bizNoInput = document.getElementById('input-findid-bizno');
+
+          let reqBcMerchants = {
+            bizNo: bizNoInput.value.trim(),
+            nextKey: this.nextKey,
+          };
+          const data = await qrpaySdk.fetchPostAsync(REST_APIS.OPEN.BC_MERCHANTS, reqBcMerchants);
+          console.log(data);
+          this.page++;
+          this.isLoading = false;
+
+          if (data.ok) {
+            const { hasNext, nextKey, list } = data.data;
+            this.state = [...this.state, ...list];
+            this.hasNext = hasNext;
+            this.render(list);
+            this.nextKey = nextKey;
+          } else {
+            const errorMsg = data.error.message || '시스템오류';
+            ConfirmModal.open({
+              desc: '가맹점 조회에 실패하였습니다[' + errorMsg + ']',
+              hideCancel: true,
+            });
+          }
+        },
+
+        render: function (items) {
+          const listContainer = document.querySelector('.bx-franchise ul');
+          if (!listContainer) return;
+
+          items.forEach((item) => {
+            const li = document.createElement('li');
+            li.className = 'row align-items-center';
+            li.innerHTML = `
+        <div class="col-xs-auto pr20">
+          <label class="input-type-round">
+            <input type="radio" name="merchant-select" value="${item.merchantNo}" />
+            <span></span>
+          </label>
+        </div>
+        <div class="col">
+          <p class="h5 fw500">${item.merchantName}</p>
+          <span class="text-muted">${item.merchantNo}</span>
+        </div>
+        <div class="col-xs-auto">
+          <button type="button" class="fw500" onclick="MerchantManager.showDetail('${item.merchantNo}')">
+            <i class="icon-list"></i> 상세보기
+          </button>
+        </div>
+      `;
+            listContainer.appendChild(li);
+          });
+
+          // 마지막으로 추가된 요소를 감시 대상으로 등록
+          if (listContainer.lastElementChild) {
+            this.observer.disconnect(); // 이전 감시 해제
+            this.observer.observe(listContainer.lastElementChild); // 새 마지막 요소 감시
+          }
+        },
+
+        // ... 나머지 handleSelection, toggleNextButton, showDetail 함수는 기존과 동일 ...
+        handleSelection: function () {
+          const selected = document.querySelector('input[name="merchant-select"]:checked');
+          if (selected) {
+            this.toggleNextButton(true);
+          }
+        },
+
+        toggleNextButton: function (isActive) {
+          const nextBtn = document.querySelector('.btm-fixed-btn a');
+          if (isActive) {
+            nextBtn.classList.remove('btn-muted');
+            nextBtn.classList.add('btn-primary');
+            nextBtn.style.pointerEvents = 'auto';
+          } else {
+            nextBtn.classList.add('btn-muted');
+            nextBtn.classList.remove('btn-primary');
+            nextBtn.style.pointerEvents = 'none';
+          }
+        },
+
+        showDetail: function (merchantNo) {
+          const data = this.state.find((item) => item.merchantNo === String(merchantNo));
+          if (!data) return;
+          document.getElementById('detail-name').innerText = data.merchantName;
+          document.getElementById('detail-no').innerText = data.merchantNo;
+          document.getElementById('detail-rep').innerText = data.representativeName;
+          document.getElementById('detail-tel').innerText = data.telNo;
+          document.getElementById('detail-addr').innerText = data.address;
+          $('#modal-merchant-detail').modal('show');
+        },
+      };
+    </script>
+
+    <script th:inline="javascript">
+      const niceSmsRefId = /*[[${smsRefId}]]*/ '';
+
       document.addEventListener('DOMContentLoaded', function () {
+        MerchantManager.init();
+
         // DOM 요소 참조
         const bizNoInput = document.getElementById('input-findid-bizno');
         const findBtn = document.getElementById('btn-findid-find-bcmerchant');
@@ -102,5 +247,48 @@
         });
       });
     </script>
+
+    <div class="modal fade" id="modal-merchant-detail" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header bg-white mb-20">
+            <h3 class="modal-title">상세정보</h3>
+          </div>
+          <div class="modal-body p-10">
+            <table class="table mb-20" style="font-size: 15px">
+              <colgroup>
+                <col style="width: 35%; background: #fafafa" />
+                <col />
+              </colgroup>
+              <tbody>
+                <tr>
+                  <th>가맹점명</th>
+                  <td id="detail-name" class="fw500"></td>
+                </tr>
+                <tr>
+                  <th>사업자번호</th>
+                  <td id="detail-no"></td>
+                </tr>
+                <tr>
+                  <th>대표자</th>
+                  <td id="detail-rep"></td>
+                </tr>
+                <tr>
+                  <th>연락처</th>
+                  <td id="detail-tel"></td>
+                </tr>
+                <tr>
+                  <th class="align-middle">주소</th>
+                  <td id="detail-addr"></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="modal-footer border-0">
+            <button type="button" class="btn btn-primary btn-block btn-md" data-dismiss="modal">닫기</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </body>
 </html>

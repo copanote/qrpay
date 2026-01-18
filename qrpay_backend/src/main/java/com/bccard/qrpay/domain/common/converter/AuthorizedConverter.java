@@ -1,4 +1,4 @@
-package com.bccard.qrpay.domain.transaction.converter;
+package com.bccard.qrpay.domain.common.converter;
 
 import com.bccard.qrpay.domain.common.code.AuthorizeType;
 import jakarta.persistence.AttributeConverter;

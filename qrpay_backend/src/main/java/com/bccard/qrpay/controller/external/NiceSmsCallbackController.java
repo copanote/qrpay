@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.Objects;
+
 @Slf4j
 @Controller
 @RequiredArgsConstructor
@@ -55,12 +57,10 @@ public class NiceSmsCallbackController {
             if (!merCi.equals(niceCi)) {
                 next = niceSmsRequestor.getPrevView();
                 model.addAttribute("errMessage", "불일치 ");
-
             }
         }
-
-
         model.addAttribute("smsRefId", fetched.getId());
+        model.addAttribute("authMethod", "NICE-SMS");
         return next;
     }
 
@@ -90,7 +90,7 @@ public class NiceSmsCallbackController {
             paramValue = paramValue.replaceAll("-", "");
             paramValue = paramValue.replaceAll(",", "");
 
-            if (gubun != "encodeData") {
+            if (!Objects.equals(gubun, "encodeData")) {
                 paramValue = paramValue.replaceAll("\\+", "");
                 paramValue = paramValue.replaceAll("/", "");
                 paramValue = paramValue.replaceAll("=", "");

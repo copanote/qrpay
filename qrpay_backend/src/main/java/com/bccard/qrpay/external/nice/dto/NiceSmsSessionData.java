@@ -32,4 +32,8 @@ public class NiceSmsSessionData {
         this.state = NiceSmsState.CONFIRM_COMPLETE;
         this.confirmAt = MpmDateTimeUtils.generateDtmNow(MpmDateTimeUtils.PATTERN_YEAR_TO_SEC);
     }
+
+    public void onUpdateMerchantProvidedHashedCi(String merchantProvidedHashedCi) {
+        this.merchantProvidedHashedCi = merchantProvidedHashedCi;
+    }
 }

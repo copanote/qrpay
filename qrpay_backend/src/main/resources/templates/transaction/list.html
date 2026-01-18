@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>BC</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css" />
+    <script src="/js/jquery-3.3.1.slim.min.js.js"></script>
+    <script src="/js/popper.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <link href="/css/common.css" rel="stylesheet" />
+    <script src="/js/common.js"></script>
+
+    <th:block th:if="${#arrays.contains(@environment.getActiveProfiles(), 'local')}">
+      <script th:src="@{/js/qrpay_sdk.dev.js}"></script>
+    </th:block>
+
+    <th:block th:if="${#arrays.contains(@environment.getActiveProfiles(), 'dev')}">
+      <script th:src="@{/js/qrpay_sdk.dev.js}"></script>
+    </th:block>
+
+    <th:block th:if="${#arrays.contains(@environment.getActiveProfiles(), 'prod')}">
+      <script th:src="@{/js/qrpay_sdk.prod.js}"></script>
+    </th:block>
+  </head>
+
+  <body>
+    <div id="wrap">
+      <!-- header -->
+      <header id="hd" class="main">
+        <div class="container">
+          <h1>
+            <a href="javascript:void(0)">
+              <img src="/images/logo_big.png" height="33" alt="BC QR FOR SHOP" /><!-- 2019-05-08 -->
+              <span class="sr-only">BC QR FOR SHOP</span>
+            </a>
+          </h1>
+          <button type="button" class="icon-menu js-mn">메뉴열기</button>
+        </div>
+        <div th:replace="~{fragments/navigation :: menu}"></div>
+      </header>
+      <div th:replace="~{fragments/toolbar :: toolbar('list')}"></div>
+
+      <!-- container -->
+      <div id="ct">
+        <!-- 페이지 시작 -->
+        <div id="index">
+          <div class="sub-title">
+            <div class="row container align-items-center">
+              <h2 class="h2 col">
+                <span>거래내역관리</span>
+                <a class="icon-help" href="#">도움말</a>
+              </h2>
+              <div class="col-xs-auto">
+                <button type="button" class="btn-refresh" onclick="location.reload()"><i class="icon-refresh mr5"></i>새로고침</button>
+              </div>
+            </div>
+          </div>
+          <div class="bx-detail-collapse">
+            <a class="btn-collapse collapsed" data-toggle="collapse" href="#collapse">상세조회</a>
+            <div class="collapse" id="collapse">
+              <div class="bx-detail-srch frm">
+                <form>
+                  <div class="form-group">
+                    <span class="tit">승인번호</span>
+                    <input type="text" inputmode="numeric" pattern="[0-9]*" id="auth-last4" class="form-control" maxlength="4" placeholder="승인번호 뒤 4자리 입력" />
+                  </div>
+                  <div class="form-group">
+                    <span class="tit">브랜드</span>
+                    <div class="brand-group01">
+                      <div class="group-row">
+                        <div class="group-cell">
+                          <label class="chk-type01"> <input type="checkbox" name="brand" value="ALL" checked /><span>전체</span> </label>
+                        </div>
+                        <div class="group-cell">
+                          <label class="chk-type01"> <input type="checkbox" name="brand" value="BC" /><span>BC</span> </label>
+                        </div>
+                        <div class="group-cell">
+                          <label class="chk-type01"> <input type="checkbox" name="brand" value="UPI" /><span>유니온페이</span> </label>
+                        </div>
+                        <div class="group-cell">
+                          <label class="chk-type01"> <input type="checkbox" name="brand" value="OPAY" /><span>해외PAY</span> </label>
+                        </div>
+                      </div>
+                      <div class="group-row">
+                        <div class="group-cell">
+                          <label class="chk-type01"> <input type="checkbox" name="brand" value="SHINHAN" /><span>신한</span> </label>
+                        </div>
+                        <div class="group-cell">
+                          <label class="chk-type01"> <input type="checkbox" name="brand" value="HANA" /><span>하나</span> </label>
+                        </div>
+                        <div class="group-cell">
+                          <label class="chk-type01"> <input type="checkbox" name="brand" value="KB" /><span>국민</span> </label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <span class="tit">거래상태</span>
+                    <div class="row chk-inline-group">
+                      <div class="col">
+                        <label class="chk-type01"> <input type="checkbox" name="pay-status" value="ALL" checked /><span>전체</span> </label>
+                      </div>
+                      <div class="col">
+                        <label class="chk-type01"> <input type="checkbox" name="pay-status" value="APPROVED" /><span>승인완료</span> </label>
+                      </div>
+                      <div class="col">
+                        <label class="chk-type01"> <input type="checkbox" name="pay-status" value="AUTHORIZE_REJECTED" /><span>승인실패</span> </label>
+                      </div>
+                      <div class="col">
+                        <label class="chk-type01"> <input type="checkbox" name="pay-status" value="CANCELED" /><span>취소완료</span> </label>
+                      </div>
+                      <div class="col">
+                        <label class="chk-type01"> <input type="checkbox" name="pay-status" value="CANCELED_REJECTED" /><span>취소실패</span> </label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <span class="tit">거래일자 <a class="icon-help" href="#">도움말</a></span>
+                    <div class="row chk-inline-group">
+                      <div class="col">
+                        <label class="chk-type01"> <input type="radio" name="search-date" value="TODAY" /><span>당일</span> </label>
+                      </div>
+                      <div class="col">
+                        <label class="chk-type01"> <input type="radio" name="search-date" /><span>1주일</span> </label>
+                      </div>
+                      <div class="col">
+                        <label class="chk-type01"> <input type="radio" name="search-date" /><span>1개월</span> </label>
+                      </div>
+                    </div>
+                    <div class="row align-items-center mt15">
+                      <div class="col">
+                        <div class="form-calendar">
+                          <input type="text" class="form-control" id="trns-start-ymd" value="" />
+                          <button type="button" class="btn-calendar" data-toggle="modal" data-target="#calendar"><img src="/images/icon/icon_calendar.png" alt="달력" /></button>
+                        </div>
+                      </div>
+                      <div class="col-xs-auto">
+                        <span class="pr10 pl10">~</span>
+                      </div>
+                      <div class="col">
+                        <div class="form-calendar">
+                          <input type="text" class="form-control" id="trns-end-ymd" value="" />
+                          <button type="button" class="btn-calendar" data-toggle="modal" data-target="#calendar"><img src="/images/icon/icon_calendar.png" alt="달력" /></button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <button type="button" id="btn-search-list" class="btn btn-dark btn-block">조회</button>
+                </form>
+              </div>
+            </div>
+          </div>
+          <div class="container">
+            <ul class="lst-transact"></ul>
+          </div>
+        </div>
+        <a href="#wrap" class="icon-top">top</a>
+        <!--// 페이지 끝 -->
+      </div>
+    </div>
+    <script>
+      $(document).ready(function () {
+        /**
+         * 체크박스 그룹 로직 공통 적용 함수
+         * @param {string} name - 체크박스의 name 속성값
+         */
+        function initCheckboxGroup(name) {
+          $(document).on('change', `input[name="${name}"]`, function () {
+            const $group = $(`input[name="${name}"]`);
+            const $all = $group.filter('[value="ALL"]');
+            const $others = $group.not('[value="ALL"]');
+            const isAll = $(this).val() === 'ALL';
+
+            if (isAll) {
+              // [1] '전체'를 클릭한 경우
+              if ($(this).is(':checked')) {
+                // '전체' 체크 시 -> 나머지는 모두 해제
+                $others.prop('checked', false);
+              } else {
+                // '전체' 해제 방지 (나머지가 아무것도 없다면 다시 체크)
+                if ($others.filter(':checked').length === 0) {
+                  $(this).prop('checked', true);
+                }
+              }
+            } else {
+              // [2] '나머지' 항목을 클릭한 경우
+              const checkedOthersCount = $others.filter(':checked').length;
+              const totalOthersCount = $others.length;
+
+              if ($(this).is(':checked')) {
+                // 나머지 모든 항목이 체크되었다면 -> 다시 '전체'만 체크하고 나머지는 해제
+                if (checkedOthersCount === totalOthersCount) {
+                  $all.prop('checked', true);
+                  $others.prop('checked', false);
+                } else {
+                  // 개별 항목 선택 시 '전체' 해제
+                  $all.prop('checked', false);
+                }
+              } else {
+                // 체크를 해제했을 때 남은 게 하나도 없다면 -> '전체' 자동 체크
+                if (checkedOthersCount === 0) {
+                  $all.prop('checked', true);
+                }
+              }
+            }
+          });
+        }
+
+        // 각각의 그룹에 로직 적용
+        initCheckboxGroup('brand'); // 브랜드 그룹
+        initCheckboxGroup('pay-status'); // 거래상태 그룹
+      });
+    </script>
+    <script>
+      $(document).ready(function () {
+        // 날짜 포맷 함수 (YYYY-MM-DD)
+        function formatDate(date) {
+          const d = new Date(date);
+          let month = '' + (d.getMonth() + 1);
+          let day = '' + d.getDate();
+          const year = d.getFullYear();
+
+          if (month.length < 2) month = '0' + month;
+          if (day.length < 2) day = '0' + day;
+
+          return [year, month, day].join('-');
+        }
+
+        // 날짜 세팅 공통 함수
+        function setSearchDates(periodType) {
+          const end = new Date(); // 오늘
+          let start = new Date();
+
+          switch (periodType) {
+            case 'TODAY':
+              // 당일: 시작일 = 종료일
+              break;
+            case '1WEEK':
+              start.setDate(end.getDate() - 7);
+              break;
+            case '1MONTH':
+              start.setMonth(end.getMonth() - 1);
+              break;
+            case '3MONTH':
+            default:
+              start.setMonth(end.getMonth() - 3);
+              break;
+          }
+
+          $('#trns-start-ymd').val(formatDate(start));
+          $('#trns-end-ymd').val(formatDate(end));
+        }
+
+        // [1] 페이지 로드 시 기본 3개월 세팅 (라디오 버튼에 value가 없으므로 수동 호출)
+        setSearchDates('3MONTH');
+
+        // [2] 라디오 버튼 클릭 이벤트
+        $('input[name="search-date"]').on('change', function () {
+          const labelText = $(this).next('span').text();
+
+          if (labelText === '당일') {
+            setSearchDates('TODAY');
+          } else if (labelText === '1주일') {
+            setSearchDates('1WEEK');
+          } else if (labelText === '1개월') {
+            setSearchDates('1MONTH');
+          }
+        });
+
+        $(document).ready(function () {
+          // [공통] 날짜 차이 계산 함수 (단위: 일)
+          function getDateDiff(date1, date2) {
+            const d1 = new Date(date1.substring(0, 4), date1.substring(4, 6) - 1, date1.substring(6, 8));
+            const d2 = new Date(date2.substring(0, 4), date2.substring(4, 6) - 1, date2.substring(6, 8));
+            return Math.floor((d2 - d1) / (1000 * 60 * 60 * 24));
+          }
+
+          // [공통] 오늘 날짜 YYYYMMDD 가져오기
+          function getTodayStr() {
+            const now = new Date();
+            return now.getFullYear() + String(now.getMonth() + 1).padStart(2, '0') + String(now.getDate()).padStart(2, '0');
+          }
+
+          // [검증 함수] 날짜가 유효한지 체크
+          function isValidRange(selectedDate, mode) {
+            const today = getTodayStr();
+            const startVal = $('#trns-start-ymd').val().replace(/-/g, '');
+            const endVal = $('#trns-end-ymd').val().replace(/-/g, '');
+
+            // 1. 미래 날짜 선택 불가
+            if (selectedDate > today) {
+              alert('미래 일자는 선택할 수 없습니다.');
+              return false;
+            }
+
+            // 2. 오늘로부터 1년 이내만 조회 가능 (약 365일)
+            if (getDateDiff(selectedDate, today) > 365) {
+              alert('최근 1년 이내의 데이터만 조회 가능합니다.');
+              return false;
+            }
+
+            // 3. 시작일/종료일 선후 관계 검증
+            if (mode === 'START') {
+              if (selectedDate > endVal) {
+                alert('시작일은 종료일보다 늦을 수 없습니다.');
+                return false;
+              }
+            } else if (mode === 'END') {
+              if (selectedDate < startVal) {
+                alert('종료일은 시작일보다 빠를 수 없습니다.');
+                return false;
+              }
+            }
+
+            return true;
+          }
+
+          // --- 달력 버튼 클릭 이벤트 ---
+
+          // 시작 날짜 버튼
+          $('#trns-start-ymd')
+            .siblings('.btn-calendar')
+            .on('click', function () {
+              const currentVal = $('#trns-start-ymd').val().replace(/-/g, '');
+
+              CalendarModal.openCalendar(currentVal, function (date) {
+                // 콜백 안에서 검증 수행
+                if (isValidRange(date, 'START')) {
+                  $('#trns-start-ymd').val(formatDateWithHyphen(date));
+                  $('input[name="search-date"]').prop('checked', false); // 라디오 해제
+                } else {
+                  // 검증 실패 시 모달을 다시 띄우거나 유지 (선택 사항)
+                  CalendarModal.openCalendar(date, function () {});
+                }
+              });
+            });
+
+          // 종료 날짜 버튼
+          $('#trns-end-ymd')
+            .siblings('.btn-calendar')
+            .on('click', function () {
+              const currentVal = $('#trns-end-ymd').val().replace(/-/g, '');
+
+              CalendarModal.openCalendar(currentVal, function (date) {
+                if (isValidRange(date, 'END')) {
+                  $('#trns-end-ymd').val(formatDateWithHyphen(date));
+                  $('input[name="search-date"]').prop('checked', false);
+                }
+              });
+            });
+        });
+
+        // YYYYMMDD -> YYYY-MM-DD 변환 함수
+        function formatDateWithHyphen(dateStr) {
+          return dateStr.substring(0, 4) + '-' + dateStr.substring(4, 6) + '-' + dateStr.substring(6, 8);
+        }
+      });
+
+      const searchFilters = () => {
+        return {
+          // 브랜드 선택값 (예: ["ALL"] 또는 ["BC", "UPI"])
+          brands: $('input[name="brand"]:checked')
+            .map(function () {
+              return this.value;
+            })
+            .get(),
+
+          // 거래상태 선택값 (예: ["APPROVED", "CANCELED"])
+          status: $('input[name="pay-status"]:checked')
+            .map(function () {
+              return this.value;
+            })
+            .get(),
+          startYmd: $('#trns-start-ymd').val().replace(/-/g, ''),
+          endYmd: $('#trns-end-ymd').val().replace(/-/g, ''),
+          authNoLast4: $('#auth-last4').val(),
+        };
+      };
+
+      const TransactionManager = {
+        state: [],
+        page: 0, // API가 pageNumber: 0부터 시작하므로 0으로 초기화
+        size: 20,
+        hasNext: false,
+        isLoading: false,
+        observer: null,
+
+        init: function () {
+          this.fetchTransactions();
+
+          const findBtn = document.getElementById('btn-search-list'); // 실제 조회 버튼 ID 확인 필요
+          if (findBtn) {
+            findBtn.addEventListener('click', () => {
+              this.reset();
+              this.fetchTransactions();
+            });
+          }
+
+          this.observer = new IntersectionObserver(
+            (entries) => {
+              if (entries[0].isIntersecting && !this.isLoading && this.hasNext) {
+                this.fetchTransactions();
+              }
+            },
+            { threshold: 1.0 }
+          );
+        },
+
+        reset: function () {
+          this.state = [];
+          this.page = 0;
+          this.hasNext = false;
+          const listContainer = document.querySelector('.lst-transact');
+          if (listContainer) listContainer.innerHTML = '';
+          if (this.observer) this.observer.disconnect();
+        },
+        searchFilters: () => {
+          return {
+            // 브랜드 선택값 (예: ["ALL"] 또는 ["BC", "UPI"])
+            brands: $('input[name="brand"]:checked')
+              .map(function () {
+                return this.value;
+              })
+              .get(),
+
+            // 거래상태 선택값 (예: ["APPROVED", "CANCELED"])
+            status: $('input[name="pay-status"]:checked')
+              .map(function () {
+                return this.value;
+              })
+              .get(),
+            startYmd: $('#trns-start-ymd').val().replace(/-/g, ''),
+            endYmd: $('#trns-end-ymd').val().replace(/-/g, ''),
+            authNoLast4: $('#auth-last4').val(),
+          };
+        },
+
+        fetchTransactions: async function () {
+          if (this.isLoading) return;
+          this.isLoading = true;
+
+          let reqHistory = {
+            page: this.page,
+            size: this.size,
+            startYmd: this.searchFilters().startYmd,
+            endYmd: this.searchFilters().endYmd,
+            authNoLast4: this.searchFilters().authNoLast4,
+            paymentStatus: this.searchFilters().status,
+            serviceType: this.searchFilters().brands,
+          };
+          console.log(reqHistory);
+          const params = new URLSearchParams();
+
+          Object.entries(reqHistory).forEach(([key, value]) => {
+            // 값이 존재할 때만 추가
+            if (value != null && value !== '') {
+              // 배열인 경우 (brands, status 등) 쉼표로 연결해서 보낼 때
+              if (Array.isArray(value)) {
+                if (value.length === 1 && value.includes('ALL')) return;
+                if (value.length > 0) params.append(key, value.join(','));
+              } else {
+                params.append(key, value);
+              }
+            }
+          });
+
+          const queryString = params.toString();
+          const data = await qrpaySdk.fetchGetAsync(REST_APIS.TRANSACTION.HISTORY + '?' + queryString);
+          this.isLoading = false;
+
+          console.log(JSON.stringify(data));
+
+          if (data.ok) {
+            const { content, last } = data.data;
+            this.state = [...this.state, ...content];
+            this.hasNext = !last; // last가 false면 다음 페이지가 있음
+            this.page++;
+
+            this.render(content);
+          } else {
+            const status = data.status;
+            if (status === 401) {
+              console.log('로그인이 필요합니다.');
+              const auth_loginId = '';
+              PasswordModal.open({
+                loginId: auth_loginId,
+                onSuccessCallback: (res) => {
+                  this.fetchTransactions();
+                },
+                onCancelCallback: () => {
+                  console.log('cancel authentication');
+                },
+              });
+            } else {
+              const errorMsg = data || data.message || '';
+              alert(errorMsg);
+            }
+          }
+        },
+
+        render: function (items) {
+          const listContainer = document.querySelector('.lst-transact');
+          if (!listContainer) return;
+
+          // 조회 결과가 없을 때 처리
+          if (items.length === 0) {
+            // 페이지가 0일 때만 메시지 표시 (처음 조회)
+            if (this.page === 1) {
+              const emptyLi = document.createElement('li');
+              emptyLi.className = 'empty-message text-center';
+              emptyLi.innerHTML = '<p class="text-muted"><i class="icon-warning"></i> 조회내역이 없습니다.</p>';
+              listContainer.appendChild(emptyLi);
+            }
+            return;
+          }
+
+          items.forEach((item) => {
+            console.log(item);
+            // 브랜드 아이콘 처리
+            const brandIcon = `icon-${item.serviceType.toLowerCase()}`;
+
+            // 상태 텍스트 및 배지 처리
+            let statusName = '승인완료';
+            let badgeClass = 'badge-line-muted';
+            if (item.paymentStatus === 'CANCELED') {
+              statusName = '취소완료';
+            } else if (item.paymentStatus.includes('REJECTED')) {
+              statusName = '승인실패';
+              badgeClass = 'badge-line-danger';
+            }
+
+            // 날짜 포맷팅 (YYYYMMDDHHMMSS -> YYYY-MM-DD HH:MM:SS)
+            const rawDate = item.transactionAt;
+            const formattedDate = `${rawDate.substring(0, 4)}-${rawDate.substring(4, 6)}-${rawDate.substring(6, 8)} ${rawDate.substring(8, 10)}:${rawDate.substring(10, 12)}:${rawDate.substring(
+              12,
+              14
+            )}`;
+
+            const li = document.createElement('li');
+            li.className = 'row align-items-center';
+            li.innerHTML = `
+                <div class="col">
+                    <p class="h4"><i class="${brandIcon}"></i> ${item.approvalNo || '-'}</p>
+                    <ul class="lst-split h6 text-muted">
+                        <li>${item.serviceType}</li>
+                        <li>${formattedDate}</li>
+                        <li>${item.installment === 0 ? '일시불' : item.installment + '개월'}</li>
+                    </ul>
+                    <a class="price-wrp" href="javascript:void(0);" onclick="TransactionManager.showDetail('${item.transactionId}')">
+                        <strong class="price">${Number(item.transactionAmount).toLocaleString()}</strong><small>원</small>
+                    </a>
+                </div>
+                <div class="col-xs-auto">
+                    <button type="button" class="badge badge-pill ${badgeClass}">${statusName}</button>
+                </div>
+            `;
+            listContainer.appendChild(li);
+          });
+
+          // 무한 스크롤 감시 설정
+          if (this.hasNext && listContainer.lastElementChild) {
+            this.observer.disconnect();
+            this.observer.observe(listContainer.lastElementChild);
+          }
+        },
+
+        showDetail: function (id) {
+          const data = this.state.find((item) => item.transactionId === id);
+          if (!data) return;
+          console.log('상세 데이터 로드:', data);
+          // 여기서 상세 팝업 오픈 로직 추가
+        },
+      };
+
+      $(document).ready(function () {
+        TransactionManager.init();
+      });
+    </script>
+
+    <div th:replace="~{fragments/modals/common-modal :: passwordContent}"></div>
+    <div th:replace="~{fragments/modals/common-modal :: confirmModal}"></div>
+    <div th:replace="~{fragments/modals/common-modal :: loadingModal}"></div>
+    <div th:replace="~{fragments/modals/calendar-modal :: calendarModal}"></div>
+  </body>
+</html>

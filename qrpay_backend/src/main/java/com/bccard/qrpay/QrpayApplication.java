@@ -8,10 +8,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
 
 import javax.sql.DataSource;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.sql.Connection;
-import java.sql.Statement;
 
 @Slf4j
 @SpringBootApplication
@@ -38,12 +34,19 @@ public class QrpayApplication {
             // 3. data.sql 실행
 
             log.info("ApplicationRunner:initDatabase");
-            try (Connection conn = dataSource.getConnection();
-                 Statement stmt = conn.createStatement()) {
-                String dataSql = Files.readString(Paths.get("src/main/resources/sql/data.sql"));
-                stmt.execute(dataSql);
-                conn.commit();
-            }
+//            try (Connection conn = dataSource.getConnection();
+//                 Statement stmt = conn.createStatement()) {
+//                ClassPathResource cpr = new ClassPathResource("sql/data.sql");
+//                String dataSql = "";
+//
+//                try (InputStreamReader reader = new InputStreamReader(cpr.getInputStream(), StandardCharsets.UTF_8)) {
+//                    dataSql = FileCopyUtils.copyToString(reader);
+//                } catch (IOException e) {
+//                    throw new RuntimeException("SQL 파일을 읽을 수 없습니다.", e);
+//                }
+//                stmt.execute(dataSql);
+//                conn.commit();
+//            }
         };
     }
 }

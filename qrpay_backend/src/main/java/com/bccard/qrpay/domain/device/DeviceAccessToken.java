@@ -19,7 +19,7 @@ public class DeviceAccessToken {
     @Column(name = "API_RNEW_TKN_DATA", length = 256)
     private String apiRefreshToken;
 
-    @Column(name = "API_CONN_EXPL_ATON", length = 14)
+    @Column(name = "API_CONN_EXPI_ATON", length = 14)
     private String apiAccessExpireDate;
 
     @Builder

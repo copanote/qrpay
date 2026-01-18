@@ -40,7 +40,12 @@ public enum QrpayErrorCode implements ErrorCode {
     //MERCHANT
     MERCHANT_NOT_FOUND(404, "", "가맹점정보를 찾을 수 없습니다."),
     MERCHANT_CANCELED(409, "", "탈회한 가맹점"),
+    MERCHANT_IS_NOT_ACTIVE(409, "", "활성화 가맹점 아님"),
     MERCHANT_NAME_LENGTH_POLICY_VIOLATION(409, "ME444", "가맹점이름은 14자리 이하로 변경 가능합니다."),
+
+
+    //TRANSACTION
+    INVALID_SEARCH_CONDITION(400, "400", "조회 조건이 잘 못 되었습니다."),
 
 
     //QRKIT

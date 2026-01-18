@@ -1,5 +1,6 @@
 package com.bccard.qrpay.domain.common.code;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import lombok.Getter;
 
 @Getter
@@ -26,6 +27,7 @@ public enum PaymentStatus implements DatabaseCodeConvertable {
         this.description = description;
     }
 
+    @JsonCreator
     public static PaymentStatus of(String code) {
         for (PaymentStatus st : PaymentStatus.values()) {
             if (st.getDbCode().equalsIgnoreCase(code)) {

@@ -1,11 +1,14 @@
 package com.bccard.qrpay.controller.page;
 
 import com.bccard.qrpay.domain.common.code.FinancialInstitution;
+import com.bccard.qrpay.domain.common.code.MemberRole;
 import com.bccard.qrpay.domain.log.QrpayLog;
 import com.bccard.qrpay.domain.log.QrpayLogService;
 import com.bccard.qrpay.domain.member.Member;
 import com.bccard.qrpay.domain.member.MemberService;
 import com.bccard.qrpay.domain.merchant.FinancialInstitutionMerchant;
+import com.bccard.qrpay.domain.merchant.Merchant;
+import com.bccard.qrpay.domain.merchant.MerchantService;
 import com.bccard.qrpay.exception.QrpayCustomException;
 import com.bccard.qrpay.exception.code.QrpayErrorCode;
 import com.bccard.qrpay.external.bc.mci.MciService;
@@ -27,6 +30,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -36,6 +40,7 @@ public class AuthPageController {
 
     private final QrpayLogService logService;
     private final MemberService memberService;
+    private final MerchantService merchantService;
 
     private final MciService mciService;
     private final NiceSmsService niceSmsService;
@@ -121,7 +126,46 @@ public class AuthPageController {
     }
 
     @GetMapping("/auth/findid/confirm")
-    public String findId_confirm(Model model) {
+    public String findId_confirm(Model model,
+                                 @RequestParam String niceReferenceId,
+                                 @RequestParam String bcMerchantNo) throws JsonProcessingException {
+
+        QrpayLog qrpayLog = logService.findById(Long.valueOf(niceReferenceId));
+        String sessionData = qrpayLog.getLogMessage().getBody();
+        NiceSmsSessionData niceSmsSessionData = objectMapper.readValue(sessionData, NiceSmsSessionData.class);
+
+        log.info("NiceSmsSessionData={}", niceSmsSessionData);
+
+        if (niceSmsSessionData.getState() != NiceSmsState.CALLBACK_RECEIVED) {
+            //illegal state exception
+        }
+
+        niceSmsSessionData.changeStateToConfirm();
+        QrpayLog fetched = logService.updateLogMessageBody(qrpayLog.getId(), objectMapper.writeValueAsString(niceSmsSessionData));
+
+        MCDQCOOAMO01561ResDto resDto = mciService.mockSearchBcMerchantDetails(bcMerchantNo);
+        log.info("MCDQCOOAMO01561ResDto={}", resDto);
+
+        String merchantHashedCi = HashCipher.sha256EncodedBase64(resDto.getRsvrCiV88());
+        niceSmsSessionData.onUpdateMerchantProvidedHashedCi(merchantHashedCi);
+        QrpayLog fetched2 = logService.updateLogMessageBody(qrpayLog.getId(), objectMapper.writeValueAsString(niceSmsSessionData));
+
+        if (!niceSmsSessionData.getNiceProvidedHashedCi().equals(merchantHashedCi)) {
+            //not matched ci;
+        }
+
+        Optional<Merchant> byBcMerchantNo = merchantService.findByBcMerchantNo(bcMerchantNo);
+        if (bcMerchantNo.isEmpty()) {
+            //가입하지 않음.
+//            throw new IllegalStateException();
+        }
+        Merchant finded = byBcMerchantNo.get();
+        Member finedMasterMember = memberService.findMembers(finded).stream().filter(m -> m.getRole() == MemberRole.MASTER).findFirst()
+                .orElseThrow(IllegalStateException::new);
+
+        model.addAttribute("userName", finded.getRepresentativeName());
+        model.addAttribute("userId", finedMasterMember.getLoginId());
+
         return "auth/find-id/findid-confirm-03";
     }
 
@@ -172,7 +216,22 @@ public class AuthPageController {
     }
 
     @GetMapping("/auth/findpw/change")
-    public String findPw_change(Model model) {
+    public String findPw_change(Model model, @RequestParam String niceReferenceId) throws JsonProcessingException {
+
+        QrpayLog qrpayLog = logService.findById(Long.valueOf(niceReferenceId));
+        String sessionData = qrpayLog.getLogMessage().getBody();
+        NiceSmsSessionData niceSmsSessionData = objectMapper.readValue(sessionData, NiceSmsSessionData.class);
+
+        log.info("NiceSmsSessionData={}", niceSmsSessionData);
+
+        if (niceSmsSessionData.getState() != NiceSmsState.CALLBACK_RECEIVED) {
+            //illegal state exception
+        }
+
+        niceSmsSessionData.changeStateToConfirm();
+        QrpayLog fetched = logService.updateLogMessageBody(qrpayLog.getId(), objectMapper.writeValueAsString(niceSmsSessionData));
+        model.addAttribute("smsRefId", niceReferenceId);
+        model.addAttribute("authMethod", "NICE-SMS");
         return "auth/find-pw/findpw-change-03";
     }
 

@@ -31,7 +31,7 @@ public class MemberPageController {
         Member member = memberService.findBy(memId).orElseGet(() -> null);
         if (member == null) {
             log.info("Needs Authenticate");
-            return "/auth/login";
+            return "auth/login";
         }
 
         model.addAttribute("authLoginId", member.getLoginId());
@@ -56,7 +56,7 @@ public class MemberPageController {
         Member member = memberService.findBy(memId).orElseGet(() -> null);
         if (member == null) {
             log.info("Needs Authenticate");
-            return "/auth/login";
+            return "auth/login";
         }
 
         model.addAttribute("authLoginId", member.getLoginId());

@@ -1,0 +1,732 @@
+<%@page import="java.util.Enumeration"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"
+%>
+<%!
+        public String getAgent( HttpServletRequest request) {
+
+               String _userAgent = request.getHeader("user-agent");
+
+               if( _userAgent.toUpperCase().indexOf("ANDROID") > -1){
+                       _userAgent = "A";
+               }
+               else if(_userAgent.toUpperCase().indexOf("IPHONE") > -1 ||  _userAgent.toUpperCase().indexOf("IPAD") > -1){
+                       _userAgent = "I";
+               }
+               else {
+                       _userAgent = "";
+               }
+
+               return _userAgent;
+        }
+
+%>
+<script>
+var _mainUri = wwwRoot + "Main.do";
+$._Fn = {
+               logging : function(str){
+                       //console.log(str);
+               }
+               ,redirect : function(url){
+                       var _userAgent = "<%=getAgent( request)%>";
+                       if( _userAgent == "A"){
+                              $._Fn.progressbar(true, true, "FRONT");
+                       }
+                       $(location).attr("href", url);
+               }
+               ,autoRedirect : function(str){
+                       var url = wwwRoot;
+                       if(str == "MAIN"){
+                              url = url+ "Main.do";
+                       }else if(str == "LOGIN"){
+                              url = url+ "Login.do";
+                       }else if(str == "LOGOUT"){
+                              url = url+ "Logout.do";
+                       }
+                       this.redirect(url);
+               }
+               ,nullCheck : function(id, msg){
+                       if($("#"+id).val()=="" || $("#"+id).val()==null || ($("#"+id).val()).length == 0){
+                              alert(msg);
+                              //$("#"+id).focus();
+                              return (true);
+                       }else{
+                              return (false);
+                       }
+               }
+               ,ajax : function(url, param, methodType, dataType, successFn, failFn, isProgress, pageType, async, progressType){
+                       if(methodType==null){
+                              methodType = "post";
+                       }
+
+                       if(!isProgress || isProgress == undefined){
+                              isProgress = true;
+                       }
+
+                       if(pageType != "ADMIN"){
+                              pageType = "FRONT";
+                       }
+
+                       if(async == null){
+                              async = true;
+                       }
+
+                       $.ajax({
+                              url           : url
+                              ,data          : param
+                              ,dataType      : dataType
+                              ,method        : methodType
+                              ,async : async
+                              ,beforeSend : function(xhr){
+                                      xhr.setRequestHeader("_requestType", "AJAX");
+                                      if(progressType == "TRNS"){
+                                              $._Fn.progressbarTrns(true, isProgress, pageType);
+                                      } else {
+                                              $._Fn.progressbar(true, isProgress, pageType);
+                                      }
+                              }
+
+                       }).always(function(data, textStatus, jqXHR){
+
+                              if(textStatus == "success"){
+                                      if(dataType == "html"){
+                                              $._Fn.ajaxHtmlSuccess(data, successFn, failFn, jqXHR);
+                                      }else if(dataType == "json"){
+                                              $._Fn.ajaxSuccess(data, successFn, failFn, jqXHR);
+                                      }
+                              }else{
+
+                                      if(data.MPM.result.code != "MP3159"){               // 가맹점 주 단말 변경으로 인증 유도
+                                              $._Fn.ajaxError(null, jqXHR);
+                                      }
+
+                              }
+                              if(progressType == "TRNS"){
+                                      $._Fn.progressbarTrns(false, isProgress, pageType);
+                              } else {
+                                      $._Fn.progressbar(false, isProgress, pageType);
+                              }
+
+                       });
+               }
+               ,ajaxSuccess : function(data, successFn, failFn, jqXHR){
+                       try{
+                              var rsCd = data.MPM.result.code;
+                              var rsMsg = data.MPM.result.desc;
+
+                              if(rsCd == "MP0000"){ // 성공
+                                      if(successFn != null || typeof(successFn)=="function"){
+                                              successFn(data, jqXHR);
+                                      }
+                              }else{
+                                      rsMsg = rsMsg.split("\\n").join("\n");
+
+                                      if(rsCd == "MP1202" || rsCd == "MP1204" || rsCd == "MP3154" || rsCd == "MP3142"){
+                                              //비로그인(MP1202)
+                                              //중복로그인(MP1204)
+                                              //재 로그인 유도(MP3154)
+                                              //세션 오류(MP3142)
+                                              alert(rsMsg);
+                                              $._Fn.autoRedirect("LOGIN");
+                                      }else if(rsCd == "MP3107" || rsCd == "MP3130"){
+                                              // 회원가입 유도 //MP3130 PUSH 권한이 허용안된경우
+                                              alert(rsMsg);
+                                              $._Fn.autoRedirect("MEM_REG");
+                                      }else if(rsCd == "MP3159" || rsCd == "MP3502" || rsCd == "MP3503" || rsCd == "MP3504" || rsCd == "MP3222"){
+                                              // 디바이스 변경
+                                              if(failFn != null && typeof(failFn)=="function"){
+                                                     failFn(data, jqXHR);
+                                              }
+                                      }else if(rsCd == "MP3152" || rsCd == "MP3153" || rsCd == "MP1601"){
+                                              if(failFn != null && typeof(failFn)=="function"){
+                                                     failFn(data, jqXHR);
+                                              }
+                                      }else if(rsCd == "MP3105" || rsCd == "MP3121"){            //비밀번호 검증오류추가
+                                              if(failFn != null && typeof(failFn)=="function"){
+                                                     failFn(data, jqXHR);
+                                              }
+                                      }else{
+                                              if($("#customPopup").length > 0){
+                                                     openCustomPopup(rsMsg);
+                                              } else {
+                                                     alert(rsMsg);
+                                              }
+                                              if(failFn != null && typeof(failFn)=="function"){
+                                                     failFn(data, jqXHR);
+                                              }
+                                      }
+                              }
+                       }catch(J){
+                              this.ajaxError(null, jqXHR);
+                       };
+               }
+               ,ajaxHtmlSuccess : function(data, successFn, failFn, jqXHR){
+                       try{
+                              successFn(data, jqXHR);
+                       }catch(J){
+                              this.ajaxHtmlError(data, jqXHR);
+                       };
+               }
+               ,ajaxHtmlError : function(data, jqXHR){
+                       try{
+                              var _data = $.parseJSON(data);
+                              alert(_data.MPM.result.desc);
+
+                              $._Fn.autoRedirect("MAIN");
+                       }catch(J){
+                              this.ajaxError(null, jqXHR);
+                       }
+
+               }
+               ,ajaxError : function(msg, jqXHR){
+
+                       if(msg != null && msg != ""){
+                              alert(msg);
+                              $._Fn.autoRedirect("MAIN");
+                       }else{
+                              alert("시스템장애입니다.");
+                              //$._Fn.autoRedirect("MAIN");
+                       }
+               }
+               ,progressbar : function(isStart, isProgress, pageType){
+
+                       if(isProgress){
+                              if(isStart){
+                                              //STR_PATCH:20151027:제이슨 요청시 프로그레스 이미지 표시
+                                              this.logging("progressbar start");
+                                              $('#mask4').fadeIn(500).height(function(){
+                                                     return $(document).height();
+                                              });
+                                              $('.general_popup2').show().animate({opacity:1},500);
+                              }else{
+                                              this.logging("progressbar end");
+                                              $('#mask4').fadeOut();
+                                              $('.general_popup2').fadeOut().css('opacity','0');
+                                              return false;
+                              }
+                       }
+               }
+               ,stringToJson : function(data){
+                       var param = {};
+
+                       $.each(data, function() {
+                       if (param[this.name] !== undefined) {
+                           if (!param[this.name].push) {
+                               param[this.name] = [param[this.name]];
+                           }
+                           param[this.name].push(this.value || '');
+                       } else {
+                               param[this.name] = this.value || '';
+                       }
+                   });
+
+                       return param;
+               }
+               ,jsonToString : function(json){
+                   var ary = new Array();
+                   for(var key in json){
+                       var val = json[key];
+                       if(typeof(val)=='object'){
+                               val = fn_jsonToString(val);
+                       }else if(typeof(val)=='string'){
+                               val = '"'+val+'"';
+                       }
+                       ary.push('"'+ key+'":'+val);
+                   }
+                   return '{'+ary.join()+'}';
+               }
+               ,progressbarTrns : function(isStart, isProgress, pageType){
+
+                       if(isProgress){
+                              if(isStart){
+                                              //STR_PATCH:20151027:제이슨 요청시 프로그레스 이미지 표시
+                                              this.logging("progressbar start");
+                                              $('#mask5').fadeIn(500).height(function(){
+                                                     return $(document).height();
+                                              });
+                                              $('.general_popup5').show().animate({opacity:1},500);
+                              }else{
+                                              this.logging("progressbar end");
+                                              $('#mask5').fadeOut();
+                                              $('.general_popup5').fadeOut().css('opacity','0');
+                                              return false;
+                              }
+                       }
+               }
+}
+
+function onlyNumber(obj){
+        if(!/^[0-9]*$/.test($(obj).val())){
+               $(obj).val($(obj).val().replace(/[^0-9]/g, ""));
+        }
+
+}
+
+function onlyNumberEn(obj){
+        if(!/^[a-zA-Z0-9]$/.test($(obj).val())){
+               $(obj).val($(obj).val().replace(/[^a-zA-Z0-9]/g, ""));
+        }
+}
+
+//숫자 영문자 조합 6~12
+function checkIdPwd1(val){
+        if(!/^[a-zA-Z0-9]{4,12}$/.test(val)){
+               return false;
+        }
+        return true;
+}
+
+//숫자와 영문자 혼용
+function checkIdPwd2(val){
+        var chk1 = val.search(/[0-9]/g);
+        var chk2 = val.search(/[a-z]/g);
+
+        if(chk1 < 0 || chk2 < 0){
+               return false;
+        }
+        return true;
+}
+
+//같은문자 4번 사용불가
+function checkIdPwd3(val){
+
+        if( /(\w)\1\1\1/.test(val) ){
+               return false;
+        }
+        return true;
+}
+
+
+function maxLengthCheck(obj){
+        if($(obj).val().length > Number($(obj).attr("maxlength"))){
+               $(obj).val($(obj).val().slice(0, Number($(obj).attr("maxlength"))));
+        }
+}
+
+// QR내보내기(URL을 앱에서 팝업 웹뷰에 로드)
+function qrShare(url){
+        <c:choose>
+               <c:when test="${userAgent eq 'A'}">
+
+               // 안드로이드
+               window.android.qrShare(url);
+
+               </c:when>
+               <c:when test="${userAgent eq 'I'}">
+               $._Fn.redirect('appto://qrShare?'+url);
+               </c:when>
+               <c:otherwise>
+
+               window.open(url);
+
+               </c:otherwise>
+        </c:choose>
+
+}
+
+function comingSoon(){
+        alert("<bc:outMessage name="${locale}" key="CMMN.NO.SERVICE"/>");
+}
+
+// 하단 메뉴 하이라이트 처리
+function setMenu(_inx){
+        $("footer").find("a").eq(_inx-1).addClass("on");
+}
+
+function qrMakeError(_this){
+        $(".qr-area").attr("style", "height:231px;background-size:231px 231px;");
+        alert("<bc:outMessage name="${locale}" key="MP3204"/>");
+}
+
+//QR 로드 완료(앱에 전달하여 앱에서 저장, 앱 구동 시 SubMain.do에서 파라미터로 받아 처리한다)
+// qr = qr base64
+// merNm = 가맹점명
+function qrLoad(qr, merNm, id){
+        <c:choose>
+               <c:when test="${userAgent eq 'A'}">
+
+               // 안드로이드
+               window.android.qrLoad(qr, merNm);
+
+               </c:when>
+               <c:when test="${userAgent eq 'I'}">
+               // !;^ 추가
+               $._Fn.redirect('appto://qrLoad?qr=!;^'+qr + '!;^&merNm=' + merNm);
+               </c:when>
+               <c:otherwise>
+
+               </c:otherwise>
+        </c:choose>
+
+
+}
+
+// 앱에 디바이스 정보 요청. 앱은 getDevice를 받으면 setDevice에 디바이스 정보를 셋팅해준다.
+function getDevice(){
+        <c:choose>
+               <c:when test="${userAgent eq 'A'}">
+
+               // 안드로이드
+               window.android.getDevice();
+               </c:when>
+               <c:when test="${userAgent eq 'I'}">
+
+               $._Fn.redirect('appto://getDevice');
+
+               </c:when>
+               <c:otherwise>
+               // 로컬 테스트용
+               var localJson = new Object();
+               localJson.DEVI_TYPE = "I";
+               localJson.DEVI_VAL = "";
+               localJson.MODL_NM = "test Samsung";
+               localJson.MOBIL_OS_NM = "test Android";
+               localJson.DEVI_ID=Math.floor(Math.random()*1000000)+1;
+               // test0001
+               //localJson.DEVI_ID="590116";
+               //localJson.DEVI_ID="590118";
+
+               localJson.APP_VER = "1.0.1";
+               setDevice(localJson);
+               </c:otherwise>
+        </c:choose>
+
+
+}
+
+function logout(){
+        if(!confirm("<bc:outMessage name="${locale}" key="CMMN.ALERT.LOGOUT"/>")){
+               return;
+        }
+
+        try{ clearQrImage(); } catch(e){}
+        setCookie( "mpmqrdata", "" );
+        setCookie( "mpmmernm", "" );
+        setCookie( "mpmmerchdid", "" );
+        setCookie( "saveId", "" );
+
+        $._Fn.ajax("${wasRoot}/Login.do?exec=logout"
+                       , ""
+                       , "post"
+                       , "json"
+                       , function(data, jqXHR){
+                              alert("<bc:outMessage name="${locale}" key="CMMN.ALERT.LOGOUT.OK"/>");
+                              $._Fn.redirect("${wasRoot}/Login.do");
+                         }
+                       , function(data, jqXHR){
+
+                       }
+        );
+}
+
+
+function logoutForBasYn(isBas){
+
+        try{ clearQrImage(); } catch(e){}
+        setCookie( "mpmqrdata", "" );
+        setCookie( "mpmmernm", "" );
+        setCookie( "mpmmerchdid", "" );
+        setCookie( "saveId", "" );
+
+        $._Fn.ajax("${wasRoot}/Login.do?exec=logout"
+               , ""
+               , "post"
+               , "json"
+               , function(data, jqXHR){
+                       if(isBas=='Y'){
+                              $._Fn.redirect('${wasRoot}/MemPassChange.api?exec=memPassChangeIdChk');
+                       } else {
+                              $._Fn.redirect('${wasRoot}/Main.do');
+                       }
+               }
+               , function(data, jqXHR){
+
+               }
+        );
+}
+
+/**
+* 앱에 저장되어 있는 qr 이미지를 clear시킴
+*/
+function clearQrImage(){
+        <c:choose>
+        <c:when test="${userAgent eq 'A'}">
+               // 안드로이드
+               window.android.qrClear();
+        </c:when>
+        <c:when test="${userAgent eq 'I'}">
+               //iOS
+               $._Fn.redirect('appto://qrClear');
+        </c:when>
+</c:choose>
+}
+
+/**
+* 개인정보처리방침 페이지를 webview가 아닌 별도 브라우저에서 표시
+*/
+function goPolicyTreatment(){
+        <c:choose>
+               <c:when test="${userAgent eq 'A'}">
+                       // 안드로이드
+                       window.android.goPolicyTreatment();
+               </c:when>
+               <c:when test="${userAgent eq 'I'}">
+                       //iOS
+                       $._Fn.redirect('appto://goPolicyTreatment');
+               </c:when>
+        </c:choose>
+}
+
+
+function setCookie( name, value, expiredays )
+{
+        try{
+            var today = new Date();
+            today.setDate( today.getDate() + expiredays );
+            document.cookie = name + "=" + escape( value ) + "; path=/; expires=" + today.toGMTString() + ";";
+
+        }catch(e){
+               alert(e);
+        }
+
+}
+
+function getCookie(name) {
+        var cName = name + "=";
+        var x = 0;
+
+        while(i <= document.cookie.length) {
+               var y = (x + cName.length);
+               if(document.cookie.substring(x, y) == cName) {
+                       if((cName = document.cookie.indexOf(";", y)) == -1)
+                              cName = document.cookie.length;
+
+                       return unescape(document.cookie.substring(y, cName));
+               }
+               x = document.cookie.indexOf(" ", x) + 1;
+               if(x == 0)
+                       break;
+        }
+        return "";
+}
+
+/**
+* 개인정보처리방침 페이지를 webview가 아닌 별도 브라우저에서 표시
+*/
+function getDecalCode(){
+        <c:choose>
+               <c:when test="${userAgent eq 'A'}">
+                       // 안드로이드
+                       window.android.getDecalCode();
+               </c:when>
+               <c:when test="${userAgent eq 'I'}">
+                       //iOS
+                       $._Fn.redirect('appto://getDecalCode');
+               </c:when>
+        </c:choose>
+}
+
+
+var pwdBgArr2 = [
+                        "${webRoot}/images/common/bg-pwd-typ0.png"
+                       ,"${webRoot}/images/common/bg-pwd-typ1.png"
+                       ,"${webRoot}/images/common/bg-pwd-typ2.png"
+                       ,"${webRoot}/images/common/bg-pwd-typ3.png"
+                       ,"${webRoot}/images/common/bg-pwd-typ4.png"
+                       ,"${webRoot}/images/common/bg-pwd-typ5.png"
+                       ,"${webRoot}/images/common/bg-pwd-typ6.png"
+               ];
+
+    // preloading
+    try{
+        var pwdImgArr2 = new Array();
+        for(var i=0; i<pwdBgArr2.length; i++){
+               pwdImgArr2[i] = new Image();
+               pwdImgArr2[i].src = pwdBgArr2[i];
+        }
+    }catch(e){}
+
+/*
+$(document).ready(function() {
+        $("body").append("<a href='javascript:void(0)' onclick='javascript:testLogout();' style='position:fixed;z-index:99999999999999;top:0; ' >테스트</a> ")
+});
+
+function testLogout(){
+
+        $._Fn.ajax("${wasRoot}/Login.do?exec=testLogout"
+                       , ""
+                       , "post"
+                       , "json"
+                       , function(data, jqXHR){
+                              alert("<bc:outMessage name="${locale}" key="CMMN.ALERT.LOGOUT.OK"/>");
+
+                         }
+                       , function(data, jqXHR){
+
+                       }
+        );
+}  */
+
+/* function closeProgress(){
+        $._Fn.progressbar(false, true, null);
+} */
+var blockMiddle = function($obj){
+        $obj.css("margin-top", -($obj.outerHeight()/2));
+}
+
+
+/**
+* 단말기 QR 스켄 화면 Call
+*/
+function getTrnsData(){
+        <c:choose>
+               <c:when test="${userAgent eq 'A'}">
+                       // 안드로이드
+                       window.android.getTrnsData();
+               </c:when>
+               <c:when test="${userAgent eq 'I'}">
+                       //iOS
+                       $._Fn.redirect('appto://getTrnsData');
+               </c:when>
+        </c:choose>
+}
+/**
+* 단말기 QR 스켄 완료후 호출 하는 함수
+*/
+function setTrnsData(data){
+        $._Fn.progressbar(true, true, "");
+        $("#cpmQrPayload").val(data.TRNS_DATA);
+        $("#commonSttlFrm").attr("action", "${wasRoot}/Trans.do?exec=sttlFrm").submit();
+}
+/**
+* 최신 버전 유도용
+*/
+function goAppVerUpadte(){
+        var ver = getCookie('appVersion');
+        <c:choose>
+               <c:when test="${userAgent eq 'A'}">
+                       // 안드로이드
+                       if(ver < '1.0.8'){
+                              window.open("https://play.google.com/store/apps/details?id=com.bccard.mpm","pop","scrollbars=yes, resizable=yes");
+                       } else {
+                               linkExtraBrowserPostDeliv("https://play.google.com/store/apps/details?id=com.bccard.mpm","pop","scrollbars=yes, resizable=yes");
+                       }
+               </c:when>
+               <c:when test="${userAgent eq 'I'}">
+                       //iOS
+                       if(ver < '1.0.8'){
+                              window.open("https://itunes.apple.com/kr/app/qr-pay-for-shop/id1364336416?mt=8","pop","scrollbars=yes, resizable=yes");
+                       } else {
+                              linkExtraBrowserPostDeliv("https://itunes.apple.com/kr/app/qr-pay-for-shop/id1364336416?mt=8","pop","scrollbars=yes, resizable=yes");
+                       }
+               </c:when>
+        </c:choose>
+}
+/**
+* 달력 UI 생성
+*/
+function makeCalDateUi(target, y, m, d) {
+
+        var date = new Date();
+        var nowY = date.getFullYear();
+        var nowM = date.getMonth();
+        var nowD = date.getDate();
+
+        y = (y != undefined)?y:nowY;
+        m = (m != undefined)?m-1:nowM;
+        d = (d != undefined)?d:nowD;
+
+        // 월 이동 계산
+        if(m == -1) { // -1은 12월
+               y = y-1;
+               m = 11;
+        } else if(m == 12) { // 12는 다음해 1월
+               y = y+1;
+               m = 0;
+        }
+
+        // 현재 월의 요일 계산
+        var theDate = new Date(y,m,1);
+        var theDay  = theDate.getDay();
+
+        var last=[31,28,31,30,31,30,31,31,30,31,30,31]; // 월 마지막일 셋팅
+
+        if( y%4==0 && y%100!=0 || y%400==0 )lastDate=last[1]=29; // 윤년 설정
+
+        var lastDate=last[m]; // 현재월의 마지막일
+
+        var row=Math.ceil((theDay+lastDate)/7); // 달력 행
+
+        // 달력 동적생성
+        if( undefined != target ) {
+               var tgSchTrnsAton     = "#SCH_TRNS_"+target.toUpperCase()+"_ATON";
+
+               var strCal            = "";
+               var strCalTitle = "";
+               var strDNum           = 1;
+
+               // 년월  타이틀 UI 동적생성
+               strCalTitle += "<a href='javascript:prevMonth(\""+target+"\","+y+","+(m)+");' class='btn-calendar-page btn-calendar-prev' title='이전 달로 이동'><img src='${webRootRenew}/images/icon/icon_calendar_prev.png' alt='이전 달'></a>";
+               strCalTitle += "<p class='title'>"+y+"년 "+(m+1)+"월</p>";
+               strCalTitle += "<a href='javascript:nextMonth(\""+target+"\","+y+","+(m+2)+");' class='btn-calendar-page btn-calendar-next' title='다음 달로 이동'><img src='${webRootRenew}/images/icon/icon_calendar_next.png' alt='다음 달'></a>";
+               $("#"+target+"CalTitle").html(strCalTitle);
+
+               // 요일 UI는 고정으로 각 페이지에 고정
+
+               // 일자 UI 동적생성
+               for(var i=1; i<=row; i++) {
+                       strCal += "<tr>";
+                       for(var k=1; k<=7; k++) {
+                              if( i==1 && k<=theDay || strDNum>lastDate ) {
+                                      strCal += "<td>&nbsp;</td>";
+                              } else {
+                                      if( d==strDNum ) {
+                                              if(y+"-"+(m+1<10?"0"+(m+1):(m+1))+"-"+(strDNum<10?"0"+strDNum:strDNum) == $(tgSchTrnsAton).val()) {
+                                                     strCal += "<td><a href='javascript:calDateSel(\""+target+"\","+y+","+(m+1)+","+strDNum+","+lastDate+");' id='"+target+"Day"+strDNum+"' class='active'>"+strDNum+"</a></td>";
+                                              } else {
+                                                     strCal += "<td><a href='javascript:calDateSel(\""+target+"\","+y+","+(m+1)+","+strDNum+","+lastDate+");' id='"+target+"Day"+strDNum+"'>"+strDNum+"</a></td>";
+                                              }
+                                      } else {
+                                              strCal += "<td><a href='javascript:calDateSel(\""+target+"\","+y+","+(m+1)+","+strDNum+","+lastDate+");' id='"+target+"Day"+strDNum+"'>"+strDNum+"</a></td>";
+                                      }
+                                      strDNum++;
+                              }
+                       }
+                       strCal += "</tr>";
+               }
+               $("#"+target+"CalDate").html(strCal);
+        }
+}
+
+// Html 태그 Decode( EX: &amp; -> & )
+function htmlDecode(input) {
+
+        var result;
+        var doc = new DOMParser().parseFromString(input,"text/html");
+
+        if(doc != null){
+               // HTML5 지원 브라우저 Decode
+               result = doc.documentElement.textContent;
+        } else {
+               // HTML5 미지원 브라우저 Decode
+               result = $('<p/>').html(input).text();
+        }
+        return result;
+}
+
+function linkExtraBrowserPostDeliv(val){
+        <c:choose>
+               <c:when test="${userAgent eq 'A'}">
+                       // 안드로이드
+               window.android.linkExtraBrowser("https://m.epost.go.kr/postal/mobile/mobile.trace.RetrieveDomRigiTraceList.comm?sid1="+val);
+               </c:when>
+               <c:when test="${userAgent eq 'I'}">
+                       $._Fn.redirect("appto://linkExtraBrowser?url="+"https://m.epost.go.kr/postal/mobile/mobile.trace.RetrieveDomRigiTraceList.comm?sid1="+val);
+               </c:when>
+        </c:choose>
+}
+
+</script>
+
+<form name="commonSttlFrm" id="commonSttlFrm" method="post">
+        <input type="hidden" id="cpmQrPayload" name="cpmQrPayload"/>
+</form>

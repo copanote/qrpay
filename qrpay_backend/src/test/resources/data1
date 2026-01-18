@@ -1,0 +1,564 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resource>
+        <!-- 은련 거래 코드 -->
+        <code key="TRANS_U_RSPN_CODE">
+               <code key="00"><value value=""></value></code>
+               <code key="01"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="02"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="03"><value value="가맹점 번호 오류"></value></code>
+               <code key="04"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="05"><value value="카드거래 중지 상태"></value></code>
+               <code key="06"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="07"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="08"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="09"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="10"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="11"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="12"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="13"><value value="1000원 미만 거래불가"></value></code>
+               <code key="14"><value value="유효하지 않은 카드번호"></value></code>
+               <code key="15"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="16"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="17"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="18"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="19"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="20"><value value="유효기간 만료 QR 혹은 중복 QR"></value></code>
+               <code key="21"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="22"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="23"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="24"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="25"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="30"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="31"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="33"><value value="유효기간 경과"></value></code>
+               <code key="34"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="35"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="36"><value value="사용제한 카드"></value></code>
+               <code key="37"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="38"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="39"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="40"><value value="QR결제 사전 등록 필요"></value></code>
+               <code key="41"><value value="분실카드"></value></code>
+               <code key="42"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="43"><value value="분실카드"></value></code>
+               <code key="44"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="51"><value value="잔액부족"></value></code>
+               <code key="52"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="53"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="54"><value value="유효기간 경과"></value></code>
+               <code key="55"><value value="비밀번호 미입력"></value></code>
+               <code key="56"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="57"><value value="발급사에서 해외 QR거래를 지원하지 않음"></value></code>
+               <code key="58"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="59"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="60"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="61"><value value="한도초과"></value></code>
+               <code key="62"><value value="사용제한 카드"></value></code>
+               <code key="63"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="64"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="65"><value value="인출 건수 횟수 초과"></value></code>
+               <code key="66"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="67"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="68"><value value="시스템 장애"></value></code>
+               <code key="75"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="76"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="90"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="91"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="92"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="93"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="94"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="95"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="96"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="97"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="98"><value value="시스템 장애"></value></code>
+               <code key="99"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="A0"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="A1"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="A2"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="A3"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="A4"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="A5"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="A6"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="A7"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="AA"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="B1"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="C1"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="D1"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="D2"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="D3"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="D4"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="D5"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="D6"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="D7"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="D8"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="D9"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="DA"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="DB"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="DC"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="N1"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="Q1"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="Y1"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="Y3"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="Z1"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="Z3"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <!-- 중국농업은행 직불카드 거절관련 메시지 - 2018/12/31기한 -->
+               <code key="EX"><value value="해당 중국  농업은행 직불카드는 결제 서비스 준비 중 입니다.(18년 12월  말 가능)"></value></code>
+
+        </code>
+
+        <!-- VP 거래 코드 -->
+        <code key="TRANS_B_RSPN_CODE">
+               <code key="0001"><value value=""></value></code>
+               <code key="0002"><value value="승인취소가 완료되었습니다."></value></code>
+               <code key="0003"><value value="승인실패. 비씨 QR가맹점 상담센터(02-330-5777)로 연락 바랍니다."></value></code>
+               <code key="0004"><value value="승인실패. 비씨 QR가맹점 상담센터(02-330-5777)로 연락 바랍니다."></value></code>
+               <code key="0005"><value value="승인실패. 비씨 QR가맹점 상담센터(02-330-5777)로 연락 바랍니다."></value></code>
+               <code key="0006"><value value="승인실패. 비씨 QR가맹점 상담센터(02-330-5777)로 연락 바랍니다."></value></code>
+               <code key="0007"><value value="거래정지 가맹점입니다. 비씨카드 고객센터(1588-4000)로 연락 바랍니다."></value></code>
+               <code key="0008"><value value="해지된 가맹점입니다. 비씨카드 고객센터(1588-4000)로 연락 바랍니다."></value></code>
+               <code key="0009"><value value="거래정지 가맹점입니다. 비씨카드 고객센터(1588-4000)로 연락 바랍니다."></value></code>
+               <code key="0010"><value value="승인실패. 비씨 QR가맹점 상담센터(02-330-5777)로 연락 바랍니다."></value></code>
+               <code key="0011"><value value="승인실패. 비씨 QR가맹점 상담센터(02-330-5777)로 연락 바랍니다."></value></code>
+               <code key="0012"><value value="승인실패. 비씨 QR가맹점 상담센터(02-330-5777)로 연락 바랍니다."></value></code>
+               <code key="0013"><value value="승인실패. 비씨 QR가맹점 상담센터(02-330-5777)로 연락 바랍니다."></value></code>
+               <code key="0014"><value value="승인실패. 비씨 QR가맹점 상담센터(02-330-5777)로 연락 바랍니다."></value></code>
+               <code key="0015"><value value="승인실패. 비씨 QR가맹점 상담센터(02-330-5777)로 연락 바랍니다."></value></code>
+               <code key="0016"><value value="승인실패. 비씨 QR가맹점 상담센터(02-330-5777)로 연락 바랍니다."></value></code>
+               <code key="0017"><value value="승인실패. 비씨 QR가맹점 상담센터(02-330-5777)로 연락 바랍니다."></value></code>
+               <code key="0018"><value value="승인실패. 비씨 QR가맹점 상담센터(02-330-5777)로 연락 바랍니다."></value></code>
+               <code key="0019"><value value="승인실패. 비씨 QR가맹점 상담센터(02-330-5777)로 연락 바랍니다."></value></code>
+               <code key="0020"><value value="승인실패. 비씨 QR가맹점 상담센터(02-330-5777)로 연락 바랍니다."></value></code>
+               <code key="0021"><value value="승인실패. 비씨 QR가맹점 상담센터(02-330-5777)로 연락 바랍니다."></value></code>
+               <code key="0022"><value value="가맹점 KEY-IN 한도가 초과되었습니다. 비씨카드 고객센터(1588-4000)로 연락 바랍니다."></value></code>
+               <code key="0023"><value value="가맹점 매출한도가 초과되었습니다. 비씨카드 고객센터(1588-4000)로 연락 바랍니다."></value></code>
+               <code key="0024"><value value="본인 명의의 가맹점에서 승인이 불가합니다."></value></code>
+               <code key="0025"><value value="체크카드 한도가 초과되었습니다. 발급 은행에 문의하세요."></value></code>
+               <code key="0026"><value value="체크카드 한도가 초과되었습니다. 발급 은행에 문의하세요."></value></code>
+               <code key="0027"><value value="체크카드 승인거절입니다. 발급 은행에 문의하세요."></value></code>
+               <code key="0028"><value value="체크카드 승인거절입니다. 발급 은행에 문의하세요."></value></code>
+               <code key="0029"><value value="체크카드 승인거절입니다. 발급 은행에 문의하세요."></value></code>
+               <code key="0030"><value value="승인실패. 비씨 QR가맹점 상담센터(02-330-5777)로 연락 바랍니다."></value></code>
+               <code key="0031"><value value="회원정보 오류입니다. 비씨카드 고객센터(1588-4000)로 연락 바랍니다."></value></code>
+               <code key="0032"><value value="가맹점번호 오류입니다. 비씨카드 고객센터(1588-4000)로 연락 바랍니다."></value></code>
+               <code key="0033"><value value="요청하신 할부기간으로 승인이 불가합니다. 비씨카드 고객센터(1588-4000)로 연락 바랍니다."></value></code>
+               <code key="0034"><value value="이용가능 금액이 제한된 거래입니다. 비씨카드 고객센터(1588-4000)로 연락 바랍니다."></value></code>
+               <code key="0035"><value value="승인실패. 비씨 QR가맹점 상담센터(02-330-5777)로 연락 바랍니다."></value></code>
+               <code key="0036"><value value="승인실패. 비씨 QR가맹점 상담센터(02-330-5777)로 연락 바랍니다."></value></code>
+               <code key="0037"><value value="승인실패. 비씨 QR가맹점 상담센터(02-330-5777)로 연락 바랍니다."></value></code>
+               <code key="0038"><value value="체크카드 계좌에 잔액이 부족합니다."></value></code>
+               <code key="0039"><value value="체크카드 1회 사용한도가 초과되었습니다. 발급 은행에 문의하세요."></value></code>
+               <code key="0040"><value value="승인실패. 비씨 QR가맹점 상담센터(02-330-5777)로 연락 바랍니다."></value></code>
+               <code key="0041"><value value="유효기간이 경과된 카드입니다. 신규 카드로 거래해주세요."></value></code>
+               <code key="0042"><value value="신규 발급된 카드가 존재합니다. 신규 발급된 카드로 거래해주세요."></value></code>
+               <code key="0043"><value value="할부거래가 제한된 카드입니다."></value></code>
+               <code key="0044"><value value="승인실패. 비씨 QR가맹점 상담센터(02-330-5777)로 연락 바랍니다."></value></code>
+               <code key="0045"><value value="승인실패. 비씨 QR가맹점 상담센터(02-330-5777)로 연락 바랍니다."></value></code>
+               <code key="0046"><value value="잠시 후 재시도 바랍니다."></value></code>
+               <code key="0047"><value value="잠시 후 재시도 바랍니다."></value></code>
+               <code key="0048"><value value="승인실패. 비씨 QR가맹점 상담센터(02-330-5777)로 연락 바랍니다."></value></code>
+               <code key="0049"><value value="승인실패. 비씨 QR가맹점 상담센터(02-330-5777)로 연락 바랍니다."></value></code>
+               <code key="0050"><value value="해지된 가맹점입니다. 비씨카드 고객센터(1588-4000)로 연락 바랍니다."></value></code>
+               <code key="0051"><value value="할부거래가 제한된 가맹점입니다."></value></code>
+               <code key="0052"><value value="체크카드 승인거절입니다. 발급 은행에 문의하세요."></value></code>
+               <code key="0053"><value value="거래정지 가맹점입니다. 비씨카드 고객센터(1588-4000)로 연락 바랍니다."></value></code>
+               <code key="0054"><value value="승인실패. 비씨 QR가맹점 상담센터(02-330-5777)로 연락 바랍니다."></value></code>
+               <code key="0055"><value value="승인실패. 비씨 QR가맹점 상담센터(02-330-5777)로 연락 바랍니다."></value></code>
+               <code key="0056"><value value="승인실패. 비씨 QR가맹점 상담센터(02-330-5777)로 연락 바랍니다."></value></code>
+               <code key="0057"><value value="카드 사용 미등록 상태입니다. 카드사용등록 후 사용하시기 바랍니다."></value></code>
+               <code key="0058"><value value="승인실패. 비씨 QR가맹점 상담센터(02-330-5777)로 연락 바랍니다."></value></code>
+               <code key="0059"><value value="승인실패. 비씨 QR가맹점 상담센터(02-330-5777)로 연락 바랍니다."></value></code>
+               <code key="0060"><value value="거래가 정지된 카드입니다."></value></code>
+               <code key="0061"><value value="사용이 불가한 카드입니다. 신규 카드 이용 바랍니다."></value></code>
+               <code key="0062"><value value="상품권 구매한도 초과입니다."></value></code>
+               <code key="0063"><value value="분실도난카드 접수된 카드입니다."></value></code>
+               <code key="0064"><value value="할부거래가 제한된 카드입니다."></value></code>
+               <code key="0065"><value value="거래가 정지된 카드입니다."></value></code>
+               <code key="0066"><value value="거래가 정지된 카드입니다."></value></code>
+               <code key="0067"><value value="거래가 정지된 카드입니다."></value></code>
+               <code key="0068"><value value="카드 검증값 오류입니다. 재거래 바랍니다."></value></code>
+               <code key="0069"><value value="비밀번호 오류입니다."></value></code>
+               <code key="0070"><value value="회원 통합한도가 초과되었습니다. 발급 은행에 문의하세요."></value></code>
+               <code key="0071"><value value="카드 한도가 초과되었습니다. 발급 은행에 문의하세요."></value></code>
+               <code key="0072"><value value="회원 통합한도가 초과되었습니다. 발급 은행에 문의하세요."></value></code>
+               <code key="0073"><value value="회원 한도 초과입니다. 우리카드 고객센터(1588-9955)로 연락바랍니다."></value></code>
+               <code key="0074"><value value="승인실패. 비씨 QR가맹점 상담센터(02-330-5777)로 연락 바랍니다."></value></code>
+               <code key="0075"><value value="회원 통합한도가 초과되었습니다. 발급 은행에 문의하세요."></value></code>
+               <code key="0076"><value value="회원 통합한도가 초과되었습니다. 발급 은행에 문의하세요."></value></code>
+               <code key="0077"><value value="기업회원 한도가 초과되었습니다. 발급 은행에 문의하세요"></value></code>
+               <code key="0078"><value value="기업회원 한도가 초과되었습니다. 발급 은행에 문의하세요"></value></code>
+               <code key="0079"><value value="기업회원 한도가 초과되었습니다. 발급 은행에 문의하세요"></value></code>
+               <code key="0080"><value value="승인이 불가한 거래입니다. 비씨카드 고객센터(1588-4000)로 연락 바랍니다."></value></code>
+               <code key="0081"><value value="회원이 등록된 당일은 거래가 불가합니다."></value></code>
+               <code key="0082"><value value="승인이 제한된 업종입니다."></value></code>
+               <code key="0083"><value value="비밀번호 오류 횟수 초과입니다. 비씨카드 고객센터(1588-4000)로 연락 바랍니다."></value></code>
+               <code key="0084"><value value="승인실패. 비씨 QR가맹점 상담센터(02-330-5777)로 연락 바랍니다."></value></code>
+               <code key="0085"><value value="승인실패. 비씨 QR가맹점 상담센터(02-330-5777)로 연락 바랍니다."></value></code>
+               <code key="0086"><value value="승인실패. 비씨 QR가맹점 상담센터(02-330-5777)로 연락 바랍니다."></value></code>
+               <code key="0087"><value value="승인실패. 발급 은행에 문의하세요."></value></code>
+               <code key="0088"><value value="잠시 후 재시도 바랍니다."></value></code>
+               <code key="0089"><value value="발급 은행 시스템 작업중입니다. 잠시 후 재시도 바랍니다."></value></code>
+               <code key="0090"><value value="승인실패. 비씨 QR가맹점 상담센터(02-330-5777)로 연락 바랍니다."></value></code>
+               <code key="0091"><value value="발급 은행 승인거절입니다. 발급 은행에 문의하세요."></value></code>
+               <code key="0092"><value value="승인이 제한된 업종입니다. 비씨카드 고객센터(1588-4000)로 연락 바랍니다."></value></code>
+               <code key="0093"><value value="발급 은행 시스템 작업중입니다. 잠시 후 재시도 바랍니다."></value></code>
+               <code key="0094"><value value="발급 은행 시스템 작업중입니다. 잠시 후 재시도 바랍니다."></value></code>
+               <code key="0095"><value value="포인트 사용 불가 가맹점 또는 카드입니다."></value></code>
+               <code key="0096"><value value="서비스코드 검증 오류입니다. 비씨 QR가맹점 상담센터(02-330-5777)로 연락 바랍니다."></value></code>
+               <code key="0097"><value value="잠시 후 재시도 바랍니다."></value></code>
+               <code key="0098"><value value="승인실패. 비씨 QR가맹점 상담센터(02-330-5777)로 연락 바랍니다."></value></code>
+               <code key="0099"><value value="승인실패. 비씨 QR가맹점 상담센터(02-330-5777)로 연락 바랍니다."></value></code>
+               <code key="00A0"><value value="승인실패. 비씨 QR가맹점 상담센터(02-330-5777)로 연락 바랍니다."></value></code>
+               <code key="00A1"><value value="5만원 미만 금액은 할부거래가 불가합니다. 일시불 결제로 재시도 해주시기 바랍니다."></value></code>
+               <code key="00A2"><value value="주유전용카드 승인금액 초과입니다. 비씨카드 고객센터(1588-4000)로 연락 바랍니다."></value></code>
+               <code key="00A3"><value value="승인실패. 비씨 QR가맹점 상담센터(02-330-5777)로 연락 바랍니다."></value></code>
+               <code key="00A4"><value value="결제전용카드 가맹점이 아닙니다."></value></code>
+               <code key="00A5"><value value="승인실패. 비씨 QR가맹점 상담센터(02-330-5777)로 연락 바랍니다."></value></code>
+               <code key="00A6"><value value="구매카드 가맹점이 아닙니다."></value></code>
+               <code key="00A7"><value value="ISP거래로 시도하세요."></value></code>
+               <code key="00A8"><value value="당일 승인횟수 5회를 초과하였습니다. 발급 은행에 문의하세요."></value></code>
+               <code key="00A9"><value value="당일 승인횟수 1회를 초과하였습니다. 발급 은행에 문의하세요."></value></code>
+               <code key="00B1"><value value="승인실패. 비씨 QR가맹점 상담센터(02-330-5777)로 연락 바랍니다."></value></code>
+               <code key="00B2"><value value="잠시 후 재시도 바랍니다."></value></code>
+               <code key="00B3"><value value="판매구분이 틀립니다."></value></code>
+               <code key="00B4"><value value="복지카드 가맹점이 아닙니다."></value></code>
+               <code key="00B5"><value value="무료입장 서비스가 불가합니다."></value></code>
+               <code key="00B6"><value value="할인서비스 이용 불가합니다."></value></code>
+               <code key="00B7"><value value="비밀번호가 미입력 되었습니다. 비밀번호를 입력하세요."></value></code>
+               <code key="00B8"><value value="잠시 후 재시도 바랍니다."></value></code>
+               <code key="00B9"><value value="교통카드 이용이 불가합니다."></value></code>
+               <code key="00C1"><value value="기업회원 이용불가 가맹점입니다."></value></code>
+               <code key="00C2"><value value="기업회원 한도가 초과되었습니다. 발급 은행에 문의하세요."></value></code>
+               <code key="00C3"><value value="탈회된 카드입니다."></value></code>
+               <code key="00C4"><value value="수령 등록 후 사용 가능한 카드입니다."></value></code>
+               <code key="00C5"><value value="비밀번호 미등록 카드입니다. 비밀번호 등록 후 사용하세요."></value></code>
+               <code key="00C6"><value value="일시불거래가 제한된 회원입니다."></value></code>
+               <code key="00C7"><value value="회원의 요청으로 거래가 제한된 카드입니다."></value></code>
+               <code key="00C8"><value value="회원의 요청으로 거래가 정지된 카드입니다."></value></code>
+               <code key="00C9"><value value="발급 은행 승인거절입니다. 발급 은행에 문의하세요."></value></code>
+               <code key="00D1"><value value="체크카드는 할부거래가 불가합니다."></value></code>
+               <code key="00D2"><value value="기프트카드의 잔액이 부족합니다."></value></code>
+               <code key="00D3"><value value="기프트카드는 할부거래가 불가합니다."></value></code>
+               <code key="00D4"><value value="비밀번호 오류입니다."></value></code>
+               <code key="00D5"><value value="비밀번호 오류 횟수 초과입니다. 발급 은행에 문의하세요."></value></code>
+               <code key="00D6"><value value="승인거래 가능시간이 설정된 카드입니다."></value></code>
+               <code key="00D7"><value value="포인트 잔액이 부족합니다."></value></code>
+               <code key="00D8"><value value="승인실패. 비씨 QR가맹점 상담센터(02-330-5777)로 연락 바랍니다."></value></code>
+               <code key="00D9"><value value="특정 가맹점에 거래가 제한된 카드입니다. 비씨카드 고객센터(1588-4000)로 연락 바랍니다."></value></code>
+               <code key="00E1"><value value="승인실패. 비씨 QR가맹점 상담센터(02-330-5777)로 연락 바랍니다."></value></code>
+               <code key="00E2"><value value="승인실패. 비씨 QR가맹점 상담센터(02-330-5777)로 연락 바랍니다."></value></code>
+               <code key="00E3"><value value="승인실패. 비씨 QR가맹점 상담센터(02-330-5777)로 연락 바랍니다."></value></code>
+               <code key="00E4"><value value="승인실패. 비씨 QR가맹점 상담센터(02-330-5777)로 연락 바랍니다."></value></code>
+               <code key="00E5"><value value="승인실패. 비씨 QR가맹점 상담센터(02-330-5777)로 연락 바랍니다."></value></code>
+               <code key="00E6"><value value="승인실패. 비씨 QR가맹점 상담센터(02-330-5777)로 연락 바랍니다."></value></code>
+               <code key="00E7"><value value="승인실패. 비씨 QR가맹점 상담센터(02-330-5777)로 연락 바랍니다."></value></code>
+               <code key="00E8"><value value="승인실패. 비씨 QR가맹점 상담센터(02-330-5777)로 연락 바랍니다."></value></code>
+               <code key="00E9"><value value="승인실패. 비씨 QR가맹점 상담센터(02-330-5777)로 연락 바랍니다."></value></code>
+               <code key="00F1"><value value="승인실패. 비씨 QR가맹점 상담센터(02-330-5777)로 연락 바랍니다."></value></code>
+               <code key="00F2"><value value="승인실패. 비씨 QR가맹점 상담센터(02-330-5777)로 연락 바랍니다."></value></code>
+               <code key="00F3"><value value="승인실패. 비씨 QR가맹점 상담센터(02-330-5777)로 연락 바랍니다."></value></code>
+               <code key="00F4"><value value="승인실패. 비씨 QR가맹점 상담센터(02-330-5777)로 연락 바랍니다."></value></code>
+               <code key="00F5"><value value="승인실패. 비씨 QR가맹점 상담센터(02-330-5777)로 연락 바랍니다."></value></code>
+               <code key="00F6"><value value="승인실패. 비씨 QR가맹점 상담센터(02-330-5777)로 연락 바랍니다."></value></code>
+               <code key="00F7"><value value="승인실패. 비씨 QR가맹점 상담센터(02-330-5777)로 연락 바랍니다."></value></code>
+               <code key="00F8"><value value="승인실패. 비씨 QR가맹점 상담센터(02-330-5777)로 연락 바랍니다."></value></code>
+               <code key="00F9"><value value="승인실패. 비씨 QR가맹점 상담센터(02-330-5777)로 연락 바랍니다."></value></code>
+               <code key="00G1"><value value="발급 은행 시스템 점검중입니다. 잠시 후 재시도 바랍니다."></value></code>
+               <code key="00G2"><value value="발급 은행 시스템 점검중입니다. 잠시 후 재시도 바랍니다."></value></code>
+               <code key="00G3"><value value="발급 은행 시스템 점검중입니다. 잠시 후 재시도 바랍니다."></value></code>
+               <code key="00G4"><value value="발급 은행 시스템 점검중입니다. 잠시 후 재시도 바랍니다."></value></code>
+               <code key="00G5"><value value="발급 은행 시스템 점검중입니다. 잠시 후 재시도 바랍니다."></value></code>
+               <code key="00G6"><value value="발급 은행 시스템 점검중입니다. 잠시 후 재시도 바랍니다."></value></code>
+               <code key="00G7"><value value="발급 은행 시스템 점검중입니다. 잠시 후 재시도 바랍니다."></value></code>
+               <code key="00G8"><value value="발급 은행 시스템 점검중입니다. 잠시 후 재시도 바랍니다."></value></code>
+               <code key="00G9"><value value="발급 은행 시스템 점검중입니다. 잠시 후 재시도 바랍니다."></value></code>
+               <code key="00H1"><value value="발급 은행 시스템 점검중입니다. 잠시 후 재시도 바랍니다."></value></code>
+               <code key="00H2"><value value="발급 은행 시스템 점검중입니다. 잠시 후 재시도 바랍니다."></value></code>
+               <code key="00H3"><value value="발급 은행 시스템 점검중입니다. 잠시 후 재시도 바랍니다."></value></code>
+               <code key="00H4"><value value="발급 은행 시스템 점검중입니다. 잠시 후 재시도 바랍니다."></value></code>
+               <code key="00H5"><value value="발급 은행 시스템 점검중입니다. 잠시 후 재시도 바랍니다."></value></code>
+               <code key="00H6"><value value="발급 은행 시스템 점검중입니다. 잠시 후 재시도 바랍니다."></value></code>
+               <code key="00H7"><value value="발급 은행 시스템 점검중입니다. 잠시 후 재시도 바랍니다."></value></code>
+               <code key="00H8"><value value="발급 은행 시스템 점검중입니다. 잠시 후 재시도 바랍니다."></value></code>
+               <code key="00H9"><value value="승인실패. 비씨 QR가맹점 상담센터(02-330-5777)로 연락 바랍니다."></value></code>
+               <code key="00I1"><value value="발급 은행 시스템 점검중입니다. 잠시 후 재시도 바랍니다."></value></code>
+               <code key="00I2"><value value="기업회원만 가능한 거래입니다."></value></code>
+               <code key="00I3"><value value="승인실패. 비씨 QR가맹점 상담센터(02-330-5777)로 연락 바랍니다."></value></code>
+               <code key="00I4"><value value="승인실패. 비씨 QR가맹점 상담센터(02-330-5777)로 연락바랍니다."></value></code>
+               <code key="00I5"><value value="가맹점 당일승인 누적횟수가 초과되었습니다."></value></code>
+               <code key="00I6"><value value="가맹점 당일승인 누적금액이 초과되었습니다."></value></code>
+               <code key="00I7"><value value="지방세수납가맹점에서 사용이 불가한 카드입니다."></value></code>
+               <code key="00I8"><value value="승인실패. 비씨 QR가맹점 상담센터(02-330-5777)로 연락 바랍니다."></value></code>
+               <code key="00I9"><value value="승인실패. 비씨 QR가맹점 상담센터(02-330-5777)로 연락 바랍니다."></value></code>
+               <code key="00J1"><value value="승인실패. 비씨 QR가맹점 상담센터(02-330-5777)로 연락 바랍니다."></value></code>
+               <code key="00J2"><value value="승인실패. 비씨 QR가맹점 상담센터(02-330-5777)로 연락 바랍니다."></value></code>
+               <code key="00J3"><value value="승인실패. 비씨 QR가맹점 상담센터(02-330-5777)로 연락 바랍니다."></value></code>
+               <code key="00J4"><value value="승인실패. 비씨 QR가맹점 상담센터(02-330-5777)로 연락 바랍니다."></value></code>
+               <code key="00J5"><value value="승인실패. 비씨 QR가맹점 상담센터(02-330-5777)로 연락 바랍니다."></value></code>
+               <code key="00J6"><value value="승인실패. 비씨 QR가맹점 상담센터(02-330-5777)로 연락 바랍니다."></value></code>
+               <code key="00J7"><value value="승인거래 가능시간이 설정된 카드입니다."></value></code>
+               <code key="00J8"><value value="주유전용카드로 주유가맹점에서만 사용이 가능합니다."></value></code>
+               <code key="00J9"><value value="체크카드는 할부거래가 불가합니다."></value></code>
+               <code key="00K1"><value value="발급 은행 승인거절입니다. 발급 은행에 문의하세요."></value></code>
+               <code key="00K2"><value value="발급 은행 승인거절입니다. 발급 은행에 문의하세요."></value></code>
+               <code key="00K3"><value value="발급 은행 승인거절입니다. 발급 은행에 문의하세요."></value></code>
+               <code key="00K4"><value value="발급 은행 승인거절입니다. 발급 은행에 문의하세요."></value></code>
+               <code key="00K5"><value value="발급 은행 승인거절입니다. 발급 은행에 문의하세요."></value></code>
+               <code key="00K6"><value value="발급 은행 승인거절입니다. 발급 은행에 문의하세요."></value></code>
+               <code key="00K7"><value value="씨티카드 고객센터(02-3704-7777)에 문의하세요."></value></code>
+               <code key="00K8"><value value="씨티카드 고객센터(02-3704-7777)에 문의하세요."></value></code>
+               <code key="00K9"><value value="발급 은행 승인거절입니다. 발급 은행에 문의하세요."></value></code>
+               <code key="00L1"><value value="발급 은행 승인거절입니다. 발급 은행에 문의하세요."></value></code>
+               <code key="00L2"><value value="발급 은행 시스템 점검중입니다. 잠시 후 재시도 바랍니다."></value></code>
+               <code key="00L3"><value value="발급 은행 승인거절입니다. 발급 은행에 문의하세요."></value></code>
+               <code key="00L4"><value value="거래금액을 확인해주세요."></value></code>
+               <code key="00L5"><value value="승인이 제한된 업종입니다."></value></code>
+               <code key="00L6"><value value="발급 은행 승인거절입니다. 발급 은행에 문의하세요."></value></code>
+               <code key="00L7"><value value="가족카드는 포인트 거래가 불가합니다."></value></code>
+               <code key="00L8"><value value="승인실패. 비씨 QR가맹점 상담센터(02-330-5777)로 연락 바랍니다."></value></code>
+               <code key="00L9"><value value="승인실패. 비씨 QR가맹점 상담센터(02-330-5777)로 연락 바랍니다."></value></code>
+               <code key="00M1"><value value="발급 은행 승인거절입니다. 발급 은행에 문의하세요."></value></code>
+               <code key="00M2"><value value="발급 은행 승인거절입니다. 발급 은행에 문의하세요."></value></code>
+               <code key="00M3"><value value="발급 은행 승인거절입니다. 발급 은행에 문의하세요."></value></code>
+               <code key="00M4"><value value="승인실패. 비씨 QR가맹점 상담센터(02-330-5777)로 연락 바랍니다."></value></code>
+               <code key="00M5"><value value="기업회원 승인업종 한도 초과입니다."></value></code>
+               <code key="00M6"><value value="기업회원 승인제한 적용카드입니다. (1회/일/월한도 초과)"></value></code>
+               <code key="00M7"><value value="발급 은행 승인거절입니다. 발급 은행에 문의하세요."></value></code>
+               <code key="00M8"><value value="가족카드 한도가 초과되었습니다."></value></code>
+               <code key="00M9"><value value="제휴카드가 아닙니다."></value></code>
+               <code key="00N1"><value value="제휴카드가 아닙니다."></value></code>
+               <code key="00N2"><value value="제휴카드가 아닙니다."></value></code>
+               <code key="00N3"><value value="제휴 가맹점이 아닙니다."></value></code>
+               <code key="00N4"><value value="제휴카드가 아닙니다."></value></code>
+               <code key="00N5"><value value="제휴승인 한도가 초과되었습니다."></value></code>
+               <code key="00N6"><value value="제휴서비스 일일 제한횟수가 초과되었습니다."></value></code>
+               <code key="00N7"><value value="제휴서비스 월간 제한횟수가 초과되었습니다."></value></code>
+               <code key="00N8"><value value="제휴서비스 연간 제한횟수가 초과되었습니다."></value></code>
+               <code key="00N9"><value value="이용실적 부족하여 제휴서비스 이용이 불가합니다."></value></code>
+               <code key="00O1"><value value="승인실패. 비씨 QR가맹점 상담센터(02-330-5777)로 연락 바랍니다."></value></code>
+               <code key="00O2"><value value="승인실패. 비씨 QR가맹점 상담센터(02-330-5777)로 연락 바랍니다."></value></code>
+               <code key="00O3"><value value="발급 은행 승인거절입니다. 발급 은행에 문의하세요."></value></code>
+               <code key="00O4"><value value="개인카드만 승인 가능합니다."></value></code>
+               <code key="00O5"><value value="기업카드만 승인 가능합니다."></value></code>
+               <code key="00O6"><value value="중복이용이 불가한 가맹점입니다."></value></code>
+               <code key="00O7"><value value="특정제휴카드(가맹점)으로 승인이 불가합니다."></value></code>
+               <code key="00O8"><value value="특정제휴카드(가맹점)으로 승인이 불가합니다."></value></code>
+               <code key="00O9"><value value="승인실패. 비씨 QR가맹점 상담센터(02-330-5777)로 연락 바랍니다."></value></code>
+               <code key="00P1"><value value="승인실패. 비씨 QR가맹점 상담센터(02-330-5777)로 연락 바랍니다."></value></code>
+               <code key="00P2"><value value="승인실패. 비씨 QR가맹점 상담센터(02-330-5777)로 연락 바랍니다."></value></code>
+               <code key="00P3"><value value="승인실패. 비씨 QR가맹점 상담센터(02-330-5777)로 연락 바랍니다."></value></code>
+               <code key="00P4"><value value="승인실패. 비씨 QR가맹점 상담센터(02-330-5777)로 연락 바랍니다."></value></code>
+               <code key="00P5"><value value="승인실패. 비씨 QR가맹점 상담센터(02-330-5777)로 연락 바랍니다."></value></code>
+               <code key="00P6"><value value="승인실패. 비씨 QR가맹점 상담센터(02-330-5777)로 연락 바랍니다."></value></code>
+               <code key="00P7"><value value="가능한 할부 개월수 초과 되었습니다. 할부 개월수를 확인하세요."></value></code>
+               <code key="00P8"><value value="승인실패. 비씨 QR가맹점 상담센터(02-330-5777)로 연락 바랍니다."></value></code>
+               <code key="00P9"><value value="승인실패. 비씨 QR가맹점 상담센터(02-330-5777)로 연락 바랍니다."></value></code>
+               <code key="00Q1"><value value="승인실패. 비씨 QR가맹점 상담센터(02-330-5777)로 연락 바랍니다."></value></code>
+               <code key="00Q2"><value value="잠시 후 재시도 바랍니다."></value></code>
+               <code key="00Q3"><value value="승인실패. 비씨 QR가맹점 상담센터(02-330-5777)로 연락 바랍니다."></value></code>
+               <code key="00Q4"><value value="승인실패. 비씨 QR가맹점 상담센터(02-330-5777)로 연락 바랍니다."></value></code>
+               <code key="00Q5"><value value="승인실패. 비씨 QR가맹점 상담센터(02-330-5777)로 연락 바랍니다."></value></code>
+               <code key="00Q6"><value value="승인실패. 비씨 QR가맹점 상담센터(02-330-5777)로 연락 바랍니다."></value></code>
+               <code key="00Q7"><value value="승인실패. 비씨 QR가맹점 상담센터(02-330-5777)로 연락 바랍니다."></value></code>
+               <code key="00R1"><value value="승인실패. 비씨 QR가맹점 상담센터(02-330-5777)로 연락 바랍니다."></value></code>
+               <code key="00R2"><value value="승인실패. 비씨 QR가맹점 상담센터(02-330-5777)로 연락 바랍니다."></value></code>
+               <code key="00R3"><value value="승인실패. 비씨 QR가맹점 상담센터(02-330-5777)로 연락 바랍니다."></value></code>
+               <code key="00R4"><value value="발급 은행 승인거절입니다. 발급 은행에 문의하세요."></value></code>
+               <code key="00R5"><value value="발급 은행 승인거절입니다. 발급 은행에 문의하세요."></value></code>
+               <code key="00R6"><value value="발급 은행 승인거절입니다. 발급 은행에 문의하세요."></value></code>
+               <code key="00R7"><value value="승인실패. 비씨 QR가맹점 상담센터(02-330-5777)로 연락 바랍니다."></value></code>
+               <code key="00R8"><value value="발급 은행 승인거절입니다. 발급 은행에 문의하세요."></value></code>
+               <code key="00R9"><value value="발급 은행 승인거절입니다. 발급 은행에 문의하세요."></value></code>
+               <code key="00S1"><value value="발급 은행 승인거절입니다. 발급 은행에 문의하세요."></value></code>
+               <code key="00S2"><value value="발급 은행 승인거절입니다. 발급 은행에 문의하세요."></value></code>
+               <code key="00S3"><value value="발급 은행 승인거절입니다. 발급 은행에 문의하세요."></value></code>
+               <code key="00S4"><value value="분실도난카드 접수된 카드입니다."></value></code>
+               <code key="00S5"><value value="발급 은행 승인거절입니다. 발급 은행에 문의하세요."></value></code>
+               <code key="00S6"><value value="발급 은행 승인거절입니다. 발급 은행에 문의하세요."></value></code>
+               <code key="00S7"><value value="우리체크카드 일한도초과입니다. 우리카드에 문의하세요.(1588-9955)"></value></code>
+               <code key="00S8"><value value="우리체크카드 월한도초과입니다. 우리카드에 문의하세요.(1588-9955)"></value></code>
+               <code key="00T1"><value value="발급 은행 승인거절입니다. 발급 은행에 문의하세요."></value></code>
+               <code key="00T2"><value value="발급 은행 승인거절입니다. 발급 은행에 문의하세요."></value></code>
+               <code key="00T3"><value value="QR코드 생성 후 3분 이내에 거래해야 합니다. 재시도 바랍니다."></value></code>
+               <code key="00T4"><value value="QR코드는 생성 후 1번만 거래가 가능합니다. 재시도 바랍니다."></value></code>
+               <code key="00T5"><value value="발급 은행 승인거절입니다. 발급 은행에 문의하세요."></value></code>
+               <code key="00T6"><value value="발급 은행 승인거절입니다. 발급 은행에 문의하세요."></value></code>
+               <code key="00T7"><value value="1일 사용금액이 초과 되었습니다."></value></code>
+               <code key="00U1"><value value="승인실패. 비씨 QR가맹점 상담센터(02-330-5777)로 연락 바랍니다."></value></code>
+               <code key="00U2"><value value="회원의 요청으로 거래가 정지된 카드입니다."></value></code>
+               <code key="00U3"><value value="발급 은행 시스템 점검중입니다. 잠시 후 재시도 바랍니다."></value></code>
+               <code key="00U4"><value value="발급 은행 시스템 점검중입니다. 잠시 후 재시도 바랍니다."></value></code>
+               <code key="00U5"><value value="발급 은행 승인거절입니다. 발급 은행에 문의하세요."></value></code>
+               <code key="00Y1"><value value="발급 은행 시스템 점검중입니다. 잠시 후 재시도 바랍니다."></value></code>
+               <code key="00Y2"><value value="발급 은행 시스템 점검중입니다. 잠시 후 재시도 바랍니다."></value></code>
+               <code key="00Y3"><value value="발급 은행 시스템 점검중입니다. 잠시 후 재시도 바랍니다."></value></code>
+               <code key="00Z1"><value value="발급 은행 시스템 점검중입니다. 잠시 후 재시도 바랍니다."></value></code>
+               <code key="00Z2"><value value="발급 은행 시스템 점검중입니다. 잠시 후 재시도 바랍니다."></value></code>
+               <code key="00Z3"><value value="발급 은행 시스템 점검중입니다. 잠시 후 재시도 바랍니다."></value></code>
+               <code key="00Z4"><value value="발급 은행 시스템 점검중입니다. 잠시 후 재시도 바랍니다."></value></code>
+               <code key="00Z5"><value value="발급 은행 시스템 점검중입니다. 잠시 후 재시도 바랍니다."></value></code>
+               <code key="00Z6"><value value="발급 은행 시스템 점검중입니다. 잠시 후 재시도 바랍니다."></value></code>
+               <code key="LA00"><value value="가맹점 한도 초과"></value></code>
+               <code key="LA01"><value value="가맹점 1회 한도 초과"></value></code>
+               <code key="LA02"><value value="가맹점 월 한도 초과"></value></code>
+               <code key="QR00"><value value="BC카드 QR만 스캔 결제가 가능합니다"></value></code>
+               <code key="QR03"><value value="국내 QR결제 서비스 약관 동의 안함"></value></code>
+               <code key="QR04"><value value="승인실패(QR키트 등록 신청 안함)"></value></code>
+
+        </code>
+
+
+        <!-- EVONET 거래 코드 -->
+        <code key="TRANS_E_RSPN_CODE">
+               <code key="00"><value value="정상승인"></value></code>
+               <code key="01"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="02"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="03"><value value="가맹점 번호 오류"></value></code>
+               <code key="04"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="05"><value value="카드거래 중지 상태"></value></code>
+               <code key="06"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="07"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="09"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="10"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="11"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="12"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="13"><value value="1000원 미만 거래불가"></value></code>
+               <code key="14"><value value="유효하지 않은 카드번호"></value></code>
+               <code key="15"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="16"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="17"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="19"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="20"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="21"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="22"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="23"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="25"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="30"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="31"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="33"><value value="유효기간 경과"></value></code>
+               <code key="34"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="35"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="36"><value value="사용제한 카드"></value></code>
+               <code key="37"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="38"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="39"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="40"><value value="QR결제 사전 등록 필요"></value></code>
+               <code key="41"><value value="분실카드"></value></code>
+               <code key="42"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="43"><value value="분실카드"></value></code>
+               <code key="44"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="50"><value value="익일 단말취소불가. 비씨카드 콜센터(02-950-8510)로 연락주세요. "></value></code>
+               <code key="51"><value value="잔액부족"></value></code>
+               <code key="52"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="53"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="54"><value value="유효기간 경과"></value></code>
+               <code key="55"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="56"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="57"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="58"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="59"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="60"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="61"><value value="한도초과"></value></code>
+               <code key="62"><value value="사용제한 카드"></value></code>
+               <code key="63"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="64"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="65"><value value="인출 건수 횟수 초과"></value></code>
+               <code key="66"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="67"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="68"><value value="시스템 장애"></value></code>
+               <code key="75"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="76"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="90"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="91"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="92"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="93"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="94"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="95"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="96"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="97"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="98"><value value="시스템 장애"></value></code>
+               <code key="99"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="A0"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="A1"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="A2"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="A3"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="A4"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="A5"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="A6"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="A7"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="AA"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="B1"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="C1"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="D1"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="D2"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="D3"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="D4"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="D5"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="D6"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="D7"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="D8"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="D9"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="DA"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="DB"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="DC"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="N1"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="Q1"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="Y1"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="Y3"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="Z1"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <code key="Z3"><value value="승인실패. 비씨카드 콜센터(02-950-8688)로 연락주세요."></value></code>
+               <!-- TRNS_STAT + INI_RSPN_CODE -->
+               <code key="2000"><value value="승인 실패. 비씨카드 콜센터(02-950-8510)로 연락주세요."></value></code>
+        </code>
+
+
+        <!-- 회원가입 코드 -->
+        <code key="MERCHANT_J_RSPN_CODE">
+
+               <!-- 회원정보 코드는 31xx 대역을 사용 -->
+               <code key="0000"><value value="정상"></value></code>
+               <code key="3101"><value value="아이디 중복"></value></code>
+               <code key="3102"><value value="약관 동의 안함"></value></code>
+               <code key="3103"><value value="인증받지 않은 사용자 "></value></code>
+               <code key="3104"><value value="이메일 인증 가능 시간 초과"></value></code>
+               <code key="3105"><value value="비밀번호 형식 오류"></value></code>
+               <code key="3106"><value value="비밀번호 불 일치"></value></code>
+               <code key="3107"><value value="처음부터 다시 진행 유도"></value></code>
+               <code key="3108"><value value="입력한 아이디는 {0} 로 사용 가능합니다."></value></code>
+
+               <!-- 아이디 찾기 : 회원 정보 없음 -->
+               <code key="3141"><value value="회원 정보 없음 "></value></code>
+
+               <!-- 아이디 찾기, 비밀번호 찾기 : 처음부터 다시 진행 유도 -->
+               <code key="3142"><value value="처음부터 다시 진행 유도 "></value></code>
+
+               <!-- 로그인  -->
+               <code key="3150"><value value="아이디/비밀번호 불일치 "></value></code>
+               <code key="3151"><value value="등록되지 않은 아이디"></value></code>
+               <code key="3152"><value value="비밀번호 오류"></value></code>
+               <code key="3153"><value value="비밀번호 오류 회수 초과"></value></code>
+               <code key="3154"><value value="재 로그인 유도"></value></code>
+               <code key="3155"><value value="로그인 중 G/W 세션이 만료되어 다시 로그인 시도"></value></code>
+               <code key="3156"><value value="로그인 중 G/W 인증 에러로 다시 로그인 시도"></value></code>
+               <code key="3157"><value value="로그인 권한 없음"></value></code>
+               <code key="3158"><value value="단말정보 저장 중 오류 발생"></value></code>
+               <code key="3159"><value value="가맹점주 디바이스 변경"></value></code>
+               <code key="3160"><value value="디바이스 변경으로 인증 중 실패"></value></code>
+               <code key="3161"><value value="SMS 본인인증 묘듈 인증 에러"></value></code>
+               <code key="3162"><value value="신용카드 본인인증 묘듈 인증 에러"></value></code>
+
+               <!-- 가맹점 정보 코드는 32xx 대역을 사용 -->
+               <code key="3200"><value value="등록되지 않은 가맹점"></value></code>
+               <code key="3201"><value value="이미 가입한 가맹점"></value></code>
+               <code key="3202"><value value="회원정보 없음"></value></code>
+               <code key="3203"><value value="가맹점주 정보 변경 불가"></value></code>
+               <code key="3204"><value value="QR 생성 오류"></value></code>
+               <code key="3205"><value value="QR 검증 실패 "></value></code>
+               <code key="3206"><value value="QR 검증 실패"></value></code>
+               <code key="3207"><value value="제휴사 정보 없음"></value></code>
+               <code key="3208"><value value="EDC 가맹점 아님"></value></code>
+               <code key="3209"><value value="가맹점 대표자 CI 불일치"></value></code>
+               <code key="3210"><value value="가맹점 전문 조회 오류"></value></code>
+
+        </code>
+</resource>

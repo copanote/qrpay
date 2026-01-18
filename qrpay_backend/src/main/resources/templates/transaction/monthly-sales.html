@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>BC</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css" />
+    <script src="/js/jquery-3.3.1.slim.min.js.js"></script>
+    <script src="/js/popper.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <link href="/css/common.css" rel="stylesheet" />
+    <script src="/js/common.js"></script>
+
+    <th:block th:if="${#arrays.contains(@environment.getActiveProfiles(), 'local')}">
+      <script th:src="@{/js/qrpay_sdk.dev.js}"></script>
+    </th:block>
+
+    <th:block th:if="${#arrays.contains(@environment.getActiveProfiles(), 'dev')}">
+      <script th:src="@{/js/qrpay_sdk.dev.js}"></script>
+    </th:block>
+
+    <th:block th:if="${#arrays.contains(@environment.getActiveProfiles(), 'prod')}">
+      <script th:src="@{/js/qrpay_sdk.prod.js}"></script>
+    </th:block>
+  </head>
+
+  <body>
+    <div id="wrap">
+      <!-- header -->
+      <header id="hd" class="main">
+        <div class="container">
+          <h1>
+            <a href="javascript:void(0)">
+              <img src="/images/logo_big.png" height="33" alt="BC QR FOR SHOP" /><!-- 2019-05-08 -->
+              <span class="sr-only">BC QR FOR SHOP</span>
+            </a>
+          </h1>
+          <button type="button" class="icon-menu js-mn">메뉴열기</button>
+        </div>
+        <div th:replace="~{fragments/navigation :: menu}"></div>
+      </header>
+      <div th:replace="~{fragments/toolbar :: toolbar('monthly')}"></div>
+
+      <!-- container -->
+      <div id="ct">
+        <!-- 페이지 시작 -->
+        <div id="index">
+          <div class="sub-title">
+            <div class="row container align-items-center">
+              <h2 class="h2 col">
+                <span>월별 매출 합계</span>
+              </h2>
+            </div>
+          </div>
+          <ul class="nav tab-type01 row">
+            <li class="col nav-item">
+              <a class="nav-link" data-toggle="tab" href="#month1" id="tab-month1"></a>
+            </li>
+            <li class="col nav-item">
+              <a class="nav-link" data-toggle="tab" href="#month2" id="tab-month2"></a>
+            </li>
+            <li class="col nav-item">
+              <a class="nav-link active" data-toggle="tab" href="#month3" id="tab-month3"></a>
+            </li>
+          </ul>
+          <div class="tab-content">
+            <div class="tab-pane fade fade" id="month1">
+              <ul class="lst-transact lst-total"></ul>
+              <div class="container">
+                <ul class="lst-transact"></ul>
+              </div>
+            </div>
+            <div class="tab-pane fade" id="month2">
+              <ul class="lst-transact lst-total"></ul>
+              <div class="container">
+                <ul class="lst-transact"></ul>
+              </div>
+            </div>
+            <div class="tab-pane show active" id="month3">
+              <ul class="lst-transact lst-total"></ul>
+              <div class="container">
+                <ul class="lst-transact"></ul>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--// 페이지 끝 -->
+      </div>
+    </div>
+    <div th:replace="~{fragments/modals/common-modal :: passwordContent}"></div>
+    <div th:replace="~{fragments/modals/common-modal :: confirmModal}"></div>
+    <div th:replace="~{fragments/modals/common-modal :: loadingModal}"></div>
+    <script>
+      /**
+       * 월별 매출 관리 매니저
+       */
+      const MonthlySalesManager = {
+        months: [], // ["202601", "202512", "202511"]
+
+        init: function () {
+          this.calculateMonths();
+          this.updateTabHeaders();
+          this.fetchData();
+        },
+
+        // 현재 월 포함 이전 3개월 계산
+        calculateMonths: function () {
+          const now = new Date();
+          for (let i = 2; i > -1; i--) {
+            const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+            const yyyy = d.getFullYear();
+            const mm = String(d.getMonth() + 1).padStart(2, '0');
+            this.months.push(yyyy + mm);
+          }
+        },
+
+        // 탭 헤더 및 데이터 바인딩
+        updateTabHeaders: function () {
+          const self = this;
+          $('.nav.tab-type01 .nav-link').each(function (index) {
+            const ym = self.months[index];
+            const displayMonth = parseInt(ym.substring(4)) + '월';
+            $(this).text(displayMonth);
+            const paneId = $(this).attr('href');
+            $(paneId).data('ym', ym);
+          });
+        },
+
+        fetchData: async function () {
+          let responseData = [
+            /* mock data
+            {
+              yearMonth: '202601',
+              list: [
+                { serviceType: 'BC', totalAuthAmount: 500000, totalRefundAmount: 1000 },
+                { serviceType: 'HANA', totalAuthAmount: 100000, totalRefundAmount: 1000 },
+              ],
+            },*/
+          ];
+
+          const data = await qrpaySdk.fetchGetAsync(REST_APIS.TRANSACTION.MONTHL_SALES);
+          console.log(JSON.stringify(data));
+          if (data.ok) {
+            responseData = data.data;
+          } else {
+            const status = data.status;
+            if (status === 401) {
+              console.log('로그인이 필요합니다.');
+              const auth_loginId = '';
+              PasswordModal.open({
+                loginId: auth_loginId,
+                onSuccessCallback: (res) => {
+                  this.fetchData();
+                },
+                onCancelCallback: () => {
+                  console.log('cancel authentication');
+                },
+              });
+            } else {
+              const errorMsg = data || data.message || '';
+              alert(errorMsg);
+            }
+          }
+
+          this.render(responseData);
+        },
+
+        render: function (apiData) {
+          const self = this;
+          $('.tab-pane').each(function () {
+            const $pane = $(this);
+            const targetYM = $pane.data('ym');
+            const monthObj = apiData.find((item) => item.yearMonth === targetYM);
+            const list = monthObj ? monthObj.list : [];
+            self.updateTabContent($pane, list, targetYM);
+          });
+        },
+
+        // 탭 내부 업데이트 (데이터 없을 시 0원 표기 로직 포함)
+        updateTabContent: function ($pane, list, ym) {
+          let totalSales = 0;
+          let totalRefunds = 0;
+          const displayMonth = parseInt(ym.substring(4)) + '월';
+          let listHtml = '';
+
+          if (!list || list.length === 0) {
+            // 데이터가 없을 때
+            totalSales = 0;
+            totalRefundAmount = 0;
+            // listHtml = '<li class="row"><div class="col text-center p-5 text-muted">해당 월의 매출 데이터가 없습니다.</div></li>';
+            listHtml = '';
+          } else {
+            // 데이터가 있을 때 합산 및 리스트 생성
+            list.forEach((item) => {
+              totalSales += item.totalAuthAmount || 0;
+              totalRefunds += item.totalRefundAmount || 0;
+              console.log(totalRefunds);
+              const iconClass = this.getIconClass(item.serviceType);
+
+              listHtml += `
+                    <li class="row">
+                        <div class="col">
+                            <p class="h6 text-muted"><i class="${iconClass}"></i> ${item.serviceType} 매출 합계</p>
+                            <div class="price-wrp"><strong class="price">${this.formatNumber(item.totalAuthAmount)}</strong><small>원</small></div>
+                        </div>
+                        <div class="col-xs-auto text-right">
+                            <p class="fw700"><i class="icon-won"></i> 수수료 혜택 금액</p>
+                            <div class="price-wrp text-primary"><strong class="price">${this.formatNumber(item.totalRefundAmount) || '-'}</strong><small>원</small></div>
+                        </div>
+                    </li>`;
+            });
+          }
+
+          // 2. 상단 총합 영역 HTML 생성
+          const summaryHtml = `
+            <ul class="lst-transact lst-total">
+                <li class="row">
+                    <div class="col">
+                        <p class="h6 text-muted">${displayMonth} 총 매출 합계</p>
+                        <div class="price-wrp"><strong class="price">${this.formatNumber(totalSales)}</strong><small>원</small></div>
+                    </div>
+                    <div class="col-xs-auto text-right">
+                        <p class="fw700"><i class="icon-won"></i> 수수료 혜택 금액</p>
+                        <div class="price-wrp text-primary"><strong class="price">${this.formatNumber(totalRefunds)}</strong><small>원</small></div>
+                    </div>
+                </li>
+            </ul>
+            <div class="container">
+                <ul class="lst-transact">
+                    ${listHtml}
+                </ul>
+            </div>`;
+
+          // 3. 탭 패널에 한 번에 주입
+          $pane.empty().html(summaryHtml);
+        },
+
+        formatNumber: function (num) {
+          if (num === null || num === undefined || isNaN(num)) {
+            return '0';
+          }
+          return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        },
+
+        getIconClass: function (type) {
+          const maps = { BC: 'icon-bc', HANA: 'icon-hana', SHINHAN: 'icon-shinhan', LOTTE: 'icon-lotte', HYUNDAI: 'icon-hyundai01' };
+          return maps[type.toUpperCase()] || 'icon-bc';
+        },
+      };
+
+      $(document).ready(function () {
+        MonthlySalesManager.init();
+      });
+    </script>
+    <script></script>
+  </body>
+</html>

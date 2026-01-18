@@ -31,22 +31,24 @@ public class MemberService {
     private final MemberRepository memberCUDRepository;
     private final CustomPasswordEncoder customPasswordEncoder;
 
-
+    @Transactional(readOnly = true)
     public Member findByMemberId(String memberId) {
         return memberQueryRepository.findById(memberId)
                 .orElseThrow(() -> new MemberException(QrpayErrorCode.MEMBER_NOT_FOUND));
     }
 
+    @Transactional(readOnly = true)
     public Optional<Member> findBy(String memberId) {
         return memberQueryRepository.findById(memberId);
     }
 
-
+    @Transactional(readOnly = true)
     public Member findByLoginId(String loginId) {
         return memberQueryRepository.findByLoginId(loginId)
                 .orElseThrow(() -> new MemberException(QrpayErrorCode.MEMBER_NOT_FOUND));
     }
 
+    @Transactional(readOnly = true)
     public boolean exist(String loginId) {
         return memberQueryRepository.findByLoginId(loginId).isPresent();
     }
@@ -86,6 +88,7 @@ public class MemberService {
         return StringUtils.leftPad(seq.toString(), 8, 'T');
     }
 
+    @Transactional(readOnly = true)
     public List<Member> findMemberByRole(Merchant merchant, MemberRole role) {
         List<Member> allMembers = memberQueryRepository.findAllMembers(merchant);
 
@@ -95,6 +98,7 @@ public class MemberService {
                 .toList();
     }
 
+    @Transactional(readOnly = true)
     public List<Member> findMembers(Merchant merchant) {
         return memberQueryRepository.findAllMembers(merchant)
                 .stream()

@@ -6,6 +6,8 @@ import com.bccard.qrpay.auth.domain.JwtToken;
 import com.bccard.qrpay.auth.service.AuthService;
 import com.bccard.qrpay.domain.member.Member;
 import com.bccard.qrpay.domain.member.MemberService;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -14,6 +16,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Slf4j
@@ -119,7 +124,8 @@ public class AuthController {
 
     @PostMapping(value = "/auth/logout")
     @ResponseBody
-    public ResponseEntity<?> logout(@RequestBody JwtToken refreshToken) {
+    public ResponseEntity<?> logout(@RequestBody JwtToken refreshToken,
+                                    HttpServletRequest request) {
         /*
         Request: refresh token (cookie or body)
         Action: revoke refresh token
@@ -129,7 +135,25 @@ public class AuthController {
         authService.logout(refreshToken.getRefreshToken());
         //history
 
-        return ResponseEntity.ok().build();
+        Cookie[] cookies = request.getCookies();
+        List<String> cookieHeaders = new ArrayList<>();
+
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                ResponseCookie deleteCookie = ResponseCookie.from(cookie.getName(), "")
+                        .path("/") // 생성 시 경로가 다르면 삭제되지 않으니 주의
+                        .maxAge(0)
+                        .build();
+                cookieHeaders.add(deleteCookie.toString());
+            }
+        }
+
+        ResponseEntity.BodyBuilder responseBuilder = ResponseEntity.ok();
+        for (String header : cookieHeaders) {
+            responseBuilder.header(HttpHeaders.SET_COOKIE, header);
+        }
+
+        return responseBuilder.build();
     }
 
     @PostMapping(value = "/auth/me")

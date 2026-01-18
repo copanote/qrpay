@@ -1,21 +1,11 @@
 package com.bccard.qrpay.domain.transaction;
 
 import com.bccard.qrpay.domain.common.code.*;
-import com.bccard.qrpay.domain.common.converter.FinanceInstitutionConverter;
-import com.bccard.qrpay.domain.common.converter.QrTransactionTypeConverter;
-import com.bccard.qrpay.domain.common.converter.ServiceTypeConverter;
+import com.bccard.qrpay.domain.common.converter.*;
 import com.bccard.qrpay.domain.common.entity.BaseEntity;
-import com.bccard.qrpay.domain.member.Member;
 import com.bccard.qrpay.domain.merchant.Merchant;
-import com.bccard.qrpay.domain.transaction.converter.ApprovedTypeConverter;
-import com.bccard.qrpay.domain.transaction.converter.AuthorizedConverter;
-import com.bccard.qrpay.domain.transaction.converter.PaymentStatusConverter;
-import com.bccard.qrpay.domain.transaction.converter.PosEntryModeConverter;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.domain.Persistable;
 
 import java.math.BigDecimal;
@@ -25,6 +15,7 @@ import java.math.BigDecimal;
 @Entity
 @Table(name = "TBMPMTRNSCTNT")
 @IdClass(TransactionId.class)
+@ToString(exclude = {"merchant"})
 public class Transaction extends BaseEntity implements Persistable<TransactionId> {
 
     @Id
@@ -36,7 +27,11 @@ public class Transaction extends BaseEntity implements Persistable<TransactionId
     private String affiliateTransactionId;
 
     @Column(name = "TRNS_ATON", length = 14)
-    private String dateOfTransaction; //TRNS_ATON
+    private String transactionAt; //TRNS_ATON
+
+
+    @Column(name = "EPAN_NO", length = 100)
+    private String ePan;
 
     @Column(name = "ENC_PAN_NO", length = 100)
     private String encrypedPan;
@@ -45,12 +40,16 @@ public class Transaction extends BaseEntity implements Persistable<TransactionId
     private String maskedPan;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "MER_MGMT_NO")
+    @JoinColumn(name = "MER_MGMT_NO", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private Merchant merchant;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "MER_CDHD_NO")
-    private Member member;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "MER_CDHD_NO", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+//    @NotFound(action = NotFoundAction.IGNORE)
+//    private Member member;
+
+    @Column(name = "MER_CDHD_NO")
+    private String memberId;
 
     @Column(name = "FNST_COPR_CODE")
     @Convert(converter = FinanceInstitutionConverter.class)
@@ -117,7 +116,7 @@ public class Transaction extends BaseEntity implements Persistable<TransactionId
     private String unifiedQrTransactionId;
 
     @Column(name = "REFD_AMT", precision = 15)
-    private Long refundAmountToMerchant;
+    private BigDecimal refundAmountToMerchant;
 
     @Column(name = "AUTH_CLSS")
     @Convert(converter = ApprovedTypeConverter.class)
@@ -147,7 +146,7 @@ public class Transaction extends BaseEntity implements Persistable<TransactionId
     private String moneyType; // 0001 페이북머니
 
     @Column(name = "REQ_MNY", precision = 15)
-    private Long requestMoneyAmount;
+    private BigDecimal requestMoneyAmount;
 
     @Override
     public TransactionId getId() {

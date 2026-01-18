@@ -32,7 +32,7 @@ public class QrKitPageController {
         Member member = memberService.findBy(memId).orElseGet(() -> null);
         if (member == null) {
             log.info("Needs Authenticate");
-            return "/auth/login";
+            return "auth/login";
         }
 
         Merchant merchant = member.getMerchant();

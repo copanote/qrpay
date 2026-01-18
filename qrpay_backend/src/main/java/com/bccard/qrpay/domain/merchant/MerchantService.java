@@ -1,5 +1,6 @@
 package com.bccard.qrpay.domain.merchant;
 
+import com.bccard.qrpay.domain.common.code.FinancialInstitution;
 import com.bccard.qrpay.domain.member.MemberService;
 import com.bccard.qrpay.domain.merchant.repository.MerchantQueryRepository;
 import com.bccard.qrpay.domain.merchant.repository.MerchantRepository;
@@ -19,11 +20,16 @@ import java.util.Optional;
 public class MerchantService {
     private final MerchantQueryRepository merchantQueryRepository;
     private final MerchantRepository merchantRepository;
-
     private final MemberService memberService;
 
+    @Transactional(readOnly = true)
     public Optional<Merchant> findById(String merchantId) {
         return merchantQueryRepository.findById(merchantId);
+    }
+
+    @Transactional(readOnly = true)
+    public Optional<Merchant> findByBcMerchantNo(String bcMerchantNo) {
+        return merchantQueryRepository.findByFinancialInstitutionAndFiMerchantNo(FinancialInstitution.BCCARD, bcMerchantNo);
     }
 
     @Transactional
@@ -79,4 +85,6 @@ public class MerchantService {
 
         return fetchedMerchant;
     }
+
+
 }

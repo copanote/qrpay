@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <div id="fixedToolbar" th:fragment="toolbar(menuName)">
+    <ul class="row">
+      <li class="col-4" th:classappend="${menuName == 'qr'} ? 'active'">
+        <a href="/pages/home/mpmqr">
+          <i class="icon-toolbar1"></i>
+          <p>QR 코드</p>
+        </a>
+      </li>
+      <li class="col-4" th:classappend="${menuName == 'list'} ? 'active'">
+        <a href="/pages/transaction/list">
+          <i class="icon-toolbar2"></i>
+          <p>거래내역</p>
+        </a>
+      </li>
+      <li class="col-4" th:classappend="${menuName == 'monthly'} ? 'active'">
+        <a href="/pages/transaction/monthly-sales">
+          <i class="icon-toolbar3"></i>
+          <p>월별 매출 합계</p>
+        </a>
+      </li>
+    </ul>
+  </div>
+</html>

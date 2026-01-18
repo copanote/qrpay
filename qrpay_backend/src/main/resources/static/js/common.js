@@ -253,8 +253,27 @@ const REST_APIS = {
     STATUS: '/qrpay/api/v1/qr-kit/status',
   },
 
+  TRANSACTION: {
+    MONTHL_SALES: '/qrpay/api/v1/transaction/monthly-sales',
+    HISTORY: '/qrpay/api/v1/transaction/history',
+  },
+
   OPEN: {
     PW_RESET: '/qrpay/api/open/v1/member/password-reset',
     BC_MERCHANTS: '/qrpay/api/open/v1/bc/merchants',
   },
 };
+
+const onLogout = async () => {
+  try {
+    const date = await qrpaySdk.logout();
+    console.log(date);
+  } catch (error) {
+    console.error(error);
+  }
+  window.location.replace(qrpaySdk.PAGES_APIS.LOGIN_PAGE || '/pages/login');
+};
+$(document).ready(function () {
+  const logoutBtn = document.getElementById('btn-logout');
+  logoutBtn && logoutBtn.addEventListener('click', onLogout);
+});

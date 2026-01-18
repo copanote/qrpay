@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<html lang="ko">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
@@ -228,6 +228,28 @@
               hideCancel: true,
             });
           }
+
+          // 실제 환경에서는 AJAX 호출이 들어가는 부분입니다.
+          // 가상의 딜레이(500ms)와 함께 데이터를 추가합니다.
+          /*setTimeout(() => {
+              private String merchantName;
+    private String representativeName;
+    private String bcMerchantNo;
+    private String telNo;
+    private String zipCode;
+    private String address;
+    private String registeredAt; //yymmdd
+            const newData = [
+              { merchantNo: `M00${this.page}1`, merchantName: `가맹점_${this.page}_A`, representativeName: '홍길동', address: '서울시 중구 ...', telNo: '010-1234-5678' },
+              { merchantNo: `M00${this.page}2`, merchantName: `가맹점_${this.page}_B`, representativeName: '임꺽정', address: '서울시 종로구 ...', telNo: '010-9876-5432' },
+            ];
+
+            // 최대 5페이지까지만 데이터를 가져오도록 제한 (예시)
+            //if (this.page > 5) {
+            // this.observer.disconnect();
+            //}
+          }, 500);
+          */
         },
 
         render: function (items) {
@@ -298,8 +320,117 @@
       };
     </script>
 
+    <script>
+      /*
+      const MerchantManager = {
+        state: [],
+
+        init: function () {
+          const findBtn = document.getElementById('btn-signup-find-bcmerchant');
+          findBtn.addEventListener('click', () => this.fetchMerchants());
+
+          // 라디오 버튼 클릭 이벤트 위임 (목록이 동적으로 생성되므로 부모에 위임)
+          const listContainer = document.querySelector('.bx-franchise ul');
+          listContainer.addEventListener('change', (e) => {
+            if (e.target.name === 'merchant-select') {
+              this.handleSelection();
+            }
+          });
+        },
+
+        fetchMerchants: function () {
+          // 가맹점 조회 시 "다음" 버튼 초기화
+          this.toggleNextButton(false);
+
+          this.state = [
+            { merchantNo: '1234567890', merchantName: '가맹점명_1', representativeName: '신동욱', address: '서울시 중구 을지로 170', telNo: '02-0000-1234' },
+            { merchantNo: '2345678911', merchantName: '가맹점명_2', representativeName: '김철수', address: '서울시 강남구 테헤란로 123 123123123123123123123서래', telNo: '02-1111-2222' },
+          ];
+          this.render();
+        },
+
+        // 라디오 선택 시 실행되는 로직
+        handleSelection: function () {
+          const selected = document.querySelector('input[name="merchant-select"]:checked');
+          if (selected) {
+            this.toggleNextButton(true);
+          }
+        },
+
+        // 하단 "다음" 버튼 활성화/비활성화
+        toggleNextButton: function (isActive) {
+          const nextBtn = document.querySelector('.btm-fixed-btn a');
+          if (isActive) {
+            nextBtn.classList.remove('btn-muted');
+            nextBtn.classList.add('btn-primary');
+            nextBtn.style.pointerEvents = 'auto'; // 클릭 가능
+          } else {
+            nextBtn.classList.add('btn-muted');
+            nextBtn.classList.remove('btn-primary');
+            nextBtn.style.pointerEvents = 'none'; // 클릭 불가
+          }
+        },
+
+        showDetail: function (merchantNo) {
+          const data = this.state.find((item) => item.merchantNo === String(merchantNo));
+          if (!data) return;
+
+          document.getElementById('detail-name').innerText = data.merchantName;
+          document.getElementById('detail-no').innerText = data.merchantNo;
+          document.getElementById('detail-rep').innerText = data.representativeName;
+          document.getElementById('detail-tel').innerText = data.telNo;
+          document.getElementById('detail-addr').innerText = data.address;
+
+          $('#modal-merchant-detail').modal('show');
+        },
+
+        render: function () {
+          const listContainer = document.querySelector('.bx-franchise ul');
+          if (!listContainer) return;
+
+          let htmlContent = '';
+          this.state.forEach((item) => {
+            htmlContent += `
+        <li class="row align-items-center">
+          <div class="col-xs-auto pr20">
+            <label class="input-type-round">
+              <input type="radio" name="merchant-select" value="${item.merchantNo}" />
+              <span></span>
+            </label>
+          </div>
+          <div class="col">
+            <p class="h5 fw500">${item.merchantName}</p>
+            <span class="text-muted">${item.merchantNo}</span>
+          </div>
+          <div class="col-xs-auto">
+            <button type="button" class="fw500" onclick="MerchantManager.showDetail('${item.merchantNo}')">
+              <i class="icon-list"></i> 상세보기
+            </button>
+          </div>
+        </li>
+      `;
+          });
+          listContainer.innerHTML = htmlContent;
+        },
+      };    */
+    </script>
+
     <script th:inline="javascript">
       const niceSmsRefId = /*[[${smsRefId}]]*/ '';
+      /*
+            const MerchantManager = {
+              state: [],
+
+              init: () => {
+                const mockMerchantData = [
+                  { merchantNo: '123456789', merchantName: '가맹정명_1', representativeName: '신동욱', address: '서울시 중구 을지로 170, 을지트윈타워)', telNo: '02-0000-1234' },
+                  { merchantNo: '234567891', merchantName: '가맹정명_2', representativeName: '신동욱', address: '서울시 중구 을지로 170, 을지트윈타워)', telNo: '02-0000-1234' },
+                  { merchantNo: '345678912', merchantName: '가맹정명_3', representativeName: '신동욱', address: '서울시 중구 을지로 170, 을지트윈타워)', telNo: '02-0000-1234' },
+                  { merchantNo: '456789123', merchantName: '가맹정명_4', representativeName: '신동욱', address: '서울시 중구 을지로 170, 을지트윈타워)', telNo: '02-0000-1234' },
+                  { merchantNo: '567891234', merchantName: '가맹정명_5', representativeName: '신동욱', address: '서울시 중구 을지로 170, 을지트윈타워)', telNo: '02-0000-1234' },
+                ];
+              },
+            }; */
 
       document.addEventListener('DOMContentLoaded', function () {
         MerchantManager.init();

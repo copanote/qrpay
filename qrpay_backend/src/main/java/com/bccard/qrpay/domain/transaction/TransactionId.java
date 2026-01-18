@@ -1,7 +1,7 @@
 package com.bccard.qrpay.domain.transaction;
 
 import com.bccard.qrpay.domain.common.code.AuthorizeType;
-import com.bccard.qrpay.domain.transaction.converter.AuthorizedConverter;
+import com.bccard.qrpay.domain.common.converter.AuthorizedConverter;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import lombok.*;
@@ -36,8 +36,6 @@ public class TransactionId implements Serializable {
         this.affiliateTransactionId = affiliateTransactionId;
         this.authorizeType = authorizeType;
     }
-
-
 }
 
 /**

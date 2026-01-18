@@ -6,6 +6,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -28,6 +29,13 @@ public class TransactionQueryRepository {
                         .and(transaction.authorizeType.eq(id.getAuthorizeType())))
                 .fetchFirst();
         return Optional.ofNullable(t);
+    }
+
+    public List<Transaction> findByTrnsId(String transactionId) {
+        return queryFactory
+                .selectFrom(transaction)
+                .where(transaction.transactionId.eq(transactionId))
+                .fetch();
     }
 
 }
