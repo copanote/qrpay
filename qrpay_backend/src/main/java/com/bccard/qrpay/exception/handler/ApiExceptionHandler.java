@@ -1,11 +1,11 @@
 package com.bccard.qrpay.exception.handler;
 
-
 import com.bccard.qrpay.exception.ApiError;
 import com.bccard.qrpay.exception.AuthException;
 import com.bccard.qrpay.exception.QrpayCustomException;
 import com.bccard.qrpay.exception.code.ErrorCode;
 import com.bccard.qrpay.exception.code.QrpayErrorCode;
+import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -13,8 +13,6 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-
-import java.util.stream.Collectors;
 
 @Slf4j
 @RestControllerAdvice(annotations = RestController.class)
@@ -58,7 +56,6 @@ public class ApiExceptionHandler {
         log.error("Internal Server Error: {}", e.getMessage(), e);
         return ResponseEntity.status(errorCode.getStatus()).body(apiError);
     }
-
 
     @ExceptionHandler(QrpayCustomException.class)
     public ResponseEntity<ApiError> handleQrpayCustomExceptions(QrpayCustomException e) {
@@ -105,6 +102,4 @@ public class ApiExceptionHandler {
 
         return ResponseEntity.status(errorCode.getStatus()).body(apiError);
     }
-
-
 }

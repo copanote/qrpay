@@ -1,6 +1,6 @@
 package com.bccard.qrpay.config.web.argumentresolver;
 
-import com.bccard.qrpay.auth.domain.CustomUserDetails;
+import com.bccard.qrpay.domain.auth.CustomUserDetails;
 import com.bccard.qrpay.domain.member.Member;
 import com.bccard.qrpay.exception.AuthException;
 import com.bccard.qrpay.exception.code.QrpayErrorCode;
@@ -24,7 +24,12 @@ public class LoginMemberArgumentResolver implements HandlerMethodArgumentResolve
     }
 
     @Override
-    public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
+    public Object resolveArgument(
+            MethodParameter parameter,
+            ModelAndViewContainer mavContainer,
+            NativeWebRequest webRequest,
+            WebDataBinderFactory binderFactory)
+            throws Exception {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || !(authentication.getPrincipal() instanceof CustomUserDetails userDetails)) {
             throw new AuthException(QrpayErrorCode.AUTHENTICATE_REQUIRED_ARGUMENTHANDLER);

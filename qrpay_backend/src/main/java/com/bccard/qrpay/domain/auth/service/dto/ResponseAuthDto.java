@@ -1,4 +1,4 @@
-package com.bccard.qrpay.auth.service.dto;
+package com.bccard.qrpay.domain.auth.service.dto;
 
 import lombok.Builder;
 import lombok.Getter;

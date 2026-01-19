@@ -1,15 +1,16 @@
 package com.bccard.qrpay.auth.repository;
 
-import com.bccard.qrpay.auth.domain.RefreshToken;
+import com.bccard.qrpay.domain.auth.RefreshToken;
+import com.bccard.qrpay.domain.auth.repository.RefreshTokenQueryRepository;
+import com.bccard.qrpay.domain.auth.repository.RefreshTokenRepository;
 import jakarta.persistence.EntityManager;
+import java.time.Instant;
+import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.Instant;
-import java.util.Optional;
 
 @SpringBootTest
 @Transactional

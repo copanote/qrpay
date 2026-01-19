@@ -25,36 +25,48 @@ public class MpmQrKitApplication extends BaseEntity implements Persistable<Long>
 
     @Column(name = "MER_MGMT_NO", length = 9)
     private String merchantId;
+
     @Column(name = "MER_NM", length = 40)
     private String merchantName;
+
     @Column(name = "NW_ADDR", length = 200)
-    private String address; //Not-Used
+    private String address; // Not-Used
+
     @Column(name = "ZP", length = 6)
     private String zipCode;
+
     @Column(name = "HP_TEL_NO", length = 14)
     private String phoneNo;
+
     @Column(name = "EMAIL", length = 100)
-    private String email; //Not-Used
+    private String email; // Not-Used
+
     @Column(name = "QR_REF_ID", length = 25)
     private String qrReferenceId;
+
     @Column(name = "ADD_APLC_YN", length = 1)
     @Convert(converter = BooleanYnConverter.class)
     private Boolean extraApplication;
+
     @Column(name = "SND_STAT", length = 2)
     @Convert(converter = QrKitShippingStatusConverter.class)
     private QrKitShippingStatus status;
 
     @Column(name = "DONG_OVR_NW_ADDR", length = 100)
     private String address1;
+
     @Column(name = "DONG_BLW_NW_ADDR", length = 100)
     private String address2;
+
     @Column(name = "REGD_SND_DATE", length = 8)
     private String registeredMailSentAt;
+
     @Column(name = "REGD_NO", length = 15)
     private String registeredMailNo;
 
     @Column(name = "ADD_APLC_PE_ID", length = 40)
     private String additionalApplicantId;
+
     @Column(name = "ADD_APLC_RSON", length = 500)
     private String additionalApplicantReason;
 
@@ -67,12 +79,19 @@ public class MpmQrKitApplication extends BaseEntity implements Persistable<Long>
         return id;
     }
 
-
     @Builder(builderMethodName = "newQrKit")
-    public MpmQrKitApplication(Long id, String merchantId, String merchantName,
-                               String address1, String address2, String zipCode, String phoneNo,
-                               String qrReferenceId, Boolean extraApplication,
-                               QrKitShippingStatus status, QrKitApplicationChannel applicationChannel) {
+    public MpmQrKitApplication(
+            Long id,
+            String merchantId,
+            String merchantName,
+            String address1,
+            String address2,
+            String zipCode,
+            String phoneNo,
+            String qrReferenceId,
+            Boolean extraApplication,
+            QrKitShippingStatus status,
+            QrKitApplicationChannel applicationChannel) {
         this.id = id;
         this.merchantId = merchantId;
         this.merchantName = merchantName;
@@ -86,7 +105,6 @@ public class MpmQrKitApplication extends BaseEntity implements Persistable<Long>
         this.applicationChannel = applicationChannel;
     }
 }
-
 
 /**
  * 이름               널?       유형

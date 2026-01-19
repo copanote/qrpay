@@ -15,12 +15,11 @@ import com.bccard.qrpay.domain.qrkit.QrKitService;
 import com.bccard.qrpay.domain.qrkit.dto.MpmQrKitApplyReqDto;
 import com.bccard.qrpay.exception.AuthException;
 import com.bccard.qrpay.exception.code.QrpayErrorCode;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -32,13 +31,10 @@ public class QrKitApiController {
     private final QrKitService qrKitService;
     private final EmvMpmQrService emvMpmQrService;
 
-
     @PostMapping(value = "/v1/qr-kit/apply")
     @ResponseBody
-    public ResponseEntity<?> qrkitApply(
-            @LoginMember Member member,
-            @RequestBody ApiQrKitApplyReqDto reqDto
-    ) throws Exception {
+    public ResponseEntity<?> qrkitApply(@LoginMember Member member, @RequestBody ApiQrKitApplyReqDto reqDto)
+            throws Exception {
 
         log.info("Member={}", member.getMemberId());
 
@@ -80,11 +76,10 @@ public class QrKitApiController {
         }
 
         List<MpmQrKitApplication> mpmQrKitApplications = qrKitService.find(member);
-        List<QrKitApplicationDto> list = mpmQrKitApplications.stream()
-                .map(QrKitApplicationDto::from).toList();
+        List<QrKitApplicationDto> list =
+                mpmQrKitApplications.stream().map(QrKitApplicationDto::from).toList();
 
         QrpayApiResponse<QrKitApplicationResDto> res = QrpayApiResponse.ok(member, QrKitApplicationResDto.of(list));
         return ResponseEntity.ok().body(res);
     }
-
 }

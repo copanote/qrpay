@@ -72,23 +72,23 @@ public class PasswordValidator {
         return false;
     }
 
-//    public static void main(String[] args) {
-//        System.out.println("--- 6자리 숫자 검증 테스트 ---");
-//        System.out.println("123456 (성공): " + isValid("123456")); // true
-//        System.out.println("12345 (실패/길이): " + isValid("12345")); // false
-//        System.out.println("ABCDEF (실패/문자): " + isValid("ABCDEF")); // false
-//        System.out.println("1234567 (실패/길이): " + isValid("1234567")); // false
-//
-//        System.out.println("\n--- 동일 숫자 3회 연속 검증 테스트 ---");
-//        System.out.println("111234 (실패): " + isValid("111234")); // false (111)
-//        System.out.println("123444 (실패): " + isValid("123444")); // false (444)
-//        System.out.println("122345 (성공): " + isValid("122345")); // true (22)
-//
-//        System.out.println("\n--- 연속 숫자 3회 연속 검증 테스트 ---");
-//        System.out.println("123456 (실패): " + isValid("123456")); // false (123)
-//        System.out.println("987654 (실패): " + isValid("987654")); // false (987)
-//        System.out.println("121456 (성공): " + isValid("121456")); // true
-//        System.out.println("901234 (실패): " + isValid("901234")); // false (012)
-//        System.out.println("321456 (실패): " + isValid("321456")); // false (321)
-//    }
+    //    public static void main(String[] args) {
+    //        System.out.println("--- 6자리 숫자 검증 테스트 ---");
+    //        System.out.println("123456 (성공): " + isValid("123456")); // true
+    //        System.out.println("12345 (실패/길이): " + isValid("12345")); // false
+    //        System.out.println("ABCDEF (실패/문자): " + isValid("ABCDEF")); // false
+    //        System.out.println("1234567 (실패/길이): " + isValid("1234567")); // false
+    //
+    //        System.out.println("\n--- 동일 숫자 3회 연속 검증 테스트 ---");
+    //        System.out.println("111234 (실패): " + isValid("111234")); // false (111)
+    //        System.out.println("123444 (실패): " + isValid("123444")); // false (444)
+    //        System.out.println("122345 (성공): " + isValid("122345")); // true (22)
+    //
+    //        System.out.println("\n--- 연속 숫자 3회 연속 검증 테스트 ---");
+    //        System.out.println("123456 (실패): " + isValid("123456")); // false (123)
+    //        System.out.println("987654 (실패): " + isValid("987654")); // false (987)
+    //        System.out.println("121456 (성공): " + isValid("121456")); // true
+    //        System.out.println("901234 (실패): " + isValid("901234")); // false (012)
+    //        System.out.println("321456 (실패): " + isValid("321456")); // false (321)
+    //    }
 }

@@ -5,7 +5,6 @@ import com.bccard.qrpay.domain.member.Member;
 import lombok.Builder;
 import lombok.Getter;
 
-
 @Getter
 @Builder
 public class EmployeesInfoDto {
@@ -14,7 +13,6 @@ public class EmployeesInfoDto {
     private Boolean permissionToCancel;
     private Boolean suspended;
     private String joinedAt;
-
 
     public static EmployeesInfoDto from(Member member) {
         return EmployeesInfoDto.builder()

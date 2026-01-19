@@ -1,5 +1,7 @@
 package com.bccard.qrpay.domain.member;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import com.bccard.qrpay.domain.common.code.*;
 import com.bccard.qrpay.domain.member.repository.MemberQueryRepository;
 import com.bccard.qrpay.domain.member.repository.MemberRepository;
@@ -9,17 +11,14 @@ import com.bccard.qrpay.domain.merchant.repository.FinancialInstitutionMerchantR
 import com.bccard.qrpay.domain.merchant.repository.MerchantQueryRepository;
 import com.bccard.qrpay.domain.merchant.repository.MerchantRepository;
 import jakarta.persistence.EntityManager;
+import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @Transactional
@@ -134,7 +133,8 @@ public class MemberRepositoryTest {
 
         long seq = memberQueryRepository.getNextSequenceValue();
 
-        Member newMember = Member.createMasterMember(seq + "", merchant, "test01", "encpass", "1.3", "", "test@gmail.com");
+        Member newMember =
+                Member.createMasterMember(seq + "", merchant, "test01", "encpass", "1.3", "", "test@gmail.com");
         memberRepository.save(newMember);
         em.flush();
         em.clear();

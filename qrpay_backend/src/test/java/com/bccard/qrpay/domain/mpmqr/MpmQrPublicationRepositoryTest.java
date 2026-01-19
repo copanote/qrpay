@@ -11,6 +11,7 @@ import com.bccard.qrpay.domain.mpmqr.repository.MpmQrPublicationQueryRepository;
 import com.bccard.qrpay.domain.mpmqr.repository.MpmQrPublicationRepository;
 import com.bccard.qrpay.utils.MpmDateTimeUtils;
 import jakarta.persistence.EntityManager;
+import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,8 +19,6 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 @SpringBootTest
 @Transactional
@@ -84,7 +83,7 @@ public class MpmQrPublicationRepositoryTest {
         System.out.println(qrref1.get().getQrReferenceId());
         System.out.println(qrref2.isPresent());
     }
-    
+
     @Test
     void test_findStaticmpmQR() {
         Merchant merchant = Merchant.createNewMerchant().merchantId("m999").build();
@@ -104,8 +103,5 @@ public class MpmQrPublicationRepositoryTest {
         MpmQrPublication mpmQrPublication = emvMpmQrService.publishBcEmvMpmQr(req);
         System.out.println(mpmQrPublication.getQrReferenceId());
         System.out.println(mpmQrPublication.getQrData());
-
     }
-
-
 }

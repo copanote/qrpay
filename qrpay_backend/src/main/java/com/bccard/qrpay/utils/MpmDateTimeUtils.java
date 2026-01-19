@@ -1,12 +1,11 @@
 package com.bccard.qrpay.utils;
 
-import org.apache.commons.lang3.StringUtils;
-
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.time.temporal.ChronoField;
 import java.util.regex.Pattern;
+import org.apache.commons.lang3.StringUtils;
 
 public class MpmDateTimeUtils {
     public static final String PATTERN_YEAR_TO_DATE = "yyyyMMdd";
@@ -114,7 +113,6 @@ public class MpmDateTimeUtils {
         ZonedDateTime convertedZonedDateTime = offsetDateTime.atZoneSameInstant(zoneId);
         return convertedZonedDateTime.toOffsetDateTime();
     }
-
 
     public static String generateDtmNow(String pattern) {
         return LocalDateTime.now().format(DateTimeFormatter.ofPattern(pattern));

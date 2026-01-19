@@ -1,7 +1,6 @@
 package com.bccard.qrpay.external.bc.mci;
 
 import com.bccard.qrpay.controller.api.dtos.BcMerchantInfo;
-
 import java.util.Random;
 
 public class BcMerchantInfoGenerator {
@@ -26,9 +25,8 @@ public class BcMerchantInfoGenerator {
         String[] middle = {"커머스", "유통", "푸드", "테크", "시스템", "로지스틱스", "디자인"};
         String[] suffix = {"(주)", "컴퍼니", "마켓", "스토어", ""};
 
-        return prefix[random.nextInt(prefix.length)] + " " +
-                middle[random.nextInt(middle.length)] + " " +
-                suffix[random.nextInt(suffix.length)];
+        return prefix[random.nextInt(prefix.length)] + " " + middle[random.nextInt(middle.length)] + " "
+                + suffix[random.nextInt(suffix.length)];
     }
 
     // 2. 한국인 이름 조합 생성
@@ -43,17 +41,16 @@ public class BcMerchantInfoGenerator {
         String[] cities = {"서울특별시", "경기도", "부산광역시", "인천광역시", "경상남도"};
         String[] districts = {"강남구", "수원시 팔달구", "해운대구", "남동구", "창원시 성산구"};
         String[] roads = {"중앙로", "테헤란로", "백범로", "가산디지털로", "한강대로"};
-        return cities[random.nextInt(cities.length)] + " " +
-                districts[random.nextInt(districts.length)] + " " +
-                roads[random.nextInt(roads.length)] + " " + (random.nextInt(200) + 1) + "번길";
+        return cities[random.nextInt(cities.length)] + " " + districts[random.nextInt(districts.length)]
+                + " " + roads[random.nextInt(roads.length)]
+                + " " + (random.nextInt(200) + 1) + "번길";
     }
 
     // 4. 랜덤 전화번호 (지역번호 포함)
     private static String generateTelNo() {
         String[] areaCodes = {"02", "031", "032", "051", "010"};
-        return areaCodes[random.nextInt(areaCodes.length)] + "-" +
-                (random.nextInt(9000) + 1000) + "-" +
-                (random.nextInt(9000) + 1000);
+        return areaCodes[random.nextInt(areaCodes.length)] + "-" + (random.nextInt(9000) + 1000) + "-"
+                + (random.nextInt(9000) + 1000);
     }
 
     // 5. 고정 길이 숫자 문자열 생성

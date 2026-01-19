@@ -22,8 +22,5 @@ public class MpmQrPublicationService {
         return "MQ" + yyyyString + paddedSeq;
     }
 
-    public void findStaticMpmQrOrCreate(Merchant m) {
-
-    }
-
+    public void findStaticMpmQrOrCreate(Merchant m) {}
 }

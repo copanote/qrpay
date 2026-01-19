@@ -1,9 +1,8 @@
-package com.bccard.qrpay.auth.service;
+package com.bccard.qrpay.config.security;
 
 import com.bccard.qrpay.utils.security.HashCipher;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-
 
 @Component
 public class CustomPasswordEncoder implements PasswordEncoder {

@@ -1,6 +1,5 @@
 package com.bccard.qrpay.controller.page.dto;
 
-
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
@@ -15,5 +14,4 @@ public class QrKitApplyPageDto {
     private String postNo;
     private String address1;
     private String address2;
-
 }

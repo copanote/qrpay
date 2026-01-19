@@ -52,7 +52,7 @@
                 <a class="icon-help" href="#">도움말</a>
               </h2>
               <div class="col-xs-auto">
-                <button type="button" class="btn-refresh" onclick="location.reload()"><i class="icon-refresh mr5"></i>새로고침</button>
+                <button type="button" class="btn-refresh" onclick="TransactionManager.refresh()"><i class="icon-refresh mr5"></i>새로고침</button>
               </div>
             </div>
           </div>
@@ -406,6 +406,10 @@
             { threshold: 1.0 }
           );
         },
+        refresh: function () {
+          this.reset();
+          this.fetchTransactions();
+        },
 
         reset: function () {
           this.state = [];
@@ -540,14 +544,14 @@
             const li = document.createElement('li');
             li.className = 'row align-items-center';
             li.innerHTML = `
-                <div class="col">
+                <div class="col" onclick="TransactionManager.showDetail('${item.transactionId}')">
                     <p class="h4"><i class="${brandIcon}"></i> ${item.approvalNo || '-'}</p>
                     <ul class="lst-split h6 text-muted">
                         <li>${item.serviceType}</li>
                         <li>${formattedDate}</li>
                         <li>${item.installment === 0 ? '일시불' : item.installment + '개월'}</li>
                     </ul>
-                    <a class="price-wrp" href="javascript:void(0);" onclick="TransactionManager.showDetail('${item.transactionId}')">
+                    <a class="price-wrp" href="javascript:void(0);" >
                         <strong class="price">${Number(item.transactionAmount).toLocaleString()}</strong><small>원</small>
                     </a>
                 </div>
@@ -568,8 +572,77 @@
         showDetail: function (id) {
           const data = this.state.find((item) => item.transactionId === id);
           if (!data) return;
-          console.log('상세 데이터 로드:', data);
-          // 여기서 상세 팝업 오픈 로직 추가
+
+          const $tbody = $('#detail-tbody');
+          const isCanceled = data.paymentStatus === 'CANCELED';
+
+          // 금액 영역 클래스 처리 (취소 시 del 클래스 추가)
+          const priceClass = isCanceled ? 'price-txt-wrp del' : 'price-txt-wrp';
+
+          // 1. 테이블 데이터 구성
+          let html = `
+        <tr class="price">
+            <th>결제금액</th>
+            <td>
+                <span class="${priceClass}"> 
+                    <strong class="font-lato">${Number(data.transactionAmount).toLocaleString()}</strong><span>원</span>
+                </span>
+            </td>
+        </tr>
+        <tr><th>브랜드</th><td>${data.serviceType}</td></tr>
+        <tr><th>거래일시</th><td>${this.formatDateFull(data.transactionAt)}</td></tr>
+        <tr><th>승인번호</th><td>${data.approvalNo || '-'}</td></tr>
+        <tr><th>카드번호</th><td>${data.maskedPan || '****************'}</td></tr>
+        <tr><th>할부정보</th><td>${data.installment === 0 ? '일시불' : data.installment + '개월'}</td></tr>
+        <tr><th>거래고유번호</th><td>${data.transactionId}</td></tr>
+    `;
+
+          // 은련(UPI)일 때만 Voucher No 노출
+          if (data.serviceType === 'UPI') {
+            html += `<tr><th>Voucher No. (凭证号)</th><td>${data.voucherNo || '-'}</td></tr>`;
+          }
+
+          // 할인 정보가 있을 때만 노출 (데이터 필드명은 API 설계에 맞게 조정하세요)
+          if (data.discountAmount > 0) {
+            html += `
+            <tr><th>할인 전 금액</th><td>${Number(data.beforeDiscountAmount).toLocaleString()}원</td></tr>
+            <tr><th>할인 금액</th><td>${Number(data.discountAmount).toLocaleString()}원</td></tr>
+            <tr><th>할인 후 금액</th><td>${Number(data.transactionAmount).toLocaleString()}원</td></tr>
+        `;
+          }
+
+          html += `<tr><th>승인상태</th><td>${isCanceled ? '취소완료' : '승인완료'}</td></tr>`;
+
+          $tbody.html(html);
+
+          // 2. 취소 버튼 제어
+          const $btnArea = $('#cancel-btn-area');
+          if (isCanceled) {
+            $btnArea.hide(); // 이미 취소된 건은 버튼 숨김
+          } else {
+            // 현대카드 여부에 따른 알림 처리 예시
+            const cancelBtnHtml =
+              data.serviceType === 'HYUNDAI'
+                ? `<button type="button" class="btn btn-dark btn-lg btn-block" onclick="alert('현대카드 고객센터(1577-6000)를 통해 취소 가능합니다.')">승인취소</button>`
+                : `<button type="button" class="btn btn-dark btn-lg btn-block" onclick="TransactionManager.cancelPay('${data.transactionId}')">승인취소</button>`;
+            $btnArea.html(cancelBtnHtml).show();
+          }
+
+          // 3. 모달 열기
+          $('#transactionDetailModal').modal('show');
+        },
+
+        // 날짜 포맷팅 헬퍼 함수
+        formatDateFull: function (rawDate) {
+          if (!rawDate || rawDate.length < 14) return rawDate;
+          return `${rawDate.substring(0, 4)}-${rawDate.substring(4, 6)}-${rawDate.substring(6, 8)} ${rawDate.substring(8, 10)}:${rawDate.substring(10, 12)}:${rawDate.substring(12, 14)}`;
+        },
+
+        cancelPay: function (id) {
+          if (confirm('정말 취소하시겠습니까?')) {
+            // 취소 API 호출 로직 구현
+            console.log('취소 요청 ID:', id);
+          }
         },
       };
 
@@ -582,5 +655,34 @@
     <div th:replace="~{fragments/modals/common-modal :: confirmModal}"></div>
     <div th:replace="~{fragments/modals/common-modal :: loadingModal}"></div>
     <div th:replace="~{fragments/modals/calendar-modal :: calendarModal}"></div>
+
+    <div class="modal fade modal-fullscreen" id="transactionDetailModal" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="container">
+            <button type="button" class="icon-back" data-dismiss="modal">이전 페이지 이동</button>
+            <h1>결제 내역</h1>
+            <button type="button" class="btn-cls" data-dismiss="modal">닫기</button>
+          </div>
+
+          <div class="modal-body p-0">
+            <div id="ct">
+              <div class="container">
+                <div class="ft-txt-wrp">
+                  <table class="tb-paydetail">
+                    <tbody id="detail-tbody"></tbody>
+                  </table>
+
+                  <div class="mt25 mb50" id="cancel-btn-area"></div>
+                  <div class="bx-gray-id h6 mt-auto">
+                    <span>추가 문의 사항은<br />BC QR결제 가맹점 상담센터(<a href="tel:02-330-5777">02-330-5777</a>)를 이용해주세요.</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </body>
 </html>

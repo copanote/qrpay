@@ -64,7 +64,7 @@ public class Member extends BaseEntity implements Persistable<String> {
     private Boolean permissionToCancel;
 
     @Column(name = "AFFI_CO_ID", length = 40)
-    private String affiCoId; //BCQRCPAY
+    private String affiCoId; // BCQRCPAY
 
     @Column(name = "RCRU_PE_NO", length = 10)
     private String referrerId;
@@ -84,29 +84,28 @@ public class Member extends BaseEntity implements Persistable<String> {
 
     @Override
     public String toString() {
-        return "Member{" +
-                "memberId='" + memberId + '\'' +
-                ", loginId='" + loginId + '\'' +
-                ", hashedPassword='" + hashedPassword + '\'' +
-                ", role=" + role +
-                ", status=" + status +
-                ", lastLoginAt='" + lastLoginAt + '\'' +
-                ", passwordErrorCount=" + passwordErrorCount +
-                ", passwordErrorAt='" + passwordErrorAt + '\'' +
-                ", passwordChangedAt='" + passwordChangedAt + '\'' +
-                ", termsAgreeInfo='" + termsAgreeInfo + '\'' +
-                ", authCnclAbleYn=" + permissionToCancel +
-                ", affiCoId='" + affiCoId + '\'' +
-                ", referrerId='" + referrerId + '\'' +
-                ", termsAgreedAt='" + termsAgreedAt + '\'' +
-                ", email='" + email + '\'' +
-                ", withdrawalAt='" + withdrawalAt + '\'' +
-                ", device=" + device +
-                ", createdBy='" + createdBy + '\'' +
-                ", createdAt='" + createdAt + '\'' +
-                ", lastModifiedBy='" + lastModifiedBy + '\'' +
-                ", lastModifiedAt='" + lastModifiedAt + '\'' +
-                '}';
+        return "Member{" + "memberId='"
+                + memberId + '\'' + ", loginId='"
+                + loginId + '\'' + ", hashedPassword='"
+                + hashedPassword + '\'' + ", role="
+                + role + ", status="
+                + status + ", lastLoginAt='"
+                + lastLoginAt + '\'' + ", passwordErrorCount="
+                + passwordErrorCount + ", passwordErrorAt='"
+                + passwordErrorAt + '\'' + ", passwordChangedAt='"
+                + passwordChangedAt + '\'' + ", termsAgreeInfo='"
+                + termsAgreeInfo + '\'' + ", authCnclAbleYn="
+                + permissionToCancel + ", affiCoId='"
+                + affiCoId + '\'' + ", referrerId='"
+                + referrerId + '\'' + ", termsAgreedAt='"
+                + termsAgreedAt + '\'' + ", email='"
+                + email + '\'' + ", withdrawalAt='"
+                + withdrawalAt + '\'' + ", device="
+                + device + ", createdBy='"
+                + createdBy + '\'' + ", createdAt='"
+                + createdAt + '\'' + ", lastModifiedBy='"
+                + lastModifiedBy + '\'' + ", lastModifiedAt='"
+                + lastModifiedAt + '\'' + '}';
     }
 
     @Override
@@ -114,12 +113,13 @@ public class Member extends BaseEntity implements Persistable<String> {
         return memberId;
     }
 
-
-    public static Member createNewEmployee(String memberId, Merchant merchant, String loginId, String hashedPassword, Boolean permissionToCancel) {
+    public static Member createNewEmployee(
+            String memberId, Merchant merchant, String loginId, String hashedPassword, Boolean permissionToCancel) {
         return new Member(memberId, merchant, loginId, hashedPassword, permissionToCancel);
     }
 
-    private Member(String memberId, Merchant merchant, String loginId, String hashedPassword, Boolean permissionToCancel) {
+    private Member(
+            String memberId, Merchant merchant, String loginId, String hashedPassword, Boolean permissionToCancel) {
         this.memberId = memberId;
         this.merchant = merchant;
         this.loginId = loginId;
@@ -131,11 +131,25 @@ public class Member extends BaseEntity implements Persistable<String> {
         this.affiCoId = "BCQRCPAY";
     }
 
-    public static Member createMasterMember(String memberId, Merchant merchant, String loginId, String hashedPassword, String termsAgreeInfo, String referrerId, String email) {
+    public static Member createMasterMember(
+            String memberId,
+            Merchant merchant,
+            String loginId,
+            String hashedPassword,
+            String termsAgreeInfo,
+            String referrerId,
+            String email) {
         return new Member(memberId, merchant, loginId, hashedPassword, termsAgreeInfo, referrerId, email);
     }
 
-    private Member(String memberId, Merchant merchant, String loginId, String hashedPassword, String termsAgreeInfo, String referrerId, String email) {
+    private Member(
+            String memberId,
+            Merchant merchant,
+            String loginId,
+            String hashedPassword,
+            String termsAgreeInfo,
+            String referrerId,
+            String email) {
         this.memberId = memberId;
         this.merchant = merchant;
         this.loginId = loginId;
@@ -144,14 +158,12 @@ public class Member extends BaseEntity implements Persistable<String> {
         this.referrerId = referrerId;
         this.email = email;
 
-
         this.role = MemberRole.MASTER;
         this.status = MemberStatus.ACTIVE;
         this.termsAgreedAt = MpmDateTimeUtils.generateDtmNow(MpmDateTimeUtils.FORMATTER_YEAR_TO_SEC);
         this.permissionToCancel = Boolean.TRUE;
         this.affiCoId = "BCQRCPAY";
     }
-
 
     public void onPasswordFail() {
         passwordErrorAt = MpmDateTimeUtils.generateDtmNow(MpmDateTimeUtils.PATTERN_YEAR_TO_DATE);
@@ -189,7 +201,6 @@ public class Member extends BaseEntity implements Persistable<String> {
             this.status = MemberStatus.CANCELLED;
         }
     }
-
 }
 
 /**

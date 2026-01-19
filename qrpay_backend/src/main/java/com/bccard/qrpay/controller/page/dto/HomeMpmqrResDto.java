@@ -1,6 +1,5 @@
 package com.bccard.qrpay.controller.page.dto;
 
-
 import lombok.Builder;
 import lombok.Getter;
 

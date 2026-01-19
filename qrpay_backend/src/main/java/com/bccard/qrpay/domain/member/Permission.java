@@ -1,6 +1,5 @@
 package com.bccard.qrpay.domain.member;
 
-
 import lombok.Getter;
 
 @Getter
@@ -13,5 +12,4 @@ public enum Permission {
     }
 
     private final String name;
-
 }

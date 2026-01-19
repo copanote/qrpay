@@ -1,6 +1,5 @@
 package com.bccard.qrpay.controller.api;
 
-
 import com.bccard.qrpay.config.web.argumentresolver.LoginMember;
 import com.bccard.qrpay.controller.api.common.QrpayApiResponse;
 import com.bccard.qrpay.controller.api.dtos.*;
@@ -18,15 +17,13 @@ import com.bccard.qrpay.exception.AuthException;
 import com.bccard.qrpay.exception.MpmQrException;
 import com.bccard.qrpay.exception.code.QrpayErrorCode;
 import com.bccard.qrpay.utils.ZxingQrcode;
+import java.math.BigDecimal;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import java.math.BigDecimal;
-import java.util.List;
-
 
 @Slf4j
 @RequiredArgsConstructor
@@ -40,8 +37,7 @@ public class MpmMerchantApiController {
 
     @RequestMapping(value = "v1/member/{memberId}/employee-cancel11")
     @ResponseBody
-    public ResponseEntity<?> cancel(@LoginMember Member member,
-                                    @PathVariable(value = "memberId") String memberId) {
+    public ResponseEntity<?> cancel(@LoginMember Member member, @PathVariable(value = "memberId") String memberId) {
         log.info("Member={}", member.getMemberId());
 
         if (member.getRole() != MemberRole.MASTER) {
@@ -50,18 +46,14 @@ public class MpmMerchantApiController {
 
         Member byMemberId = memberService.findByMemberId(memberId);
 
-//        memberService.cancel();
+        //        memberService.cancel();
 
         return ResponseEntity.ok(QrpayApiResponse.ok(member, EmployeesInfoDto.from(null)));
     }
 
-
     @RequestMapping(value = "/v1/merchant/add-employee")
     @ResponseBody
-    public ResponseEntity<?> addEmployee(
-            @LoginMember Member member,
-            @RequestBody AddEmployeeReqDto reqDto
-    ) {
+    public ResponseEntity<?> addEmployee(@LoginMember Member member, @RequestBody AddEmployeeReqDto reqDto) {
         log.info("Member={}", member.getMemberId());
 
         if (member.getRole() != MemberRole.MASTER) {
@@ -75,11 +67,11 @@ public class MpmMerchantApiController {
         List<Permission> permissions = reqDto.getPermissions();
         boolean permissionCancel = permissions.contains(Permission.CANCEL);
 
-        Member newEmployee = memberService.addEmployee(merchant, reqDto.getLoginId(), reqDto.getPassword(), permissionCancel);
+        Member newEmployee =
+                memberService.addEmployee(merchant, reqDto.getLoginId(), reqDto.getPassword(), permissionCancel);
 
         return ResponseEntity.ok(QrpayApiResponse.ok(member, EmployeesInfoDto.from(newEmployee)));
     }
-
 
     @RequestMapping(value = "/v1/merchant/employees")
     @ResponseBody
@@ -93,7 +85,8 @@ public class MpmMerchantApiController {
         }
 
         List<Member> employees = memberService.findMemberByRole(merchant, MemberRole.EMPLOYEE);
-        List<EmployeesInfoDto> result = employees.stream().map(EmployeesInfoDto::from).toList();
+        List<EmployeesInfoDto> result =
+                employees.stream().map(EmployeesInfoDto::from).toList();
 
         return ResponseEntity.ok(QrpayApiResponse.ok(member, EmployeesInfoResDto.of(result)));
     }
@@ -111,12 +104,9 @@ public class MpmMerchantApiController {
         return ResponseEntity.ok(QrpayApiResponse.ok(member, MerchantInfoResDto.from(merchant)));
     }
 
-
     @PostMapping(value = "/v1/merchant/change-vat")
     @ResponseBody
-    public ResponseEntity<?> changeVat(
-            @LoginMember Member member,
-            @RequestBody VatChangeReqDto reqDto) {
+    public ResponseEntity<?> changeVat(@LoginMember Member member, @RequestBody VatChangeReqDto reqDto) {
 
         Merchant merchant = member.getMerchant();
 
@@ -130,20 +120,16 @@ public class MpmMerchantApiController {
         }
         Merchant changed = merchantService.updateVat(merchant, updateVat);
 
-        TipTaxInfoDto resDto = TipTaxInfoDto
-                .builder()
+        TipTaxInfoDto resDto = TipTaxInfoDto.builder()
                 .tipRate(changed.getTipRate() == null ? BigDecimal.ZERO : changed.getTipRate())
                 .vatRate(changed.getVatRate() == null ? BigDecimal.ZERO : changed.getVatRate())
                 .build();
-
 
         return ResponseEntity.ok(QrpayApiResponse.ok(member, resDto));
     }
 
     @PostMapping(value = "/v1/merchant/change-tip")
-    public ResponseEntity<?> changeTip(
-            @LoginMember Member member,
-            @RequestBody TipChangeReqDto reqDto) {
+    public ResponseEntity<?> changeTip(@LoginMember Member member, @RequestBody TipChangeReqDto reqDto) {
 
         log.info("Member={}", member.getMemberId());
         if (member.getRole() != MemberRole.MASTER) {
@@ -156,8 +142,7 @@ public class MpmMerchantApiController {
         }
         Merchant changed = merchantService.updateTip(member.getMerchant(), updateVat);
 
-        TipTaxInfoDto resDto = TipTaxInfoDto
-                .builder()
+        TipTaxInfoDto resDto = TipTaxInfoDto.builder()
                 .tipRate(changed.getTipRate() == null ? BigDecimal.ZERO : changed.getTipRate())
                 .vatRate(changed.getVatRate() == null ? BigDecimal.ZERO : changed.getVatRate())
                 .build();
@@ -168,8 +153,7 @@ public class MpmMerchantApiController {
     @PostMapping(value = "/v1/merchant/change-name")
     @ResponseBody
     public ResponseEntity<?> changeName(
-            @LoginMember Member member,
-            @RequestBody @Validated MerchantNameChangeReqDto req) throws Exception {
+            @LoginMember Member member, @RequestBody @Validated MerchantNameChangeReqDto req) throws Exception {
 
         log.info("Member={}", member.getMemberId());
 
@@ -178,24 +162,19 @@ public class MpmMerchantApiController {
         }
 
         Merchant merchant = merchantService.updateMerchantName(member.getMerchant(), req.getName());
-        PublishBcEmvMpmQrReqDto reqEmvMpm = PublishBcEmvMpmQrReqDto.staticEmvMpm(
-                member.getMemberId(),
-                merchant,
-                "410"
-        );
+        PublishBcEmvMpmQrReqDto reqEmvMpm = PublishBcEmvMpmQrReqDto.staticEmvMpm(member.getMemberId(), merchant, "410");
 
         MpmQrPublication staticMpmQr = emvMpmQrService.publishBcEmvMpmQr(reqEmvMpm);
-        MpmQrInfoResDto out = MpmQrInfoResDto.staticMpmQrInfo(merchant.getMerchantName(),
-                ZxingQrcode.base64EncodedQrImageForQrpay(staticMpmQr.getQrData()));
+        MpmQrInfoResDto out = MpmQrInfoResDto.staticMpmQrInfo(
+                merchant.getMerchantName(), ZxingQrcode.base64EncodedQrImageForQrpay(staticMpmQr.getQrData()));
 
         return ResponseEntity.ok().body(QrpayApiResponse.ok(member, out));
     }
 
     @PostMapping(value = "/v1/merchant/mpmqr")
     @ResponseBody
-    public ResponseEntity<?> mpmqr(
-            @LoginMember Member member,
-            @RequestBody @Validated MpmQrInfoReqDto req) throws Exception {
+    public ResponseEntity<?> mpmqr(@LoginMember Member member, @RequestBody @Validated MpmQrInfoReqDto req)
+            throws Exception {
 
         Merchant merchant = member.getMerchant();
         MpmQrPublication emvmpmQr;
@@ -209,12 +188,7 @@ public class MpmMerchantApiController {
             }
 
             PublishBcEmvMpmQrReqDto publishEmvMpmReqDto = PublishBcEmvMpmQrReqDto.dynamicEmvMpm(
-                    member.getMemberId(),
-                    merchant,
-                    req.getAmount(),
-                    req.getInstallment(),
-                    "410"
-            );
+                    member.getMemberId(), merchant, req.getAmount(), req.getInstallment(), "410");
 
             log.info("Publish Dynamic emvmpm qr={}", publishEmvMpmReqDto);
 
@@ -223,17 +197,16 @@ public class MpmMerchantApiController {
                     merchant.getMerchantName(),
                     ZxingQrcode.base64EncodedQrImageForQrpay(emvmpmQr.getQrData()),
                     emvmpmQr.getAmount(),
-                    req.getInstallment()
-            );
+                    req.getInstallment());
 
         } else if (req.getPim() == PointOfInitMethod.STATIC) {
             log.info("Publish static emvmpm qr");
             emvmpmQr = emvMpmQrService.findStaticMpmQrOrCreate(member.getMemberId(), merchant);
-            out = MpmQrInfoResDto.staticMpmQrInfo(merchant.getMerchantName(), ZxingQrcode.base64EncodedQrImageForQrpay(emvmpmQr.getQrData()));
+            out = MpmQrInfoResDto.staticMpmQrInfo(
+                    merchant.getMerchantName(), ZxingQrcode.base64EncodedQrImageForQrpay(emvmpmQr.getQrData()));
         } else {
             throw new MpmQrException(QrpayErrorCode.NOT_SUPPORT_PIM);
         }
         return ResponseEntity.ok().body(out);
     }
-
 }

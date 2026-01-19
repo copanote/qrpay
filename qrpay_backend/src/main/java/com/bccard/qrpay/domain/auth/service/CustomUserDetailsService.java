@@ -1,6 +1,6 @@
-package com.bccard.qrpay.auth.service;
+package com.bccard.qrpay.domain.auth.service;
 
-import com.bccard.qrpay.auth.domain.CustomUserDetails;
+import com.bccard.qrpay.domain.auth.CustomUserDetails;
 import com.bccard.qrpay.domain.common.code.MemberStatus;
 import com.bccard.qrpay.domain.common.code.MerchantStatus;
 import com.bccard.qrpay.domain.member.Member;
@@ -23,7 +23,9 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Member member = memberQueryRepository.findByLoginId(username).orElseThrow(() -> new UsernameNotFoundException("NotFound Username"));
+        Member member = memberQueryRepository
+                .findByLoginId(username)
+                .orElseThrow(() -> new UsernameNotFoundException("NotFound Username"));
 
         if (member.getStatus() == MemberStatus.CANCELLED) {
             throw new QrpayCustomException(QrpayErrorCode.MEMBER_CANCELED);
@@ -41,7 +43,9 @@ public class CustomUserDetailsService implements UserDetailsService {
     }
 
     public UserDetails loadUserByMemberId(String memberId) throws UsernameNotFoundException {
-        Member member = memberQueryRepository.findById(memberId).orElseThrow(() -> new UsernameNotFoundException("NotFound Username"));
+        Member member = memberQueryRepository
+                .findById(memberId)
+                .orElseThrow(() -> new UsernameNotFoundException("NotFound Username"));
 
         if (member.getStatus() == MemberStatus.CANCELLED) {
             throw new QrpayCustomException(QrpayErrorCode.MEMBER_CANCELED);
@@ -57,5 +61,4 @@ public class CustomUserDetailsService implements UserDetailsService {
 
         return CustomUserDetails.of(member);
     }
-
 }

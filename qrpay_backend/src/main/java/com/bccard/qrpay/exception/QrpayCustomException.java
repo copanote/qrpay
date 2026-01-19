@@ -1,6 +1,5 @@
 package com.bccard.qrpay.exception;
 
-
 import com.bccard.qrpay.exception.code.ErrorCode;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;

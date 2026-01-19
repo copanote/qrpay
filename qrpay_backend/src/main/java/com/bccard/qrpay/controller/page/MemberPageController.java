@@ -19,15 +19,13 @@ public class MemberPageController {
 
     private final MemberService memberService;
 
-
     @GetMapping("/member/employee/add")
     public String employee_add(Model model) {
         return "member/employee/employee-add";
     }
 
     @GetMapping("/member/employee/list")
-    public String employee_list(Model model,
-                                @CookieValue(value = "memId", required = false) String memId) {
+    public String employee_list(Model model, @CookieValue(value = "memId", required = false) String memId) {
         Member member = memberService.findBy(memId).orElseGet(() -> null);
         if (member == null) {
             log.info("Needs Authenticate");
@@ -41,8 +39,7 @@ public class MemberPageController {
     }
 
     @GetMapping("/member/{memberId}/employee/change-pw")
-    public String employee_pw_change(Model model,
-                                     @PathVariable(value = "memberId") String memberId) {
+    public String employee_pw_change(Model model, @PathVariable(value = "memberId") String memberId) {
 
         Member byMemberId = memberService.findByMemberId(memberId);
         model.addAttribute("toChangePwLoginId", byMemberId.getLoginId());
@@ -64,6 +61,4 @@ public class MemberPageController {
 
         return "member/master/master-change-password";
     }
-
-
 }

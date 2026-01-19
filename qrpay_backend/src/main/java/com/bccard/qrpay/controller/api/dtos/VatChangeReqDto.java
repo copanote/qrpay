@@ -1,6 +1,5 @@
 package com.bccard.qrpay.controller.api.dtos;
 
-
 import lombok.Getter;
 import lombok.ToString;
 

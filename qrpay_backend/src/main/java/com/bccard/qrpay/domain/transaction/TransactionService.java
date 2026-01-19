@@ -1,6 +1,5 @@
 package com.bccard.qrpay.domain.transaction;
 
-
 import com.bccard.qrpay.domain.common.code.MerchantStatus;
 import com.bccard.qrpay.domain.merchant.Merchant;
 import com.bccard.qrpay.domain.merchant.MerchantService;
@@ -10,13 +9,12 @@ import com.bccard.qrpay.domain.transaction.dto.TransSearchCondition;
 import com.bccard.qrpay.exception.MerchantException;
 import com.bccard.qrpay.exception.QrpayCustomException;
 import com.bccard.qrpay.exception.code.QrpayErrorCode;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -28,7 +26,8 @@ public class TransactionService {
     @Transactional(readOnly = true)
     public List<MonthlySalesDto> fetchMonthlySalesList(String merchantId, int period) {
 
-        Merchant merchant = merchantService.findById(merchantId)
+        Merchant merchant = merchantService
+                .findById(merchantId)
                 .orElseThrow(() -> new MerchantException(QrpayErrorCode.MERCHANT_NOT_FOUND));
 
         if (MerchantStatus.ACTIVE != merchant.getMerchantStatus()) {
@@ -47,5 +46,4 @@ public class TransactionService {
 
         return transHistoryQueryRepository.searchSlice(searchCondition, pageable);
     }
-
 }

@@ -6,6 +6,7 @@ import com.bccard.qrpay.domain.member.MemberService;
 import com.bccard.qrpay.domain.merchant.Merchant;
 import com.bccard.qrpay.domain.qrkit.MpmQrKitApplication;
 import com.bccard.qrpay.domain.qrkit.QrKitService;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -13,8 +14,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -24,7 +23,6 @@ public class QrKitPageController {
 
     private final MemberService memberService;
     private final QrKitService qrKitService;
-
 
     @GetMapping("/qrkit/apply")
     public String apply(Model model, @CookieValue(value = "memId", required = false) String memId) {
@@ -37,8 +35,7 @@ public class QrKitPageController {
 
         Merchant merchant = member.getMerchant();
 
-        QrKitApplyPageDto resDto = QrKitApplyPageDto
-                .builder()
+        QrKitApplyPageDto resDto = QrKitApplyPageDto.builder()
                 .merchantId(merchant.getMerchantId())
                 .merchantName(merchant.getMerchantName())
                 .build();
@@ -46,8 +43,7 @@ public class QrKitPageController {
         List<MpmQrKitApplication> mpmQrKitApplications = qrKitService.find(member);
         if (!mpmQrKitApplications.isEmpty()) {
             MpmQrKitApplication first = mpmQrKitApplications.getFirst();
-            resDto = QrKitApplyPageDto
-                    .builder()
+            resDto = QrKitApplyPageDto.builder()
                     .merchantId(merchant.getMerchantId())
                     .merchantName(merchant.getMerchantName())
                     .phoneNo(first.getPhoneNo())
@@ -67,6 +63,4 @@ public class QrKitPageController {
     public String history(Model model) {
         return "qr-kit/status";
     }
-
-
 }

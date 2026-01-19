@@ -5,10 +5,9 @@ import com.bccard.qrpay.domain.common.converter.*;
 import com.bccard.qrpay.domain.common.entity.BaseEntity;
 import com.bccard.qrpay.domain.merchant.Merchant;
 import jakarta.persistence.*;
+import java.math.BigDecimal;
 import lombok.*;
 import org.springframework.data.domain.Persistable;
-
-import java.math.BigDecimal;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -27,8 +26,7 @@ public class Transaction extends BaseEntity implements Persistable<TransactionId
     private String affiliateTransactionId;
 
     @Column(name = "TRNS_ATON", length = 14)
-    private String transactionAt; //TRNS_ATON
-
+    private String transactionAt; // TRNS_ATON
 
     @Column(name = "EPAN_NO", length = 100)
     private String ePan;
@@ -43,10 +41,10 @@ public class Transaction extends BaseEntity implements Persistable<TransactionId
     @JoinColumn(name = "MER_MGMT_NO", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private Merchant merchant;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "MER_CDHD_NO", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-//    @NotFound(action = NotFoundAction.IGNORE)
-//    private Member member;
+    //    @ManyToOne(fetch = FetchType.LAZY)
+    //    @JoinColumn(name = "MER_CDHD_NO", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+    //    @NotFound(action = NotFoundAction.IGNORE)
+    //    private Member member;
 
     @Column(name = "MER_CDHD_NO")
     private String memberId;
@@ -60,11 +58,9 @@ public class Transaction extends BaseEntity implements Persistable<TransactionId
     @Convert(converter = AuthorizedConverter.class)
     private AuthorizeType authorizeType = AuthorizeType.UNKNOWN;
 
-
     @Column(name = "SVC_CLSS")
     @Convert(converter = ServiceTypeConverter.class)
     private ServiceType serviceType;
-
 
     @Column(name = "REQ_INST_CODE", length = 4)
     private String reqInstituteCode;
@@ -150,8 +146,7 @@ public class Transaction extends BaseEntity implements Persistable<TransactionId
 
     @Override
     public TransactionId getId() {
-        return TransactionId
-                .create()
+        return TransactionId.create()
                 .transactionId(transactionId)
                 .affiliateTransactionId(affiliateTransactionId)
                 .authorizeType(authorizeType)
@@ -159,7 +154,13 @@ public class Transaction extends BaseEntity implements Persistable<TransactionId
     }
 
     @Builder
-    public Transaction(String transactionId, String affiliateTransactionId, Merchant merchant, AuthorizeType authorizeType, ServiceType serviceType, PaymentStatus paymentStatus) {
+    public Transaction(
+            String transactionId,
+            String affiliateTransactionId,
+            Merchant merchant,
+            AuthorizeType authorizeType,
+            ServiceType serviceType,
+            PaymentStatus paymentStatus) {
         this.transactionId = transactionId;
         this.affiliateTransactionId = affiliateTransactionId;
         this.merchant = merchant;

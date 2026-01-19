@@ -1,14 +1,12 @@
 package com.bccard.qrpay.controller.api.dtos;
 
-
 import com.bccard.qrpay.domain.common.code.MemberStatus;
 import com.bccard.qrpay.domain.member.Member;
 import com.bccard.qrpay.domain.member.Permission;
-import lombok.Builder;
-import lombok.Getter;
-
 import java.util.ArrayList;
 import java.util.List;
+import lombok.Builder;
+import lombok.Getter;
 
 @Getter
 @Builder
@@ -34,5 +32,4 @@ public class AddEmployeeResDto {
                 .permissions(permissionList)
                 .build();
     }
-
 }

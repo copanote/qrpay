@@ -1,19 +1,17 @@
-package com.bccard.qrpay.auth.service;
+package com.bccard.qrpay.domain.auth.service;
 
-import com.bccard.qrpay.auth.domain.RefreshToken;
-import com.bccard.qrpay.auth.repository.RefreshTokenQueryRepository;
-import com.bccard.qrpay.auth.repository.RefreshTokenRepository;
+import com.bccard.qrpay.domain.auth.RefreshToken;
+import com.bccard.qrpay.domain.auth.repository.RefreshTokenQueryRepository;
+import com.bccard.qrpay.domain.auth.repository.RefreshTokenRepository;
 import com.bccard.qrpay.exception.AuthException;
 import com.bccard.qrpay.exception.code.QrpayErrorCode;
 import com.bccard.qrpay.utils.security.HashCipher;
+import java.time.Instant;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.Instant;
-import java.util.Optional;
-
 
 @Slf4j
 @RequiredArgsConstructor
@@ -48,9 +46,9 @@ public class RefreshTokenService {
 
     @Transactional
     public int revokeAll(String memberId, String reason) {
-        return refreshTokenCudRepository.revokeAllRefreshTokenByMemberId(memberId, Instant.now().toEpochMilli(), reason);
+        return refreshTokenCudRepository.revokeAllRefreshTokenByMemberId(
+                memberId, Instant.now().toEpochMilli(), reason);
     }
-
 
     @Transactional
     public void refresh(String refreshToken) {

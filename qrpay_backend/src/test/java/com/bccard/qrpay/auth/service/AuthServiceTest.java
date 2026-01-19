@@ -1,19 +1,20 @@
 package com.bccard.qrpay.auth.service;
 
-import com.bccard.qrpay.auth.domain.JwtToken;
-import com.bccard.qrpay.auth.domain.RefreshToken;
-import com.bccard.qrpay.auth.repository.RefreshTokenQueryRepository;
-import com.bccard.qrpay.auth.security.JwtProvider;
+import static org.assertj.core.api.Assertions.assertThat;
+
+import com.bccard.qrpay.config.security.JwtProvider;
+import com.bccard.qrpay.domain.auth.JwtToken;
+import com.bccard.qrpay.domain.auth.RefreshToken;
+import com.bccard.qrpay.domain.auth.repository.RefreshTokenQueryRepository;
+import com.bccard.qrpay.domain.auth.service.AuthService;
+import com.bccard.qrpay.domain.auth.service.RefreshTokenService;
 import com.bccard.qrpay.domain.member.MemberService;
+import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @Transactional

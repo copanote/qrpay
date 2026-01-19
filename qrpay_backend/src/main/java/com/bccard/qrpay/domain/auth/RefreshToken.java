@@ -1,13 +1,11 @@
-package com.bccard.qrpay.auth.domain;
-
+package com.bccard.qrpay.domain.auth;
 
 import com.bccard.qrpay.domain.common.converter.BooleanYnConverter;
 import com.bccard.qrpay.domain.common.entity.BaseEntity;
 import jakarta.persistence.*;
+import java.time.Instant;
 import lombok.*;
 import org.springframework.data.domain.Persistable;
-
-import java.time.Instant;
 
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -23,7 +21,6 @@ public class RefreshToken extends BaseEntity implements Persistable<Long> {
     @Column(nullable = false)
     private String memberId;
 
-
     @Column(nullable = false, length = 512)
     private String tokenHash;
 
@@ -33,11 +30,12 @@ public class RefreshToken extends BaseEntity implements Persistable<Long> {
     @Column(nullable = false, length = 20)
     private Long expiresAt;
 
-
     @Convert(converter = BooleanYnConverter.class)
     @Column(name = "Revoked", length = 1)
     private Boolean revoked = false;
+
     private String revokeReason;
+
     @Column(length = 20)
     private Long revokedAt;
 
@@ -47,8 +45,7 @@ public class RefreshToken extends BaseEntity implements Persistable<Long> {
     private Long lastUsedAt;
 
     @Builder(builderMethodName = "createNew")
-    public RefreshToken(String memberId, String tokenHash, Long issuedAt,
-                        Long expiresAt, String deviceId) {
+    public RefreshToken(String memberId, String tokenHash, Long issuedAt, Long expiresAt, String deviceId) {
         this.memberId = memberId;
         this.tokenHash = tokenHash;
         this.issuedAt = issuedAt;
@@ -74,5 +71,4 @@ public class RefreshToken extends BaseEntity implements Persistable<Long> {
     public boolean isValid() {
         return !revoked && Instant.now().toEpochMilli() < expiresAt;
     }
-
 }

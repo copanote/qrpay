@@ -26,8 +26,8 @@ public class MpmQrPublication extends BaseEntity implements Persistable<String> 
     private Merchant merchant;
 
     //    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "MER_CDHD_NO")
-//    private Member member;
+    //    @JoinColumn(name = "MER_CDHD_NO")
+    //    private Member member;
     @Column(name = "MER_CDHD_NO")
     private String memberId;
 
@@ -56,8 +56,16 @@ public class MpmQrPublication extends BaseEntity implements Persistable<String> 
     }
 
     @Builder(builderMethodName = "createMpmqrPublication")
-    public MpmQrPublication(String qrReferenceId, Merchant merchant, String memberId, PointOfInitMethod pim,
-                            Long amount, String qrData, String startedAt, String affiliateId, String affiliateRequestValue) {
+    public MpmQrPublication(
+            String qrReferenceId,
+            Merchant merchant,
+            String memberId,
+            PointOfInitMethod pim,
+            Long amount,
+            String qrData,
+            String startedAt,
+            String affiliateId,
+            String affiliateRequestValue) {
         this.qrReferenceId = qrReferenceId;
         this.merchant = merchant;
         this.memberId = memberId;
@@ -68,5 +76,4 @@ public class MpmQrPublication extends BaseEntity implements Persistable<String> 
         this.affiliateId = affiliateId;
         this.affiliateRequestValue = affiliateRequestValue;
     }
-
 }

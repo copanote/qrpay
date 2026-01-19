@@ -15,6 +15,4 @@ public class MpmQrKitApplyReqDto {
     private String address2;
     private String zip;
     private String phoneNo;
-
-
 }

@@ -5,14 +5,14 @@ import com.bccard.qrpay.domain.log.QrpayLog;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import org.springframework.stereotype.Repository;
-
 import java.util.Optional;
+import org.springframework.stereotype.Repository;
 
 @Repository
 public class QrpayLogQueryRepository {
     @PersistenceContext
     private EntityManager entityManager;
+
     private final JPAQueryFactory queryFactory;
 
     public QrpayLogQueryRepository(EntityManager entityManager) {
@@ -28,14 +28,11 @@ public class QrpayLogQueryRepository {
     }
 
     public Optional<QrpayLog> findById(Long id) {
-        QrpayLog q = queryFactory
-                .selectFrom(qrpayLog)
-                .where(qrpayLog.id.eq(id))
-                .fetchFirst();
+        QrpayLog q = queryFactory.selectFrom(qrpayLog).where(qrpayLog.id.eq(id)).fetchFirst();
 
         return Optional.ofNullable(q);
     }
 
-//    public List<QrpayLog> findBy
+    //    public List<QrpayLog> findBy
 
 }

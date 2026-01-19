@@ -10,7 +10,6 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.domain.Persistable;
 
-
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
@@ -25,23 +24,32 @@ public class QrpayLog extends BaseEntity implements Persistable<Long> {
 
     @Column(name = "REG_MLSC_ATON", length = 17)
     private String createdAtSss;
+
     @Column(name = "CHNL_TRNS_UNIQ_NO", length = 14)
     private String transactionId;
+
     @Column(name = "AFFI_CO_TRNS_UNIQ_NO", length = 50)
     private String affiliateTransactionId;
+
     @Column(name = "UNIF_TRNS_UNIQ_NO", length = 50)
     private String unifiedQrTransactionId;
+
     @Column(name = "OBJ_INST_CODE", length = 4)
     private String instituteCode;
+
     @Column(name = "PSTC_NO", length = 50)
-    private String messageId; //전문번호
+    private String messageId; // 전문번호
+
     @Convert(converter = MessageTypeConverter.class)
     @Column(name = "PROC_CLSS", length = 1)
     private MessageType messageType;
+
     @Column(name = "RSPN_CODE", length = 5)
     private String responseCode;
+
     @Column(name = "MER_MGMT_NO", length = 9)
     private String merchantId;
+
     @Column(name = "INTN_PROC_CODE", length = 10)
     private String internalResponseCode;
 
@@ -51,43 +59,43 @@ public class QrpayLog extends BaseEntity implements Persistable<Long> {
 
     @Embedded
     @AttributeOverrides({
-            @AttributeOverride(name = "standardHeader", column = @Column(name = "RIX_HDR_VAL", length = 48)),
-            @AttributeOverride(name = "header", column = @Column(name = "CMMN_HDR_VAL", length = 128)),
-            @AttributeOverride(name = "body", column = @Column(name = "CHNL_DATA_1_VAL", length = 4000))
+        @AttributeOverride(name = "standardHeader", column = @Column(name = "RIX_HDR_VAL", length = 48)),
+        @AttributeOverride(name = "header", column = @Column(name = "CMMN_HDR_VAL", length = 128)),
+        @AttributeOverride(name = "body", column = @Column(name = "CHNL_DATA_1_VAL", length = 4000))
     })
     private LogMessage fepFldMessage;
 
     @Embedded
     @AttributeOverrides({
-            @AttributeOverride(name = "standardHeader", column = @Column(name = "FEP_STD_HDR_VAL", length = 4000)),
-            @AttributeOverride(name = "header", column = @Column(name = "FEP_CMMN_HDR_VAL", length = 1000)),
-            @AttributeOverride(name = "body", column = @Column(name = "FEP_CHNL_DATA_1_VAL", length = 4000))
+        @AttributeOverride(name = "standardHeader", column = @Column(name = "FEP_STD_HDR_VAL", length = 4000)),
+        @AttributeOverride(name = "header", column = @Column(name = "FEP_CMMN_HDR_VAL", length = 1000)),
+        @AttributeOverride(name = "body", column = @Column(name = "FEP_CHNL_DATA_1_VAL", length = 4000))
     })
     private LogMessage logMessage;
 
-//    public QrpayLog(String transactionId, String affiliateTransactionId, String unifiedQrTransactionId, String instituteCode,
-//                    String messageId, MessageType messageType, String responseCode, String merchantId, String internalResponseCode,
-//                    QrTransactionType qrTransactionType, LogMessage fepFldMessage, LogMessage logMessage) {
-//        this.createdAtSss = MpmDateTimeUtils.generateDtmNow(MpmDateTimeUtils.PATTERN_YEAR_TO_MICROSEC);
-//        this.transactionId = transactionId;
-//        this.affiliateTransactionId = affiliateTransactionId;
-//        this.unifiedQrTransactionId = unifiedQrTransactionId;
-//        this.instituteCode = instituteCode;
-//        this.messageId = messageId;
-//        this.messageType = messageType;
-//        this.responseCode = responseCode;
-//        this.merchantId = merchantId;
-//        this.internalResponseCode = internalResponseCode;
-//        this.qrTransactionType = qrTransactionType;
-//        this.fepFldMessage = fepFldMessage;
-//        this.logMessage = logMessage;
-//    }
+    //    public QrpayLog(String transactionId, String affiliateTransactionId, String unifiedQrTransactionId, String
+    // instituteCode,
+    //                    String messageId, MessageType messageType, String responseCode, String merchantId, String
+    // internalResponseCode,
+    //                    QrTransactionType qrTransactionType, LogMessage fepFldMessage, LogMessage logMessage) {
+    //        this.createdAtSss = MpmDateTimeUtils.generateDtmNow(MpmDateTimeUtils.PATTERN_YEAR_TO_MICROSEC);
+    //        this.transactionId = transactionId;
+    //        this.affiliateTransactionId = affiliateTransactionId;
+    //        this.unifiedQrTransactionId = unifiedQrTransactionId;
+    //        this.instituteCode = instituteCode;
+    //        this.messageId = messageId;
+    //        this.messageType = messageType;
+    //        this.responseCode = responseCode;
+    //        this.merchantId = merchantId;
+    //        this.internalResponseCode = internalResponseCode;
+    //        this.qrTransactionType = qrTransactionType;
+    //        this.fepFldMessage = fepFldMessage;
+    //        this.logMessage = logMessage;
+    //    }
 
     public static QrpayLog smsNice(Long id, String log) {
 
-        LogMessage logMessage = LogMessage.create()
-                .body(log)
-                .build();
+        LogMessage logMessage = LogMessage.create().body(log).build();
 
         return QrpayLog.builder()
                 .id(id)
@@ -96,14 +104,11 @@ public class QrpayLog extends BaseEntity implements Persistable<Long> {
                 .build();
     }
 
-
     @Override
     public Long getId() {
         return id;
     }
-
 }
-
 
 /*
 TRNS_SEQ_NO          NOT NULL NUMBER(10)

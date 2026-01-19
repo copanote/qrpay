@@ -7,19 +7,16 @@ public class MemberAccessHistory {
     private Long id;
 
     private String memberId;
-    private String menuClss; //make enum
+    private String menuClss; // make enum
     private String responseCode;
-    private String year;  //2025
-    private String yearMonth; //202511
-    private String day; //07
-    private String time; //160521
+    private String year; // 2025
+    private String yearMonth; // 202511
+    private String day; // 07
+    private String time; // 160521
     private String loginId;
     private FinancialInstitution financialInstitution;
     private String cardCoMerMgmgNo;
-    
-
 }
-
 
 /**
  * 가맹점회원접속이력

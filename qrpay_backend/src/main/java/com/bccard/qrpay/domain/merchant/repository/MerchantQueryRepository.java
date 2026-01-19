@@ -7,16 +7,16 @@ import com.bccard.qrpay.domain.merchant.QMerchant;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import org.springframework.stereotype.Repository;
-
 import java.util.List;
 import java.util.Optional;
+import org.springframework.stereotype.Repository;
 
 @Repository
 public class MerchantQueryRepository {
 
     @PersistenceContext
     private EntityManager entityManager;
+
     private final JPAQueryFactory queryFactory;
 
     public MerchantQueryRepository(EntityManager em) {
@@ -24,8 +24,8 @@ public class MerchantQueryRepository {
     }
 
     private static final QMerchant merchant = QMerchant.merchant;
-    private static final QFinancialInstitutionMerchant financialInstitutionMerchant = QFinancialInstitutionMerchant.financialInstitutionMerchant;
-
+    private static final QFinancialInstitutionMerchant financialInstitutionMerchant =
+            QFinancialInstitutionMerchant.financialInstitutionMerchant;
 
     public Long getNextSequenceValue() {
         String sql = "SELECT BCDBA.SEQ_MPMMERBASINFO.NEXTVAL FROM DUAL";
@@ -40,20 +40,24 @@ public class MerchantQueryRepository {
     public Optional<Merchant> findById(String merchantId) {
         Merchant m = queryFactory
                 .selectFrom(merchant)
-                .leftJoin(merchant.fiMerchants, financialInstitutionMerchant).fetchJoin()
+                .leftJoin(merchant.fiMerchants, financialInstitutionMerchant)
+                .fetchJoin()
                 .where(merchant.merchantId.eq(merchantId))
                 .fetchOne();
         return Optional.ofNullable(m);
     }
 
-    public Optional<Merchant> findByFinancialInstitutionAndFiMerchantNo(FinancialInstitution institution, String fiMerchantNo) {
+    public Optional<Merchant> findByFinancialInstitutionAndFiMerchantNo(
+            FinancialInstitution institution, String fiMerchantNo) {
         Merchant m = queryFactory
                 .selectFrom(merchant)
-                .leftJoin(merchant.fiMerchants, financialInstitutionMerchant).fetchJoin()
-                .where(financialInstitutionMerchant.financialInstitution.eq(institution)
+                .leftJoin(merchant.fiMerchants, financialInstitutionMerchant)
+                .fetchJoin()
+                .where(financialInstitutionMerchant
+                        .financialInstitution
+                        .eq(institution)
                         .and(financialInstitutionMerchant.fiMerchantNo.eq(fiMerchantNo)))
                 .fetchFirst();
         return Optional.ofNullable(m);
     }
-
 }

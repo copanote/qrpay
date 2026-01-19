@@ -6,13 +6,12 @@ import com.bccard.qrpay.domain.merchant.repository.MerchantQueryRepository;
 import com.bccard.qrpay.domain.merchant.repository.MerchantRepository;
 import com.bccard.qrpay.exception.MerchantException;
 import com.bccard.qrpay.exception.code.QrpayErrorCode;
+import java.math.BigDecimal;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.math.BigDecimal;
-import java.util.Optional;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -29,15 +28,16 @@ public class MerchantService {
 
     @Transactional(readOnly = true)
     public Optional<Merchant> findByBcMerchantNo(String bcMerchantNo) {
-        return merchantQueryRepository.findByFinancialInstitutionAndFiMerchantNo(FinancialInstitution.BCCARD, bcMerchantNo);
+        return merchantQueryRepository.findByFinancialInstitutionAndFiMerchantNo(
+                FinancialInstitution.BCCARD, bcMerchantNo);
     }
 
     @Transactional
     public Merchant updateMerchantName(Merchant merchant, String updatedMerchantName) {
 
-        Merchant fetchedMerchant = merchantQueryRepository.findById(merchant.getMerchantId()).orElseThrow(
-                () -> new MerchantException(QrpayErrorCode.MERCHANT_NOT_FOUND)
-        );
+        Merchant fetchedMerchant = merchantQueryRepository
+                .findById(merchant.getMerchantId())
+                .orElseThrow(() -> new MerchantException(QrpayErrorCode.MERCHANT_NOT_FOUND));
 
         if (updatedMerchantName.length() > 14) {
             throw new MerchantException(QrpayErrorCode.MERCHANT_NAME_LENGTH_POLICY_VIOLATION);
@@ -53,9 +53,9 @@ public class MerchantService {
     @Transactional
     public Merchant updateVat(Merchant merchant, BigDecimal updatedVat) {
 
-        Merchant fetchedMerchant = merchantQueryRepository.findById(merchant.getMerchantId()).orElseThrow(
-                () -> new MerchantException(QrpayErrorCode.MERCHANT_NOT_FOUND)
-        );
+        Merchant fetchedMerchant = merchantQueryRepository
+                .findById(merchant.getMerchantId())
+                .orElseThrow(() -> new MerchantException(QrpayErrorCode.MERCHANT_NOT_FOUND));
 
         fetchedMerchant.updateVat(updatedVat);
         return fetchedMerchant;
@@ -64,9 +64,9 @@ public class MerchantService {
     @Transactional
     public Merchant updateTip(Merchant merchant, BigDecimal tip) {
 
-        Merchant fetchedMerchant = merchantQueryRepository.findById(merchant.getMerchantId()).orElseThrow(
-                () -> new MerchantException(QrpayErrorCode.MERCHANT_NOT_FOUND)
-        );
+        Merchant fetchedMerchant = merchantQueryRepository
+                .findById(merchant.getMerchantId())
+                .orElseThrow(() -> new MerchantException(QrpayErrorCode.MERCHANT_NOT_FOUND));
 
         fetchedMerchant.updateTip(tip);
         return fetchedMerchant;
@@ -75,16 +75,14 @@ public class MerchantService {
     @Transactional
     public Merchant cancel(Merchant merchant) {
 
-        //TODO:: 카드사연결해지부분
-        Merchant fetchedMerchant = merchantQueryRepository.findById(merchant.getMerchantId()).orElseThrow(
-                () -> new MerchantException(QrpayErrorCode.MERCHANT_NOT_FOUND)
-        );
+        // TODO:: 카드사연결해지부분
+        Merchant fetchedMerchant = merchantQueryRepository
+                .findById(merchant.getMerchantId())
+                .orElseThrow(() -> new MerchantException(QrpayErrorCode.MERCHANT_NOT_FOUND));
         int count = memberService.cancelAll(merchant);
         log.info("canceled Member={}", count);
         merchant.cancel();
 
         return fetchedMerchant;
     }
-
-
 }

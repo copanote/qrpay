@@ -14,6 +14,8 @@ import com.bccard.qrpay.external.nice.NiceSmsState;
 import com.bccard.qrpay.external.nice.dto.NiceSmsSessionData;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.List;
+import java.util.Random;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -22,9 +24,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
-import java.util.Random;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -52,7 +51,8 @@ public class OpenAuthPageApiController {
 
     @RequestMapping(value = "open/v1/member/password-reset")
     @ResponseBody
-    public ResponseEntity<?> restPassword(@RequestBody @Validated ResetPasswordReqDto reqDto) throws JsonProcessingException {
+    public ResponseEntity<?> restPassword(@RequestBody @Validated ResetPasswordReqDto reqDto)
+            throws JsonProcessingException {
 
         String refId = reqDto.getSmsRefId();
 
@@ -72,7 +72,8 @@ public class OpenAuthPageApiController {
         Member m = memberService.updatePassword(toChangeMember, reqDto.getNewPassword());
 
         niceSmsSessionData.changeStateToConfirm();
-        QrpayLog fetched = logService.updateLogMessageBody(qrpayLog.getId(), objectMapper.writeValueAsString(niceSmsSessionData));
+        QrpayLog fetched =
+                logService.updateLogMessageBody(qrpayLog.getId(), objectMapper.writeValueAsString(niceSmsSessionData));
 
         return ResponseEntity.ok(QrpayApiResponse.ok(toChangeMember, ChangePasswordResDto.of(m)));
     }
@@ -98,6 +99,4 @@ public class OpenAuthPageApiController {
                 .build();
         return ResponseEntity.ok(QrpayApiResponse.ok(resDto));
     }
-
-
 }

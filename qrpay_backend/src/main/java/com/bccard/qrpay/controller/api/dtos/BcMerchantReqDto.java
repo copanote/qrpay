@@ -7,5 +7,6 @@ import lombok.Getter;
 public class BcMerchantReqDto {
     @NotBlank
     private String bizNo;
+
     private String nextKey;
 }

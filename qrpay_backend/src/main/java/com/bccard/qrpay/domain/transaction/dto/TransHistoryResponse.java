@@ -4,10 +4,9 @@ import com.bccard.qrpay.domain.common.code.PaymentStatus;
 import com.bccard.qrpay.domain.common.code.ServiceType;
 import com.bccard.qrpay.domain.transaction.Transaction;
 import com.querydsl.core.annotations.QueryProjection;
+import java.math.BigDecimal;
 import lombok.Getter;
 import lombok.ToString;
-
-import java.math.BigDecimal;
 
 @Getter
 @ToString
@@ -24,8 +23,8 @@ public class TransHistoryResponse {
     private String affiliateApprovalNo;
     private String maskedPan;
     private Long installment;
-    private BigDecimal transactionAmount; //거래금액
-    private BigDecimal principalAmount; //원금
+    private BigDecimal transactionAmount; // 거래금액
+    private BigDecimal principalAmount; // 원금
     private BigDecimal tax;
     private BigDecimal serviceFee;
     private BigDecimal amountBeforeDiscount;
@@ -70,7 +69,5 @@ public class TransHistoryResponse {
         if (cancel == null && auth.getPaymentStatus() == PaymentStatus.APPROVED) {
             possibleCancel = true;
         }
-
     }
-
 }

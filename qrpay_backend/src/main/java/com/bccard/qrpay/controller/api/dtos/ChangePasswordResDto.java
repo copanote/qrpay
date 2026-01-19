@@ -1,6 +1,5 @@
 package com.bccard.qrpay.controller.api.dtos;
 
-
 import com.bccard.qrpay.domain.member.Member;
 import lombok.Builder;
 import lombok.Getter;

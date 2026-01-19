@@ -32,7 +32,8 @@ public class FinancialInstitutionMerchant extends BaseEntity implements Persista
     private String fiMerchantName;
 
     @Builder(builderMethodName = "createNewFinancialInstituteMerchant")
-    public FinancialInstitutionMerchant(Merchant merchant, FinancialInstitution financialInstitution, String fiMerchantNo, String fiMerchantName) {
+    public FinancialInstitutionMerchant(
+            Merchant merchant, FinancialInstitution financialInstitution, String fiMerchantNo, String fiMerchantName) {
         this.merchant = merchant;
         this.financialInstitution = financialInstitution;
         this.fiMerchantNo = fiMerchantNo;

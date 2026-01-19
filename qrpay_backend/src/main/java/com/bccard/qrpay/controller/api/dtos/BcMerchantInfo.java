@@ -1,6 +1,5 @@
 package com.bccard.qrpay.controller.api.dtos;
 
-
 import lombok.Builder;
 import lombok.Getter;
 
@@ -13,5 +12,5 @@ public class BcMerchantInfo {
     private String telNo;
     private String zipCode;
     private String address;
-    private String registeredAt; //yymmdd
+    private String registeredAt; // yymmdd
 }

@@ -1,6 +1,5 @@
 package com.bccard.qrpay.domain.qrkit;
 
-
 import com.bccard.qrpay.domain.common.code.MemberRole;
 import com.bccard.qrpay.domain.common.code.MerchantStatus;
 import com.bccard.qrpay.domain.common.code.QrKitApplicationChannel;
@@ -17,11 +16,10 @@ import com.bccard.qrpay.domain.qrkit.repository.MpmQrKitRepository;
 import com.bccard.qrpay.exception.MemberException;
 import com.bccard.qrpay.exception.MerchantException;
 import com.bccard.qrpay.exception.code.QrpayErrorCode;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -53,7 +51,8 @@ public class QrKitService {
             merchant = merchantService.updateMerchantName(merchant, reqDto.getReqMerchantName());
         }
 
-        PublishBcEmvMpmQrReqDto emvmpmQrReq = PublishBcEmvMpmQrReqDto.staticEmvMpm(member.getMemberId(), merchant, "410");
+        PublishBcEmvMpmQrReqDto emvmpmQrReq =
+                PublishBcEmvMpmQrReqDto.staticEmvMpm(member.getMemberId(), merchant, "410");
         MpmQrPublication mpmQrPublication = emvMpmQrService.publishBcEmvMpmQr(emvmpmQrReq);
 
         Long id = mpmQrKitQueryRepository.getNextSequenceValue();
@@ -87,6 +86,4 @@ public class QrKitService {
 
         return mpmQrKitQueryRepository.findByMerchantId(member.getMerchant().getMerchantId());
     }
-
-
 }

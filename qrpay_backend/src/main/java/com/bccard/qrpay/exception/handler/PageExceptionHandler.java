@@ -1,6 +1,5 @@
 package com.bccard.qrpay.exception.handler;
 
-
 import com.bccard.qrpay.exception.ApiError;
 import com.bccard.qrpay.exception.AuthException;
 import com.bccard.qrpay.exception.QrpayCustomException;
@@ -10,7 +9,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-
 
 @Slf4j
 @ControllerAdvice(annotations = Controller.class)
@@ -54,6 +52,4 @@ public class PageExceptionHandler {
         log.error("AuthException: {}", e.getMessage(), e);
         return "error/404"; // error/400.html (또는 .jsp) 뷰 반환
     }
-
-
 }

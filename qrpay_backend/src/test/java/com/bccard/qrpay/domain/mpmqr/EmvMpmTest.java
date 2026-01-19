@@ -8,6 +8,10 @@ import com.copanote.emvmpm.data.EmvMpmNodeFactory;
 import com.copanote.emvmpm.definition.EmvMpmDefinition;
 import com.copanote.emvmpm.definition.packager.EmvMpmPackager;
 import com.copanote.emvmpm.parser.EmvMpmParser;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import javax.xml.parsers.ParserConfigurationException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,11 +19,6 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Transactional;
 import org.xml.sax.SAXException;
-
-import javax.xml.parsers.ParserConfigurationException;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 @SpringBootTest
 @Transactional
@@ -102,10 +101,9 @@ public class EmvMpmTest {
         System.out.println(testqrrefid.toString());
         System.out.println(testqrrefid.toQrCodeData());
 
-
-        EmvMpmNode dynamicMpm = emvMpmQrService.publishDynamicBcEmvMpmQr(emd, "", merchant, "MQ2025900013681", "410", 1234, 0);
+        EmvMpmNode dynamicMpm =
+                emvMpmQrService.publishDynamicBcEmvMpmQr(emd, "", merchant, "MQ2025900013681", "410", 1234, 0);
         System.out.println(dynamicMpm.toString());
         System.out.println(dynamicMpm.toQrCodeData());
-
     }
 }

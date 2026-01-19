@@ -35,6 +35,7 @@ public class Device extends BaseEntity implements Persistable<String> {
 
     @Embedded
     private DeviceMeta deviceMeta;
+
     @Embedded
     private DeviceAccessToken apiAccessToken;
 
@@ -52,7 +53,7 @@ public class Device extends BaseEntity implements Persistable<String> {
         this.deviceMeta = deviceMeta;
         this.apiAccessToken = deviceAccessToken;
     }
-    
+
     public void changeDeviceMeta(DeviceMeta updatedMeta) {
         deviceMeta = updatedMeta;
     }
@@ -60,8 +61,6 @@ public class Device extends BaseEntity implements Persistable<String> {
     public void changeAccessToken(DeviceAccessToken updatedAccessToken) {
         apiAccessToken = updatedAccessToken;
     }
-
-
 }
 
 /**

@@ -1,6 +1,5 @@
 package com.bccard.qrpay.controller.page;
 
-
 import com.bccard.qrpay.controller.page.dto.HomeMpmqrNavi;
 import com.bccard.qrpay.controller.page.dto.HomeMpmqrResDto;
 import com.bccard.qrpay.domain.common.code.MemberRole;
@@ -24,8 +23,7 @@ public class TransactionPageController {
     private final MemberService memberService;
 
     @GetMapping("/transaction/list")
-    public String list(Model model,
-                       @CookieValue(value = "memId", required = false) String memId) {
+    public String list(Model model, @CookieValue(value = "memId", required = false) String memId) {
         Member member = memberService.findBy(memId).orElseGet(() -> null);
         if (member == null) {
             log.info("Needs Authenticate");
@@ -39,17 +37,14 @@ public class TransactionPageController {
                 .isAdmin(member.getRole() == MemberRole.MASTER)
                 .build();
 
-        HomeMpmqrResDto homeMpmqrResDto = HomeMpmqrResDto
-                .builder()
-                .homeMpmqrNavi(mpmqrNavi)
-                .build();
+        HomeMpmqrResDto homeMpmqrResDto =
+                HomeMpmqrResDto.builder().homeMpmqrNavi(mpmqrNavi).build();
         model.addAttribute("homeMpmqrResDto", homeMpmqrResDto);
         return "transaction/list";
     }
 
     @GetMapping("/transaction/monthly-sales")
-    public String monthly_sales(Model model,
-                                @CookieValue(value = "memId", required = false) String memId) {
+    public String monthly_sales(Model model, @CookieValue(value = "memId", required = false) String memId) {
         Member member = memberService.findBy(memId).orElseGet(() -> null);
         if (member == null) {
             log.info("Needs Authenticate");
@@ -63,13 +58,9 @@ public class TransactionPageController {
                 .isAdmin(member.getRole() == MemberRole.MASTER)
                 .build();
 
-        HomeMpmqrResDto homeMpmqrResDto = HomeMpmqrResDto
-                .builder()
-                .homeMpmqrNavi(mpmqrNavi)
-                .build();
+        HomeMpmqrResDto homeMpmqrResDto =
+                HomeMpmqrResDto.builder().homeMpmqrNavi(mpmqrNavi).build();
         model.addAttribute("homeMpmqrResDto", homeMpmqrResDto);
         return "transaction/monthly-sales";
     }
-
-
 }

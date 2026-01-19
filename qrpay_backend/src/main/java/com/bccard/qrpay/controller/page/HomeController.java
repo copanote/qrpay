@@ -1,10 +1,9 @@
 package com.bccard.qrpay.controller.page;
 
-
-import com.bccard.qrpay.auth.service.AuthService;
 import com.bccard.qrpay.controller.page.dto.HomeMpmqrMain;
 import com.bccard.qrpay.controller.page.dto.HomeMpmqrNavi;
 import com.bccard.qrpay.controller.page.dto.HomeMpmqrResDto;
+import com.bccard.qrpay.domain.auth.service.AuthService;
 import com.bccard.qrpay.domain.common.code.MemberRole;
 import com.bccard.qrpay.domain.common.code.MemberStatus;
 import com.bccard.qrpay.domain.member.Member;
@@ -22,7 +21,6 @@ import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-
 @Slf4j
 @RequiredArgsConstructor
 @Controller
@@ -34,16 +32,13 @@ public class HomeController {
     private final MerchantService merchantService;
     private final EmvMpmQrService emvMpmQrService;
 
-
     @GetMapping("/home/mpmqr")
     public String home(
-//            @CookieValue(value = "accessToken", required = false) String accessToken,
-//            @CookieValue(value = "refreshToken", required = false) String refreshToken,
-            Model model,
-            @CookieValue(value = "memId", required = false) String memId
-    ) throws Exception {
+            //            @CookieValue(value = "accessToken", required = false) String accessToken,
+            //            @CookieValue(value = "refreshToken", required = false) String refreshToken,
+            Model model, @CookieValue(value = "memId", required = false) String memId) throws Exception {
         if (memId == null || memId.isBlank()) {
-            //Needs Authenticate
+            // Needs Authenticate
             return "home/login";
         }
         Member member = memberService.findBy(memId).orElseGet(() -> null);
@@ -68,8 +63,7 @@ public class HomeController {
                 .isAdmin(member.getRole() == MemberRole.MASTER)
                 .build();
 
-        HomeMpmqrResDto homeMpmqrResDto = HomeMpmqrResDto
-                .builder()
+        HomeMpmqrResDto homeMpmqrResDto = HomeMpmqrResDto.builder()
                 .homeMpmqrMain(mpmqrMain)
                 .homeMpmqrNavi(mpmqrNavi)
                 .build();
@@ -79,6 +73,4 @@ public class HomeController {
         model.addAttribute("homeMpmqrResDto", homeMpmqrResDto);
         return "home/mpmqr/main-mpmqr";
     }
-
-
 }

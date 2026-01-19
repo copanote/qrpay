@@ -10,6 +10,8 @@ import com.bccard.qrpay.domain.transaction.dto.MonthlySalesDto;
 import com.bccard.qrpay.domain.transaction.dto.TransHistoryResponse;
 import com.bccard.qrpay.domain.transaction.dto.TransSearchCondition;
 import jakarta.persistence.EntityManager;
+import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,9 +21,6 @@ import org.springframework.data.domain.Slice;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.Optional;
 
 @SpringBootTest
 @Transactional
@@ -85,7 +84,6 @@ public class TransactionRepositoryTest {
         System.out.println(byTrnsId);
     }
 
-
     @Test
     void test_mothnly() {
         Merchant m = merchantQueryRepository.findById("900004541").orElseThrow();
@@ -93,19 +91,17 @@ public class TransactionRepositoryTest {
         System.out.println(monthlySalesDtos);
     }
 
-
     @Test
     void test_slice() {
         Merchant m = merchantQueryRepository.findById("900004541").orElseThrow();
 
-        TransSearchCondition condition = TransSearchCondition
-                .builder()
+        TransSearchCondition condition = TransSearchCondition.builder()
                 .merchant(m)
                 .startYmd("20251101")
                 .endYmd("20260101")
                 .authNoLast4("0409")
-//                .paymentStatus()
-//                .serviceT
+                //                .paymentStatus()
+                //                .serviceT
                 .build();
 
         Pageable p = PageRequest.of(0, 10);

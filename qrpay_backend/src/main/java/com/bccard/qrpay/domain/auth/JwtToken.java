@@ -1,5 +1,4 @@
-package com.bccard.qrpay.auth.domain;
-
+package com.bccard.qrpay.domain.auth;
 
 import lombok.Builder;
 import lombok.Getter;

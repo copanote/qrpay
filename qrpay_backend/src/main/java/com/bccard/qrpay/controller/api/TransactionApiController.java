@@ -1,6 +1,5 @@
 package com.bccard.qrpay.controller.api;
 
-
 import com.bccard.qrpay.config.web.argumentresolver.LoginMember;
 import com.bccard.qrpay.controller.api.common.QrpayApiResponse;
 import com.bccard.qrpay.controller.api.dtos.MonthlySalesAggreResDto;
@@ -12,6 +11,7 @@ import com.bccard.qrpay.domain.transaction.dto.MonthlySalesDto;
 import com.bccard.qrpay.domain.transaction.dto.TransHistoryResponse;
 import com.bccard.qrpay.domain.transaction.dto.TransSearchCondition;
 import jakarta.validation.Valid;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -22,8 +22,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -44,9 +42,10 @@ public class TransactionApiController {
 
     @RequestMapping(value = "/v1/transaction/history")
     @ResponseBody
-    public ResponseEntity<?> history(@LoginMember Member member,
-                                     @ModelAttribute @Valid TransHistorySearchDto searchCondition,
-                                     @PageableDefault Pageable pageable) {
+    public ResponseEntity<?> history(
+            @LoginMember Member member,
+            @ModelAttribute @Valid TransHistorySearchDto searchCondition,
+            @PageableDefault Pageable pageable) {
         log.info("Member={}", member.getMemberId());
         log.info("searchCondition={}", searchCondition);
         log.info("pageable={}", pageable);

@@ -11,7 +11,8 @@ import org.springframework.web.servlet.HandlerInterceptor;
 @Component
 public class LoginRedirectInterceptor implements HandlerInterceptor {
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
+            throws Exception {
 
         // 쿠키에서 회원 정보 확인
         Cookie[] cookies = request.getCookies();
@@ -30,6 +31,4 @@ public class LoginRedirectInterceptor implements HandlerInterceptor {
         }
         return true;
     }
-
-
 }

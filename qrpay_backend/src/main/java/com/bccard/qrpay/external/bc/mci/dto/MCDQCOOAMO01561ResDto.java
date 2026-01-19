@@ -1,6 +1,5 @@
 package com.bccard.qrpay.external.bc.mci.dto;
 
-
 import lombok.*;
 
 @Getter

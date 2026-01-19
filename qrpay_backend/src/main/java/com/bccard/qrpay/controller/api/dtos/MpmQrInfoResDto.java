@@ -4,7 +4,6 @@ import com.bccard.qrpay.domain.common.code.PointOfInitMethod;
 import lombok.Builder;
 import lombok.Getter;
 
-
 @Builder
 @Getter
 public class MpmQrInfoResDto {
@@ -14,7 +13,6 @@ public class MpmQrInfoResDto {
     private String qrBase64Image;
     private String merchantName;
 
-
     public static MpmQrInfoResDto staticMpmQrInfo(String merchantName, String qrBase64Image) {
         return MpmQrInfoResDto.builder()
                 .pim(PointOfInitMethod.STATIC)
@@ -23,7 +21,8 @@ public class MpmQrInfoResDto {
                 .build();
     }
 
-    public static MpmQrInfoResDto dynamicMpmQrInfo(String merchantName, String qrBase64Image, Long amount, Long installment) {
+    public static MpmQrInfoResDto dynamicMpmQrInfo(
+            String merchantName, String qrBase64Image, Long amount, Long installment) {
         return MpmQrInfoResDto.builder()
                 .pim(PointOfInitMethod.DYNAMIC)
                 .merchantName(merchantName)
@@ -32,5 +31,4 @@ public class MpmQrInfoResDto {
                 .installment(installment)
                 .build();
     }
-
 }

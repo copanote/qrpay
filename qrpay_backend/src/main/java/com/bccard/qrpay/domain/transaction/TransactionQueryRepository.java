@@ -1,18 +1,17 @@
 package com.bccard.qrpay.domain.transaction;
 
-
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import org.springframework.stereotype.Repository;
-
 import java.util.List;
 import java.util.Optional;
+import org.springframework.stereotype.Repository;
 
 @Repository
 public class TransactionQueryRepository {
     @PersistenceContext
     private EntityManager entityManager;
+
     private final JPAQueryFactory queryFactory;
 
     public TransactionQueryRepository(EntityManager entityManager) {
@@ -24,7 +23,9 @@ public class TransactionQueryRepository {
     public Optional<Transaction> findById(TransactionId id) {
         Transaction t = queryFactory
                 .selectFrom(transaction)
-                .where(transaction.transactionId.eq(id.getTransactionId())
+                .where(transaction
+                        .transactionId
+                        .eq(id.getTransactionId())
                         .and(transaction.affiliateTransactionId.eq(id.getAffiliateTransactionId()))
                         .and(transaction.authorizeType.eq(id.getAuthorizeType())))
                 .fetchFirst();
@@ -37,5 +38,4 @@ public class TransactionQueryRepository {
                 .where(transaction.transactionId.eq(transactionId))
                 .fetch();
     }
-
 }

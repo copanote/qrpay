@@ -2,13 +2,12 @@ package com.bccard.qrpay.domain.log;
 
 import com.bccard.qrpay.utils.MpmStringUtils;
 import jakarta.persistence.Embeddable;
+import java.nio.charset.StandardCharsets;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
-
-import java.nio.charset.StandardCharsets;
 
 @Embeddable
 @NoArgsConstructor

@@ -4,12 +4,11 @@ import com.bccard.qrpay.controller.api.dtos.TransHistorySearchDto;
 import com.bccard.qrpay.domain.common.code.PaymentStatus;
 import com.bccard.qrpay.domain.common.code.ServiceType;
 import com.bccard.qrpay.domain.merchant.Merchant;
-import lombok.Builder;
-import lombok.Getter;
-
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import lombok.Builder;
+import lombok.Getter;
 
 @Getter
 @Builder
@@ -22,8 +21,7 @@ public class TransSearchCondition {
     private String endYmd;
 
     public static TransSearchCondition from(Merchant m, TransHistorySearchDto dto) {
-        return TransSearchCondition
-                .builder()
+        return TransSearchCondition.builder()
                 .merchant(m)
                 .authNoLast4(dto.getAuthNoLast4())
                 .serviceType(dto.getServiceType())

@@ -24,7 +24,6 @@ public class QrpayApiResponse<T> {
         this.data = null;
     }
 
-
     public static <T> QrpayApiResponse<T> ok(Member loginMember, T data) {
         return new QrpayApiResponse<>(
                 QrpayErrorCode.SUCCESS.getCode(),
@@ -36,11 +35,7 @@ public class QrpayApiResponse<T> {
 
     public static <T> QrpayApiResponse<T> ok(T data) {
         return new QrpayApiResponse<>(
-                QrpayErrorCode.SUCCESS.getCode(),
-                QrpayErrorCode.SUCCESS.getMessage(),
-                "",
-                "",
-                data);
+                QrpayErrorCode.SUCCESS.getCode(), QrpayErrorCode.SUCCESS.getMessage(), "", "", data);
     }
 
     public static <T> QrpayApiResponse<T> ok(Member loginMember) {
@@ -53,14 +48,10 @@ public class QrpayApiResponse<T> {
     }
 
     public static <T> QrpayApiResponse<T> ok() {
-        return new QrpayApiResponse<>(
-                QrpayErrorCode.SUCCESS.getCode(),
-                QrpayErrorCode.SUCCESS.getMessage()
-        );
+        return new QrpayApiResponse<>(QrpayErrorCode.SUCCESS.getCode(), QrpayErrorCode.SUCCESS.getMessage());
     }
 
     public static <T> QrpayApiResponse<T> error(String code, String message) {
         return new QrpayApiResponse<>(code, message);
     }
-
 }

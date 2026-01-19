@@ -2,11 +2,9 @@ package com.bccard.qrpay.external.bc.mci;
 
 import com.bccard.qrpay.controller.api.dtos.BcMerchantInfo;
 import com.bccard.qrpay.external.bc.mci.dto.MCDQCOOAMO01561ResDto;
-import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.List;
-
+import org.springframework.stereotype.Service;
 
 @Service
 public class MciService {
@@ -18,7 +16,6 @@ public class MciService {
         return resDto;
     }
 
-
     public List<BcMerchantInfo> mockBcMerchantList(String bizNo, String nextKey) {
         int pageSize = 10;
         List<BcMerchantInfo> list = new ArrayList<>();
@@ -27,6 +24,4 @@ public class MciService {
         }
         return list;
     }
-
-
 }

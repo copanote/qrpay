@@ -1,6 +1,5 @@
 package com.bccard.qrpay.controller.api;
 
-
 import com.bccard.qrpay.config.web.argumentresolver.LoginMember;
 import com.bccard.qrpay.controller.api.common.QrpayApiResponse;
 import com.bccard.qrpay.controller.api.dtos.*;
@@ -24,13 +23,10 @@ public class MemberApiController {
 
     private final MemberService memberService;
 
-
     @RequestMapping(value = "/v1/member/id-check")
     @ResponseBody
     public ResponseEntity<?> idDuplicationCheck(
-            @LoginMember Member member,
-            @RequestBody @Validated IdDupCheckReqDto reqDto
-    ) {
+            @LoginMember Member member, @RequestBody @Validated IdDupCheckReqDto reqDto) {
         log.info("Member={}", member.getMemberId());
 
         log.info("reqDto={}", reqDto);
@@ -45,14 +41,13 @@ public class MemberApiController {
 
         return ResponseEntity.ok(QrpayApiResponse.ok(member));
     }
-    
+
     @RequestMapping(value = "/v1/member/{memberId}/password-change")
     @ResponseBody
     public ResponseEntity<?> changePassword(
             @LoginMember Member member,
             @PathVariable("memberId") String memberId,
-            @RequestBody ChangePasswordReqDto reqDto
-    ) {
+            @RequestBody ChangePasswordReqDto reqDto) {
         log.info("Member={}", member.getMemberId());
 
         if (member.getRole() != MemberRole.MASTER) {
@@ -60,7 +55,9 @@ public class MemberApiController {
         }
 
         Member toChangeMember = memberService.findByMemberId(memberId);
-        if (!member.getMerchant().getMerchantId().equals(toChangeMember.getMerchant().getMerchantId())) {
+        if (!member.getMerchant()
+                .getMerchantId()
+                .equals(toChangeMember.getMerchant().getMerchantId())) {
             throw new AuthException(QrpayErrorCode.UNMATCHED_AUTHENTICATE);
         }
 
@@ -80,8 +77,7 @@ public class MemberApiController {
     public ResponseEntity<?> changePasswordEmployee(
             @LoginMember Member member,
             @PathVariable("memberId") String memberId,
-            @RequestBody ChangePasswordReqDto reqDto
-    ) {
+            @RequestBody ChangePasswordReqDto reqDto) {
         log.info("Member={}", member.getMemberId());
 
         if (member.getRole() != MemberRole.MASTER) {
@@ -89,7 +85,9 @@ public class MemberApiController {
         }
 
         Member toChangeMember = memberService.findByMemberId(memberId);
-        if (!member.getMerchant().getMerchantId().equals(toChangeMember.getMerchant().getMerchantId())) {
+        if (!member.getMerchant()
+                .getMerchantId()
+                .equals(toChangeMember.getMerchant().getMerchantId())) {
             throw new AuthException(QrpayErrorCode.UNMATCHED_AUTHENTICATE);
         }
 
@@ -107,22 +105,21 @@ public class MemberApiController {
     public ResponseEntity<?> changePermissionToCancel(
             @LoginMember Member member,
             @PathVariable("memberId") String memberId,
-            @RequestBody CancelPermissionUpdateReqResDto reqDto
-    ) {
+            @RequestBody CancelPermissionUpdateReqResDto reqDto) {
         log.info("Member={}", member.getMemberId());
         if (member.getRole() != MemberRole.MASTER) {
             throw new AuthException(QrpayErrorCode.INVALID_AUTHORIZATION);
         }
 
         Member toChangeMember = memberService.findByMemberId(memberId);
-        if (!member.getMerchant().getMerchantId().equals(toChangeMember.getMerchant().getMerchantId())) {
+        if (!member.getMerchant()
+                .getMerchantId()
+                .equals(toChangeMember.getMerchant().getMerchantId())) {
             throw new AuthException(QrpayErrorCode.UNMATCHED_AUTHENTICATE);
         }
 
         toChangeMember = memberService.updatePermissionToCancel(toChangeMember, reqDto.isPermissionToCancel());
-        return ResponseEntity.ok(
-                QrpayApiResponse.ok(member, EmployeesInfoDto.from(toChangeMember))
-        );
+        return ResponseEntity.ok(QrpayApiResponse.ok(member, EmployeesInfoDto.from(toChangeMember)));
     }
 
     @RequestMapping(value = "/v1/member/{memberId}/employee-status-change")
@@ -130,8 +127,7 @@ public class MemberApiController {
     public ResponseEntity<?> changeMemberStatus(
             @LoginMember Member member,
             @PathVariable("memberId") String memberId,
-            @RequestBody ChangeMemberStatusReqDto reqDto
-    ) {
+            @RequestBody ChangeMemberStatusReqDto reqDto) {
         log.info("Member={}", member.getMemberId());
 
         if (member.getRole() != MemberRole.MASTER) {
@@ -139,23 +135,20 @@ public class MemberApiController {
         }
 
         Member toChangeMember = memberService.findByMemberId(memberId);
-        if (!member.getMerchant().getMerchantId().equals(toChangeMember.getMerchant().getMerchantId())) {
+        if (!member.getMerchant()
+                .getMerchantId()
+                .equals(toChangeMember.getMerchant().getMerchantId())) {
             throw new AuthException(QrpayErrorCode.UNMATCHED_AUTHENTICATE);
         }
 
         toChangeMember = memberService.updateStatus(toChangeMember, reqDto.getRequestStatus());
 
-        return ResponseEntity.ok(
-                QrpayApiResponse.ok(member, EmployeesInfoDto.from(toChangeMember))
-        );
+        return ResponseEntity.ok(QrpayApiResponse.ok(member, EmployeesInfoDto.from(toChangeMember)));
     }
 
     @RequestMapping(value = "/v1/member/{memberId}/employee-cancel")
     @ResponseBody
-    public ResponseEntity<?> cancelEmployee(
-            @LoginMember Member member,
-            @PathVariable("memberId") String memberId
-    ) {
+    public ResponseEntity<?> cancelEmployee(@LoginMember Member member, @PathVariable("memberId") String memberId) {
         log.info("Member={}", member.getMemberId());
 
         if (member.getRole() != MemberRole.MASTER) {
@@ -164,10 +157,7 @@ public class MemberApiController {
 
         Member canceled = memberService.cancelEmployee(member, memberId);
 
-        return ResponseEntity.ok(
-                QrpayApiResponse.ok(member, ChangeMemberStatusResDto.of(canceled.getStatus(), canceled.getWithdrawalAt()))
-        );
+        return ResponseEntity.ok(QrpayApiResponse.ok(
+                member, ChangeMemberStatusResDto.of(canceled.getStatus(), canceled.getWithdrawalAt())));
     }
-
-
 }

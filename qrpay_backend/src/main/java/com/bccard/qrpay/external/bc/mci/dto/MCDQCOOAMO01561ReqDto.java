@@ -1,6 +1,5 @@
 package com.bccard.qrpay.external.bc.mci.dto;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -15,8 +14,6 @@ public class MCDQCOOAMO01561ReqDto {
     private String biznoV10;
 
     public static MCDQCOOAMO01561ReqDto create(String bcMerchantNo) {
-        return MCDQCOOAMO01561ReqDto.builder()
-                .merNoV9(bcMerchantNo)
-                .build();
+        return MCDQCOOAMO01561ReqDto.builder().merNoV9(bcMerchantNo).build();
     }
 }

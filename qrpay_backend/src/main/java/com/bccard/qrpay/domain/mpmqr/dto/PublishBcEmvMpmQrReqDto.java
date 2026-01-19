@@ -20,9 +20,9 @@ public class PublishBcEmvMpmQrReqDto {
     private String affiliateId;
     private String affiliateRequestValue;
 
-    public static PublishBcEmvMpmQrReqDto dynamicEmvMpm(String memberId, Merchant merchant, Long amount, Long installment, String currency) {
-        return PublishBcEmvMpmQrReqDto
-                .builder()
+    public static PublishBcEmvMpmQrReqDto dynamicEmvMpm(
+            String memberId, Merchant merchant, Long amount, Long installment, String currency) {
+        return PublishBcEmvMpmQrReqDto.builder()
                 .pim(PointOfInitMethod.DYNAMIC)
                 .memberId(memberId)
                 .merchant(merchant)
@@ -33,14 +33,11 @@ public class PublishBcEmvMpmQrReqDto {
     }
 
     public static PublishBcEmvMpmQrReqDto staticEmvMpm(String memberId, Merchant merchant, String currency) {
-        return PublishBcEmvMpmQrReqDto
-                .builder()
+        return PublishBcEmvMpmQrReqDto.builder()
                 .pim(PointOfInitMethod.STATIC)
                 .memberId(memberId)
                 .merchant(merchant)
                 .currency(currency)
                 .build();
     }
-
-
 }

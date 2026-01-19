@@ -1,11 +1,9 @@
 package com.bccard.qrpay.exception;
 
+import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
-
-import java.time.LocalDateTime;
-
 
 @Getter
 @ToString
@@ -22,6 +20,4 @@ public class ApiError {
         this.message = message;
         this.timestamp = LocalDateTime.now();
     }
-
-
 }

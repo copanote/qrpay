@@ -1,6 +1,5 @@
 package com.bccard.qrpay.domain.log;
 
-
 import com.bccard.qrpay.domain.log.repository.QrpayLogQueryRepository;
 import com.bccard.qrpay.domain.log.repository.QrpayLogRepository;
 import com.bccard.qrpay.exception.QrpayCustomException;
@@ -9,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 
 @Slf4j
 @Service
@@ -30,17 +28,17 @@ public class QrpayLogService {
 
     @Transactional
     public QrpayLog updateLogMessageBody(Long id, String logMessageBody) {
-        QrpayLog fetched = qrpayLogQueryRepository.findById(id)
+        QrpayLog fetched = qrpayLogQueryRepository
+                .findById(id)
                 .orElseThrow(() -> new QrpayCustomException(QrpayErrorCode.LOG_NOT_FOUND));
 
         fetched.getLogMessage().updateBody(logMessageBody);
         return fetched;
     }
 
-
     public QrpayLog findById(Long id) {
-        return qrpayLogQueryRepository.findById(id)
+        return qrpayLogQueryRepository
+                .findById(id)
                 .orElseThrow(() -> new QrpayCustomException(QrpayErrorCode.LOG_NOT_FOUND));
     }
-
 }

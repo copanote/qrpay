@@ -1,10 +1,9 @@
-package com.bccard.qrpay.auth.security;
+package com.bccard.qrpay.config.security;
 
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
-
 
 @Setter
 @Getter

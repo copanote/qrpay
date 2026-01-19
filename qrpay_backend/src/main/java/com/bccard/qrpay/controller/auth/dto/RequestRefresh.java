@@ -1,4 +1,4 @@
-package com.bccard.qrpay.auth.contoller.dto;
+package com.bccard.qrpay.controller.auth.dto;
 
 import lombok.Getter;
 import lombok.ToString;

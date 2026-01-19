@@ -23,8 +23,7 @@ public class MerchantPageController {
     private final MemberService memberService;
 
     @GetMapping("/merchant/vat")
-    public String vatInfo(Model model,
-                          @CookieValue(value = "memId", required = false) String memId) {
+    public String vatInfo(Model model, @CookieValue(value = "memId", required = false) String memId) {
 
         if (memId == null) {
             log.info("Needs Authenticate");
@@ -44,8 +43,7 @@ public class MerchantPageController {
     }
 
     @GetMapping("/merchant/tip")
-    public String tipInfo(Model model,
-                          @CookieValue(value = "memId", required = false) String memId) {
+    public String tipInfo(Model model, @CookieValue(value = "memId", required = false) String memId) {
         Member member = memberService.findBy(memId).orElseGet(() -> null);
         if (member == null || member.getStatus() != MemberStatus.ACTIVE) {
             log.info("Needs Authenticate");
@@ -58,6 +56,4 @@ public class MerchantPageController {
         model.addAttribute("vatRate", merchant.getVatRate());
         return "member/master/tip";
     }
-
-
 }
