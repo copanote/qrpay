@@ -2,15 +2,11 @@ package com.bccard.qrpay.controller.api;
 
 import com.bccard.qrpay.controller.api.dtos.EmvMpmQrPublishInDto;
 import com.bccard.qrpay.controller.api.dtos.EmvMpmQrPublishOutDto;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/emvmpm")
-public class EmvMpmController {
+public class EmvMpmApiController {
 
     //	@Autowired private EmvMpmService emvMpmService;
     //	@Autowired private FIMerchantId.MerchantService ms;
@@ -22,7 +18,6 @@ public class EmvMpmController {
         /*
          *  1. Request Parameter Validation
          */
-
         String merchantId = inDto.getAffiCoReqVal();
         /*
          *  2. Retrieve merchant by request

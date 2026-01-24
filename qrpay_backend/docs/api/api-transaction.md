@@ -6,11 +6,11 @@
 
 ### 📋 개요
 
-| 항목         | 내용                                 |
-|:-----------|:-----------------------------------|
-| **Method** | `GET` / `POST` / `PUT` / `DELETE`  |
-| **URL**    | `/api/v1/resource-path`            |
-| **Auth**   | `Required (Bearer Token)` / `None` |
+| 항목         | 내용                                |
+|:-----------|:----------------------------------|
+| **Method** | `GET` / `POST` / `PUT` / `DELETE` |
+| **URL**    | `/api/v1/resource-path`           |
+| **Auth**   | `Required (Bearer Token)`         |
 
 ---
 
