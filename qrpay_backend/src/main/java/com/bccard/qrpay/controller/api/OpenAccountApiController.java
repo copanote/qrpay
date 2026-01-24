@@ -14,8 +14,6 @@ import com.bccard.qrpay.external.nice.NiceSmsState;
 import com.bccard.qrpay.external.nice.dto.NiceSmsSessionData;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.util.List;
-import java.util.Random;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -25,11 +23,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+import java.util.Random;
+
 @Slf4j
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/qrpay/api")
-public class OpenAuthPageApiController {
+public class OpenAccountApiController {
 
     private final MemberService memberService;
     private final QrpayLogService logService;

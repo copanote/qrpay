@@ -21,8 +21,6 @@ import com.bccard.qrpay.utils.MpmDateTimeUtils;
 import com.bccard.qrpay.utils.security.HashCipher;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.util.List;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -31,11 +29,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.List;
+import java.util.Optional;
+
 @Slf4j
 @RequiredArgsConstructor
 @Controller
 @RequestMapping("/pages")
-public class AuthPageController {
+public class AccountPageController {
 
     private final QrpayLogService logService;
     private final MemberService memberService;
