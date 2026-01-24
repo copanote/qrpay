@@ -5,13 +5,14 @@ import com.bccard.qrpay.domain.common.converter.*;
 import com.bccard.qrpay.domain.common.entity.BaseEntity;
 import com.bccard.qrpay.utils.MpmDateTimeUtils;
 import jakarta.persistence.*;
+import lombok.*;
+import org.springframework.data.domain.Persistable;
+
 import java.io.Serial;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import lombok.*;
-import org.springframework.data.domain.Persistable;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -173,23 +174,36 @@ public class Merchant extends BaseEntity implements Persistable<String>, Seriali
 
     public void updateMerchantName(String merchantName) {
 
-        this.merchantName = merchantName;
+        if (merchantName.length() >= 14) {
+            throw new IllegalArgumentException("가맹점 이름은 14자리를 넘으면 안됩니다");
+        }
+
+        if (!this.getMerchantName().equals(merchantName)) {
+            this.merchantName = merchantName;
+        }
     }
 
     public void updateVat(BigDecimal vatRate) {
 
+        if (vatRate == null || vatRate.intValue() < 0) {
+            throw new IllegalStateException("부가세변경은 null 이거나 음수가 될 수 없습니다.");
+        }
+
         BigDecimal t = this.tipRate == null ? BigDecimal.ZERO : this.tipRate;
-        BigDecimal v = vatRate == null ? BigDecimal.ZERO : vatRate;
-        if (t.add(v).compareTo(BigDecimal.valueOf(100)) >= 0) {
+        if (t.add(vatRate).compareTo(BigDecimal.valueOf(100)) >= 0) {
             throw new IllegalStateException("부가세 + 봉사료 합계는 100 미만");
         }
         this.vatRate = vatRate;
     }
 
     public void updateTip(BigDecimal tipRate) {
+
+        if (tipRate == null || tipRate.intValue() < 0 || tipRate.intValue() >= 100) {
+            throw new IllegalStateException("봉사료변경은 null이거나 음수, 100을 넘을 수 없습니다.");
+        }
+
         BigDecimal v = this.vatRate == null ? BigDecimal.ZERO : this.vatRate;
-        BigDecimal t = tipRate == null ? BigDecimal.ZERO : tipRate;
-        if (t.add(v).compareTo(BigDecimal.valueOf(100)) >= 0) {
+        if (tipRate.add(v).compareTo(BigDecimal.valueOf(100)) >= 0) {
             throw new IllegalStateException("부가세 + 봉사료 합계는 100 미만");
         }
         this.tipRate = tipRate;
