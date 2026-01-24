@@ -2,8 +2,6 @@ package com.bccard.qrpay.config.security;
 
 import com.bccard.qrpay.domain.auth.service.CustomUserDetailsService;
 import com.bccard.qrpay.filter.JwtAuthenticationFilter;
-import java.util.Arrays;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -21,6 +19,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.Arrays;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Configuration
@@ -55,6 +56,8 @@ public class SecurityConfig {
                         .requestMatchers("/error")
                         .permitAll()
                         .requestMatchers("/.well-known/**")
+                        .permitAll() // 브라우저 자동호출 차단
+                        .requestMatchers("/fonts/**")
                         .permitAll() // 브라우저 자동호출 차단
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations())
                         .permitAll()
