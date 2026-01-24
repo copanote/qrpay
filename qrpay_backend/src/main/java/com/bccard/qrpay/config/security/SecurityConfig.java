@@ -58,7 +58,9 @@ public class SecurityConfig {
                         .requestMatchers("/.well-known/**")
                         .permitAll() // 브라우저 자동호출 차단
                         .requestMatchers("/fonts/**")
-                        .permitAll() // 브라우저 자동호출 차단
+                        .permitAll()
+                        .requestMatchers("/swagger-ui/**", "/swagger-ui.html").permitAll()
+                        .requestMatchers("/v3/api-docs/**").permitAll()
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations())
                         .permitAll()
                         .anyRequest()
