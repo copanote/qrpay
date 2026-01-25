@@ -2,7 +2,7 @@
 
 ## EmvMpmQr 생성
 
-> [BcMpm가맹점의 Emv규격 MpmQr 생성]
+> BcMpm가맹점의 Emv규격 MpmQr 생성요청. mpmqr의 규격은 STATIC과 DYNAMIC이 존재한다.
 
 ### 📋 개요
 

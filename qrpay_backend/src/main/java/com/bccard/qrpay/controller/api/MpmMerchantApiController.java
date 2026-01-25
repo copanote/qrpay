@@ -17,14 +17,19 @@ import com.bccard.qrpay.exception.AuthException;
 import com.bccard.qrpay.exception.MpmQrException;
 import com.bccard.qrpay.exception.code.QrpayErrorCode;
 import com.bccard.qrpay.utils.ZxingQrcode;
-import java.math.BigDecimal;
-import java.util.List;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
+import java.util.List;
+
+@Tag(name = "MPM가맹점", description = "BC MPM가맹 API")
 @Slf4j
 @RequiredArgsConstructor
 @RestController
@@ -171,6 +176,15 @@ public class MpmMerchantApiController {
         return ResponseEntity.ok().body(QrpayApiResponse.ok(member, out));
     }
 
+    @Operation(
+            summary = "MPMQR생성",
+            description = "jwt로 인증된 사용자의 가맹점의 MPMQR을 생성한다.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "MPMQR생성 성공"),
+                    @ApiResponse(responseCode = "400", description = "Bad Request")
+            }
+
+    )
     @PostMapping(value = "/v1/merchant/mpmqr")
     @ResponseBody
     public ResponseEntity<?> mpmqr(@LoginMember Member member, @RequestBody @Validated MpmQrInfoReqDto req)
