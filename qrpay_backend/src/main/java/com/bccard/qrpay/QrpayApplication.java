@@ -1,6 +1,5 @@
 package com.bccard.qrpay;
 
-import javax.sql.DataSource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
@@ -13,13 +12,13 @@ import org.springframework.context.annotation.Profile;
 public class QrpayApplication {
 
     public static void main(String[] args) {
-        System.setProperty("spring.profiles.active", "local");
+//        System.setProperty("spring.profiles.active", "local");
         SpringApplication.run(QrpayApplication.class, args);
     }
 
     @Bean
     @Profile({"local", "default"})
-    ApplicationRunner initDatabase(DataSource dataSource) {
+    ApplicationRunner initDatabase() {
         return args -> {
             // 1. schema.sql 실행 (스키마 생성)
             //            try (Connection conn = dataSource.getConnection();

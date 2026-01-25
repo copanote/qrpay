@@ -1,23 +1,28 @@
 package com.bccard.qrpay.domain.merchant;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-import com.bccard.qrpay.domain.common.code.*;
+import com.bccard.qrpay.domain.common.code.FinancialInstitution;
+import com.bccard.qrpay.domain.merchant.fixture.MerchantFixture;
 import com.bccard.qrpay.domain.merchant.repository.FinancialInstitutionMerchantRepository;
 import com.bccard.qrpay.domain.merchant.repository.MerchantQueryRepository;
 import com.bccard.qrpay.domain.merchant.repository.MerchantRepository;
 import jakarta.persistence.EntityManager;
-import java.util.List;
-import java.util.Optional;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.Import;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
-import org.springframework.transaction.annotation.Transactional;
 
-@SpringBootTest
-@Transactional
-@Sql("classpath:sql/data.sql")
+import static org.assertj.core.api.Assertions.assertThat;
+
+
+@ActiveProfiles("test")
+@DataJpaTest
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@Import({MerchantQueryRepository.class}) //QueryDSL Repository 추가
+@Sql(scripts = {"classpath:sql/data.sql"})
 public class MerchantRepositoryTest {
 
     @Autowired
@@ -32,94 +37,76 @@ public class MerchantRepositoryTest {
     @Autowired
     EntityManager em;
 
-    @Test
-    void testFind() {
-        System.out.println(merchantRepository.findAll().size());
-    }
 
     @Test
-    void testQueryDsl() {
-        merchantQueryRepository.findAll();
-    }
-
-    @Test
+    @DisplayName("[성공] 시퀀스생성")
     void test_createSequence() {
-        // Given
-        // When
-        // Then
+        // Give When Then
         long seq = merchantQueryRepository.getNextSequenceValue();
         long seq2 = merchantQueryRepository.getNextSequenceValue();
-
         assertThat(seq).isEqualTo(seq2 - 1);
     }
 
     @Test
+    @DisplayName("[성공] 가맹점 저장 AndThen 조회")
     void test_save_merchant() {
-        Merchant merchant = Merchant.createNewMerchant()
-                .merchantId("1")
-                .merchantStatus(MerchantStatus.ACTIVE)
-                .merchantType(MerchantType.BASIC)
-                .merchantRegister(MerchantRegister.MERCHANT)
-                .mcc("7933")
-                .businessNo("12345678")
-                .merchantName("test")
-                .merchantEnglishName("testEnglish")
-                .cityName("Seoul")
-                .cityEnglishName("SeoulEnglish")
-                .merchantZipCode("12345")
-                .merchantTelAreaNo("02")
-                .merchantTelMiddleNo("520")
-                .merchantTelLastNo("4813")
-                .representativeName("ShinDongWook")
-                .representativeBirthDay("19991231")
-                .representativeEmail("dongwookshin@bccard.com")
-                .acquisitionMethod(AcquisitionMethod.EDC)
-                .build();
+        //Given
+        Merchant merchant = MerchantFixture.createMerchant();
+        FinancialInstitutionMerchant fiMerchant = MerchantFixture.createFiMerchant(merchant);
+        merchant.addFinancialInstitute(fiMerchant);
 
         Merchant saved = merchantRepository.save(merchant);
+        FinancialInstitutionMerchant saved1 = financeInstitutionMerchantRepository.save(fiMerchant);
         merchantRepository.flush();
-
-        FinancialInstitutionMerchant bccardMerchant = FinancialInstitutionMerchant.createNewFinancialInstituteMerchant()
-                .merchant(saved)
-                .financialInstitution(FinancialInstitution.BCCARD)
-                .fiMerchantNo(saved.getBusinessNo())
-                .fiMerchantName(saved.getMerchantName())
-                .build();
-
-        FinancialInstitutionMerchant lotteMerchant = FinancialInstitutionMerchant.createNewFinancialInstituteMerchant()
-                .merchant(saved)
-                .financialInstitution(FinancialInstitution.LOTTECARD)
-                .fiMerchantNo(saved.getBusinessNo())
-                .fiMerchantName(saved.getMerchantName())
-                .build();
-
-        financeInstitutionMerchantRepository.save(bccardMerchant);
-        financeInstitutionMerchantRepository.save(lotteMerchant);
         financeInstitutionMerchantRepository.flush();
 
         em.clear();
 
-        Merchant byId = merchantQueryRepository.findById(saved.getId()).get();
-        System.out.println(byId);
-        System.out.println(byId.getFiMerchants().size());
+        //When
+        Merchant foundMerchant = merchantQueryRepository.findById(saved.getId())
+                .orElseThrow(() -> new RuntimeException("가맹점 조회 실패"));
 
-        em.clear();
-
-        List<Merchant> all = merchantRepository.findAll();
-        for (Merchant merchant1 : all) {
-            List<FinancialInstitutionMerchant> fiMerchants = merchant1.getFiMerchants();
-            for (FinancialInstitutionMerchant fiMerchant : fiMerchants) {
-                System.out.println(fiMerchant.getFinancialInstitution());
-            }
-        }
+        //Then
+        assertThat(foundMerchant.getMerchantId()).isEqualTo(saved.getMerchantId());
+        assertThat(foundMerchant.getFiMerchants()).hasSize(1);
     }
 
     @Test
-    void test_save_financialMerchant() {}
-
-    @Test
+    @DisplayName("[성공] merchantQueryRepository: findById")
     void test_findById() {
-        Optional<Merchant> merchant = merchantQueryRepository.findById("900004862");
-        System.out.println(merchant.get().getMerchantName());
+
+        //Given
+        //361 366 가맹점 두개 저장되어 있음
+        String testMerchantId = "900004862";
+
+        //When
+        Merchant foundMerchant = merchantQueryRepository.findById(testMerchantId)
+                .orElseThrow(() -> new RuntimeException("가맹점 조회 실패"));
+        //Then
+        assertThat(foundMerchant.getMerchantId()).isEqualTo(testMerchantId);
+        assertThat(foundMerchant.getFiMerchants()).hasSize(2);
     }
+
+    @Test
+    @DisplayName("[성공] merchantQueryRepository: findByFinancialInstitutionAndFiMerchantNo")
+    void test_findByFinancialInstitutionAndFiMerchantNo() {
+
+        //Given
+        // values ('900004862','361','791722496','90000981','20251015134547',null,null,'이아철판볶음');
+        // values ('900004862','366','0081239709','QRPAY','20251015134553',null,null,'이아철판볶음');
+        String fiMerchantNo = "791722496";
+        FinancialInstitution fi = FinancialInstitution.BCCARD;
+
+        String mpmMerchantId = "900004862";
+
+
+        //When
+        Merchant foundMerchant = merchantQueryRepository
+                .findByFinancialInstitutionAndFiMerchantNo(fi, fiMerchantNo)
+                .orElseThrow(() -> new RuntimeException("가맹점 조회 실패"));
+        //Then
+        assertThat(foundMerchant.getMerchantId()).isEqualTo(mpmMerchantId);
+        assertThat(foundMerchant.getFiMerchants().getFirst().getFiMerchantNo()).isEqualTo(fiMerchantNo);
+    }
+
 }

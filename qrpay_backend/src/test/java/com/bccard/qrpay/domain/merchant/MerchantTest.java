@@ -12,11 +12,10 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-
 public class MerchantTest {
 
     @Test
-    @DisplayName("Merchant 도메인(엔티티)객체 정상 생성")
+    @DisplayName("[성공] Merchant 도메인(엔티티)객체 생성")
     void merchantCreate_success() {
         //Given //When
         Merchant merchant = Merchant.createNewMerchant()
@@ -45,10 +44,10 @@ public class MerchantTest {
     }
 
     @Test
-    @DisplayName("Merchant 이름변경 성공")
+    @DisplayName("[성공] Merchant 이름변경")
     void updateMerchantName_success() {
         //Given
-        Merchant merchant = MerchantFixture.create();
+        Merchant merchant = MerchantFixture.createMerchant();
         //When
         String changedName = "스타벅스_22";
         merchant.updateMerchantName(changedName);
@@ -57,10 +56,10 @@ public class MerchantTest {
     }
 
     @Test
-    @DisplayName("Merchant 14자리 이상 크기 이름변경 실패")
+    @DisplayName("[실패] Merchant 14자리 이상 크기 이름변경 실패")
     void updateMerchantName_fail() {
         //Given
-        Merchant merchant = MerchantFixture.create();
+        Merchant merchant = MerchantFixture.createMerchant();
         //When
         String changedName = "스타벅스_1234567890";
         //Then
@@ -69,10 +68,10 @@ public class MerchantTest {
     }
 
     @Test
-    @DisplayName("봉사료[tip] 변경 성공")
+    @DisplayName("[성공 ]봉사료[tip] 변경 성공")
     void updateTip_success() {
         //Given
-        Merchant merchant = MerchantFixture.create();
+        Merchant merchant = MerchantFixture.createMerchant();
 
         //when
         merchant.updateTip(BigDecimal.valueOf(15));
@@ -82,10 +81,10 @@ public class MerchantTest {
     }
 
     @Test
-    @DisplayName("봉사료[tip] 변경 실패")
+    @DisplayName("[실패] 봉사료[tip] 변경 실패")
     void updateTip_fail() {
         //Given
-        Merchant merchant = MerchantFixture.create();
+        Merchant merchant = MerchantFixture.createMerchant();
         merchant.updateVat(BigDecimal.valueOf(50));
         //When Then
         SoftAssertions.assertSoftly(
@@ -101,10 +100,10 @@ public class MerchantTest {
     }
 
     @Test
-    @DisplayName("부가세[vat] 변경 성공")
+    @DisplayName("[성공] 부가세[vat] 변경 성공")
     void updateVat_success() {
         //Given
-        Merchant merchant = MerchantFixture.create();
+        Merchant merchant = MerchantFixture.createMerchant();
 
         //when
         merchant.updateVat(BigDecimal.valueOf(15));
@@ -114,10 +113,10 @@ public class MerchantTest {
     }
 
     @Test
-    @DisplayName("부가세[vat] 변경 실패")
+    @DisplayName("[실패] 부가세[vat] 변경 실패")
     void updateVat_fail() {
         //Given
-        Merchant merchant = MerchantFixture.create();
+        Merchant merchant = MerchantFixture.createMerchant();
         merchant.updateTip(BigDecimal.valueOf(50));
         //When Then
         SoftAssertions.assertSoftly(
@@ -133,10 +132,10 @@ public class MerchantTest {
     }
 
     @Test
-    @DisplayName("가맹점상태 CANCEL 변경 성공")
+    @DisplayName("[성공] 가맹점상태 CANCEL 변경 성공")
     void changeStatusToCancel_success() {
         //Given
-        Merchant merchant = MerchantFixture.create();
+        Merchant merchant = MerchantFixture.createMerchant();
         //when
         merchant.cancel();
         //then
@@ -145,7 +144,7 @@ public class MerchantTest {
     }
 
     @Test
-    @DisplayName("가맹점상태 CANCEL 변경 실패")
+    @DisplayName("[실패] 가맹점상태 CANCEL 변경 실패")
     void changeStatusToCancel_fail() {
     }
 
