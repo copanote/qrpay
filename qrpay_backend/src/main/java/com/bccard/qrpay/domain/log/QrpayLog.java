@@ -8,6 +8,7 @@ import com.bccard.qrpay.domain.common.entity.BaseEntity;
 import com.bccard.qrpay.utils.MpmDateTimeUtils;
 import jakarta.persistence.*;
 import lombok.*;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Persistable;
 
 @Getter
@@ -59,17 +60,17 @@ public class QrpayLog extends BaseEntity implements Persistable<Long> {
 
     @Embedded
     @AttributeOverrides({
-        @AttributeOverride(name = "standardHeader", column = @Column(name = "RIX_HDR_VAL", length = 48)),
-        @AttributeOverride(name = "header", column = @Column(name = "CMMN_HDR_VAL", length = 128)),
-        @AttributeOverride(name = "body", column = @Column(name = "CHNL_DATA_1_VAL", length = 4000))
+            @AttributeOverride(name = "standardHeader", column = @Column(name = "RIX_HDR_VAL", length = 48)),
+            @AttributeOverride(name = "header", column = @Column(name = "CMMN_HDR_VAL", length = 128)),
+            @AttributeOverride(name = "body", column = @Column(name = "CHNL_DATA_1_VAL", length = 4000))
     })
     private LogMessage fepFldMessage;
 
     @Embedded
     @AttributeOverrides({
-        @AttributeOverride(name = "standardHeader", column = @Column(name = "FEP_STD_HDR_VAL", length = 4000)),
-        @AttributeOverride(name = "header", column = @Column(name = "FEP_CMMN_HDR_VAL", length = 1000)),
-        @AttributeOverride(name = "body", column = @Column(name = "FEP_CHNL_DATA_1_VAL", length = 4000))
+            @AttributeOverride(name = "standardHeader", column = @Column(name = "FEP_STD_HDR_VAL", length = 4000)),
+            @AttributeOverride(name = "header", column = @Column(name = "FEP_CMMN_HDR_VAL", length = 1000)),
+            @AttributeOverride(name = "body", column = @Column(name = "FEP_CHNL_DATA_1_VAL", length = 4000))
     })
     private LogMessage logMessage;
 
@@ -101,6 +102,21 @@ public class QrpayLog extends BaseEntity implements Persistable<Long> {
                 .id(id)
                 .createdAtSss(MpmDateTimeUtils.generateDtmNow(MpmDateTimeUtils.PATTERN_YEAR_TO_MICROSEC))
                 .logMessage(logMessage)
+                .build();
+    }
+
+    public static QrpayLog restApiLog(Long id, String correlationId, String apiPath, String status, String request, String response) {
+        LogMessage reqLog = LogMessage.create().body(request).build();
+        LogMessage resLog = LogMessage.create().body(response).build();
+
+        return QrpayLog.builder()
+                .id(id)
+                .createdAtSss(MpmDateTimeUtils.generateDtmNow(MpmDateTimeUtils.PATTERN_YEAR_TO_MICROSEC))
+                .affiliateTransactionId(correlationId)
+                .messageId(StringUtils.truncate(apiPath, 50))
+                .responseCode(status)
+                .fepFldMessage(reqLog)
+                .logMessage(resLog)
                 .build();
     }
 

@@ -6,7 +6,9 @@ import com.bccard.qrpay.exception.QrpayCustomException;
 import com.bccard.qrpay.exception.code.QrpayErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
@@ -41,4 +43,11 @@ public class QrpayLogService {
                 .findById(id)
                 .orElseThrow(() -> new QrpayCustomException(QrpayErrorCode.LOG_NOT_FOUND));
     }
+
+    @Async
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public void saveApiLog(QrpayLog qrpayLog) {
+        qrpayLogCudRepository.save(qrpayLog);
+    }
+
 }

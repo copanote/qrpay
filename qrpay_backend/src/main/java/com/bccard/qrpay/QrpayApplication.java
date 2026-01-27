@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Profile;
 public class QrpayApplication {
 
     public static void main(String[] args) {
-//        System.setProperty("spring.profiles.active", "local");
+        System.setProperty("spring.profiles.active", "local");
         SpringApplication.run(QrpayApplication.class, args);
     }
 
