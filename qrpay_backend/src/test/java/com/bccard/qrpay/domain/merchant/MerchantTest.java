@@ -1,23 +1,22 @@
 package com.bccard.qrpay.domain.merchant;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
 import com.bccard.qrpay.domain.common.code.*;
 import com.bccard.qrpay.domain.merchant.fixture.MerchantFixture;
+import java.math.BigDecimal;
+import java.util.UUID;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
-import java.math.BigDecimal;
-import java.util.UUID;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class MerchantTest {
 
     @Test
     @DisplayName("[성공] Merchant 도메인(엔티티)객체 생성")
     void merchantCreate_success() {
-        //Given //When
+        // Given //When
         Merchant merchant = Merchant.createNewMerchant()
                 .merchantId(UUID.randomUUID().toString())
                 .merchantStatus(MerchantStatus.ACTIVE)
@@ -39,114 +38,106 @@ public class MerchantTest {
                 .registrationRequestor(FinancialInstitution.BCCARD)
                 .acquisitionMethod(AcquisitionMethod.EDI)
                 .build();
-        //Then
+        // Then
         assertThat(merchant).isNotNull();
     }
 
     @Test
     @DisplayName("[성공] Merchant 이름변경")
     void updateMerchantName_success() {
-        //Given
+        // Given
         Merchant merchant = MerchantFixture.createMerchant();
-        //When
+        // When
         String changedName = "스타벅스_22";
         merchant.updateMerchantName(changedName);
-        //Then
+        // Then
         assertThat(merchant.getMerchantName()).isEqualTo(changedName);
     }
 
     @Test
     @DisplayName("[실패] Merchant 14자리 이상 크기 이름변경 실패")
     void updateMerchantName_fail() {
-        //Given
+        // Given
         Merchant merchant = MerchantFixture.createMerchant();
-        //When
+        // When
         String changedName = "스타벅스_1234567890";
-        //Then
-        assertThatThrownBy(() -> merchant.updateMerchantName(changedName))
-                .isInstanceOf(IllegalArgumentException.class);
+        // Then
+        assertThatThrownBy(() -> merchant.updateMerchantName(changedName)).isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
     @DisplayName("[성공 ]봉사료[tip] 변경 성공")
     void updateTip_success() {
-        //Given
+        // Given
         Merchant merchant = MerchantFixture.createMerchant();
 
-        //when
+        // when
         merchant.updateTip(BigDecimal.valueOf(15));
 
-        //then
+        // then
         assertThat(merchant.getTipRate()).isEqualTo(BigDecimal.valueOf(15));
     }
 
     @Test
     @DisplayName("[실패] 봉사료[tip] 변경 실패")
     void updateTip_fail() {
-        //Given
+        // Given
         Merchant merchant = MerchantFixture.createMerchant();
         merchant.updateVat(BigDecimal.valueOf(50));
-        //When Then
-        SoftAssertions.assertSoftly(
-                softly -> {
-                    softly.assertThatThrownBy(() -> merchant.updateTip(BigDecimal.valueOf(50)))
-                            .isInstanceOf(IllegalStateException.class);
-                    softly.assertThatThrownBy(() -> merchant.updateTip(BigDecimal.valueOf(-1)))
-                            .isInstanceOf(IllegalStateException.class);
-                    softly.assertThatThrownBy(() -> merchant.updateTip(BigDecimal.valueOf(101)))
-                            .isInstanceOf(IllegalStateException.class);
-                }
-        );
+        // When Then
+        SoftAssertions.assertSoftly(softly -> {
+            softly.assertThatThrownBy(() -> merchant.updateTip(BigDecimal.valueOf(50)))
+                    .isInstanceOf(IllegalStateException.class);
+            softly.assertThatThrownBy(() -> merchant.updateTip(BigDecimal.valueOf(-1)))
+                    .isInstanceOf(IllegalStateException.class);
+            softly.assertThatThrownBy(() -> merchant.updateTip(BigDecimal.valueOf(101)))
+                    .isInstanceOf(IllegalStateException.class);
+        });
     }
 
     @Test
     @DisplayName("[성공] 부가세[vat] 변경 성공")
     void updateVat_success() {
-        //Given
+        // Given
         Merchant merchant = MerchantFixture.createMerchant();
 
-        //when
+        // when
         merchant.updateVat(BigDecimal.valueOf(15));
 
-        //then
+        // then
         assertThat(merchant.getVatRate()).isEqualTo(BigDecimal.valueOf(15));
     }
 
     @Test
     @DisplayName("[실패] 부가세[vat] 변경 실패")
     void updateVat_fail() {
-        //Given
+        // Given
         Merchant merchant = MerchantFixture.createMerchant();
         merchant.updateTip(BigDecimal.valueOf(50));
-        //When Then
-        SoftAssertions.assertSoftly(
-                softly -> {
-                    softly.assertThatThrownBy(() -> merchant.updateVat(BigDecimal.valueOf(50)))
-                            .isInstanceOf(IllegalStateException.class);
-                    softly.assertThatThrownBy(() -> merchant.updateVat(BigDecimal.valueOf(-1)))
-                            .isInstanceOf(IllegalStateException.class);
-                    softly.assertThatThrownBy(() -> merchant.updateVat(BigDecimal.valueOf(101)))
-                            .isInstanceOf(IllegalStateException.class);
-                }
-        );
+        // When Then
+        SoftAssertions.assertSoftly(softly -> {
+            softly.assertThatThrownBy(() -> merchant.updateVat(BigDecimal.valueOf(50)))
+                    .isInstanceOf(IllegalStateException.class);
+            softly.assertThatThrownBy(() -> merchant.updateVat(BigDecimal.valueOf(-1)))
+                    .isInstanceOf(IllegalStateException.class);
+            softly.assertThatThrownBy(() -> merchant.updateVat(BigDecimal.valueOf(101)))
+                    .isInstanceOf(IllegalStateException.class);
+        });
     }
 
     @Test
     @DisplayName("[성공] 가맹점상태 CANCEL 변경 성공")
     void changeStatusToCancel_success() {
-        //Given
+        // Given
         Merchant merchant = MerchantFixture.createMerchant();
-        //when
+        // when
         merchant.cancel();
-        //then
+        // then
         assertThat(merchant.getMerchantStatus()).isEqualTo(MerchantStatus.CANCELLED);
         assertThat(merchant.getSecessionDate()).isNotNull();
     }
 
     @Test
     @DisplayName("[실패] 가맹점상태 CANCEL 변경 실패")
-    void changeStatusToCancel_fail() {
-    }
-
-
+    void changeStatusToCancel_fail() {}
 }

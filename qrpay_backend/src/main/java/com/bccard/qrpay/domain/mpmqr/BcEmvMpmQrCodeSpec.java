@@ -4,30 +4,24 @@ import com.bccard.qrpay.domain.common.code.FinancialInstitution;
 import com.bccard.qrpay.domain.common.code.PointOfInitMethod;
 import com.bccard.qrpay.domain.merchant.FinancialInstitutionMerchant;
 import com.bccard.qrpay.domain.merchant.Merchant;
-import com.bccard.qrpay.domain.mpmqr.dto.PublishBcEmvMpmQrReqDto;
-import com.bccard.qrpay.domain.mpmqr.repository.MpmQrPublicationQueryRepository;
-import com.bccard.qrpay.domain.mpmqr.repository.MpmQrPublicationRepository;
 import com.copanote.emvmpm.data.EmvMpmDataObject;
 import com.copanote.emvmpm.data.EmvMpmNode;
 import com.copanote.emvmpm.data.EmvMpmNodeFactory;
 import com.copanote.emvmpm.definition.EmvMpmDefinition;
+import com.copanote.emvmpm.definition.packager.EmvMpmPackager;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.stereotype.Service;
+import org.springframework.core.io.ClassPathResource;
 
 /**
  * MpmQr Service
- * - Mpm Emv Qr 생성
+ * - Mpm Emv Qr Code Spec
  */
 @Slf4j
-@RequiredArgsConstructor
-@Service
-public class EmvMpmQrService {
+public class BcEmvMpmQrCodeSpec {
 
     private static final String BCCARD_IIN = "26000410"; // Issuer Identification Number
     private static final String BCCARD_AID = "D4100000014010"; // Application Identifier
@@ -37,66 +31,31 @@ public class EmvMpmQrService {
     private static final int DEFAULT_SIZE_WIDTH_HEIGHT = 200;
     private static final String IMAGE_FORMAT = "png";
 
-    private final MpmQrPublicationRepository mpmQrPublicationCudRepository;
-    private final MpmQrPublicationQueryRepository mpmQrPublicationQueryRepository;
-    private final EmvMpmDefinition bcEmvmpmDefinition;
+    private static final EmvMpmDefinition bcEmvmpmDefinition;
 
-    public String createQrReferenceId() {
-        return mpmQrPublicationQueryRepository.createQrReferenceId();
-    }
-
-    public MpmQrPublication findStaticMpmQrOrCreate(String memberId, Merchant m) {
-        Optional<MpmQrPublication> newestStaticMpmQr = mpmQrPublicationQueryRepository.findNewestStaticMpmQr(m);
-        return newestStaticMpmQr.orElseGet(
-                () -> publishBcEmvMpmQr(PublishBcEmvMpmQrReqDto.staticEmvMpm(memberId, m, "410")));
-    }
-
-    public MpmQrPublication publishBcEmvMpmQr(PublishBcEmvMpmQrReqDto publishBcEmvMpmQrReqDto) {
-
-        log.info("publishDynamicBcEmvMpmQr={}", publishBcEmvMpmQrReqDto.toString());
-
-        String qrReferenceId = createQrReferenceId();
-
-        EmvMpmNode emvMpmNode = null;
-        if (publishBcEmvMpmQrReqDto.getPim() == PointOfInitMethod.STATIC) {
-            emvMpmNode = publishStaticBcEmvMpmQr(
-                    bcEmvmpmDefinition,
-                    publishBcEmvMpmQrReqDto.getMemberId(),
-                    publishBcEmvMpmQrReqDto.getMerchant(),
-                    qrReferenceId,
-                    publishBcEmvMpmQrReqDto.getCurrency());
-
-        } else if (publishBcEmvMpmQrReqDto.getPim() == PointOfInitMethod.DYNAMIC) {
-
-            emvMpmNode = publishDynamicBcEmvMpmQr(
-                    bcEmvmpmDefinition,
-                    publishBcEmvMpmQrReqDto.getMemberId(),
-                    publishBcEmvMpmQrReqDto.getMerchant(),
-                    qrReferenceId,
-                    publishBcEmvMpmQrReqDto.getCurrency(),
-                    publishBcEmvMpmQrReqDto.getAmount(),
-                    publishBcEmvMpmQrReqDto.getInstallment());
-        } else {
-            throw new IllegalArgumentException(
-                    "Unknown pim=" + publishBcEmvMpmQrReqDto.getPim().toString());
+    static {
+        EmvMpmPackager emp = new EmvMpmPackager();
+        ClassPathResource classPathResource = new ClassPathResource("emvmpm_bc.xml");
+        try {
+            emp.setEmvMpmPackager(classPathResource.getInputStream());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
-
-        MpmQrPublication mpmQrPublication = MpmQrPublication.createMpmqrPublication()
-                .qrReferenceId(qrReferenceId)
-                .merchant(publishBcEmvMpmQrReqDto.getMerchant())
-                .memberId(publishBcEmvMpmQrReqDto.getMemberId())
-                .pim(publishBcEmvMpmQrReqDto.getPim())
-                .amount(publishBcEmvMpmQrReqDto.getAmount())
-                .qrData(emvMpmNode.toQrCodeData())
-                .affiliateId(publishBcEmvMpmQrReqDto.getAffiliateId())
-                .affiliateRequestValue(publishBcEmvMpmQrReqDto.getAffiliateRequestValue())
-                .startedAt(publishBcEmvMpmQrReqDto.getStartedAt())
-                .build();
-
-        return mpmQrPublicationCudRepository.save(mpmQrPublication);
+        bcEmvmpmDefinition = emp.create();
     }
 
-    public EmvMpmNode publishStaticBcEmvMpmQr(
+    public static String staticCodeData(String memberId, Merchant m, String qrRefId, String currency) {
+        EmvMpmNode node = staticEmvMpmQr(bcEmvmpmDefinition, memberId, m, qrRefId, currency);
+        return node.toQrCodeData();
+    }
+
+    public static String dynamicCodeData(
+            String memberId, Merchant m, String qrRefId, String currency, long amount, long installment) {
+        EmvMpmNode node = dynamicEmvMpmQr(bcEmvmpmDefinition, memberId, m, qrRefId, currency, amount, installment);
+        return node.toQrCodeData();
+    }
+
+    private static EmvMpmNode staticEmvMpmQr(
             EmvMpmDefinition def, String memberId, Merchant m, String qrRefId, String currency) {
         /*
          * ID 00 Payload Format Indicator
@@ -244,7 +203,7 @@ public class EmvMpmQrService {
         return root;
     }
 
-    public EmvMpmNode publishDynamicBcEmvMpmQr(
+    private static EmvMpmNode dynamicEmvMpmQr(
             EmvMpmDefinition def,
             String memberId,
             Merchant m,

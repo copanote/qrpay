@@ -49,7 +49,7 @@ public class MpmQrPublicationRepositoryTest {
 
     @Test
     void test_createqrRefId() {
-        Long nextSequenceValue = mpmQrPublicationQueryRepository.getNextSequenceValue();
+        String nextSequenceValue = mpmQrPublicationQueryRepository.createQrReferenceId();
         System.out.println(nextSequenceValue);
     }
 

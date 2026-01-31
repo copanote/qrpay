@@ -4,10 +4,12 @@ import com.bccard.qrpay.domain.common.code.PointOfInitMethod;
 import com.bccard.qrpay.domain.merchant.Merchant;
 import com.bccard.qrpay.domain.mpmqr.MpmQrPublication;
 import com.bccard.qrpay.domain.mpmqr.QMpmQrPublication;
+import com.bccard.qrpay.utils.MpmDateTimeUtils;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import java.util.Optional;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -23,10 +25,13 @@ public class MpmQrPublicationQueryRepository {
 
     private static final QMpmQrPublication mpmQrPublication = QMpmQrPublication.mpmQrPublication;
 
-    public Long getNextSequenceValue() {
+    public String createQrReferenceId() {
         String sql = "SELECT BCDBA.SEQ_MPMQRCRETCTNT.NEXTVAL FROM DUAL";
         Object result = entityManager.createNativeQuery(sql).getSingleResult();
-        return ((Number) result).longValue();
+
+        String paddedSeq = StringUtils.leftPad(String.valueOf(((Number) result).longValue()), 9, '0');
+        String yyyyString = MpmDateTimeUtils.generateDtmNow(MpmDateTimeUtils.FORMATTER_yyyy);
+        return "MQ" + yyyyString + paddedSeq;
     }
 
     public Optional<MpmQrPublication> findById(String qrReferenceId) {

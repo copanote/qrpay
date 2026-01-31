@@ -5,14 +5,13 @@ import com.bccard.qrpay.domain.common.converter.*;
 import com.bccard.qrpay.domain.common.entity.BaseEntity;
 import com.bccard.qrpay.utils.MpmDateTimeUtils;
 import jakarta.persistence.*;
-import lombok.*;
-import org.springframework.data.domain.Persistable;
-
 import java.io.Serial;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.*;
+import org.springframework.data.domain.Persistable;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -172,9 +171,11 @@ public class Merchant extends BaseEntity implements Persistable<String>, Seriali
         this.singleLimitAmount = 1000000L;
     }
 
+    public static final int MAX_NAME_LENGTH = 14;
+
     public void updateMerchantName(String merchantName) {
 
-        if (merchantName.length() >= 14) {
+        if (merchantName.length() > MAX_NAME_LENGTH) {
             throw new IllegalArgumentException("가맹점 이름은 14자리를 넘으면 안됩니다");
         }
 

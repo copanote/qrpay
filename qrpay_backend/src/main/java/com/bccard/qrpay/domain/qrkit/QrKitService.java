@@ -7,6 +7,8 @@ import com.bccard.qrpay.domain.common.code.QrKitShippingStatus;
 import com.bccard.qrpay.domain.member.Member;
 import com.bccard.qrpay.domain.merchant.Merchant;
 import com.bccard.qrpay.domain.merchant.MerchantService;
+import com.bccard.qrpay.domain.merchant.application.port.in.ChangeMerchantNameCommand;
+import com.bccard.qrpay.domain.merchant.application.port.in.ChangeMerchantNameUseCase;
 import com.bccard.qrpay.domain.mpmqr.EmvMpmQrService;
 import com.bccard.qrpay.domain.mpmqr.MpmQrPublication;
 import com.bccard.qrpay.domain.mpmqr.dto.PublishBcEmvMpmQrReqDto;
@@ -29,6 +31,7 @@ public class QrKitService {
     private final MpmQrKitRepository mpmQrKitCUDRepository;
     private final MerchantService merchantService;
     private final EmvMpmQrService emvMpmQrService;
+    private final ChangeMerchantNameUseCase changeMerchantNameUseCase;
 
     public MpmQrKitApplication apply(MpmQrKitApplyReqDto reqDto) {
 
@@ -48,7 +51,12 @@ public class QrKitService {
         }
 
         if (!reqDto.getReqMerchantName().equals(merchant.getMerchantName())) {
-            merchant = merchantService.updateMerchantName(merchant, reqDto.getReqMerchantName());
+
+            ChangeMerchantNameCommand command = ChangeMerchantNameCommand.builder()
+                    .merchantId(member.getMerchant().getMerchantId())
+                    .toUpdateName(reqDto.getReqMerchantName())
+                    .build();
+            merchant = changeMerchantNameUseCase.change(command);
         }
 
         PublishBcEmvMpmQrReqDto emvmpmQrReq =

@@ -33,24 +33,6 @@ public class MerchantService {
     }
 
     @Transactional
-    public Merchant updateMerchantName(Merchant merchant, String updatedMerchantName) {
-
-        Merchant fetchedMerchant = merchantQueryRepository
-                .findById(merchant.getMerchantId())
-                .orElseThrow(() -> new MerchantException(QrpayErrorCode.MERCHANT_NOT_FOUND));
-
-        if (updatedMerchantName.length() > 14) {
-            throw new MerchantException(QrpayErrorCode.MERCHANT_NAME_LENGTH_POLICY_VIOLATION);
-        }
-
-        if (!fetchedMerchant.getMerchantName().equals(updatedMerchantName)) {
-            fetchedMerchant.updateMerchantName(updatedMerchantName);
-        }
-
-        return fetchedMerchant;
-    }
-
-    @Transactional
     public Merchant updateVat(Merchant merchant, BigDecimal updatedVat) {
 
         Merchant fetchedMerchant = merchantQueryRepository
