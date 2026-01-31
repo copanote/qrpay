@@ -1,6 +1,5 @@
 package com.bccard.qrpay;
 
-import com.bccard.qrpay.domain.mpmqr.MpmQrPublicationService;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.client.j2se.MatrixToImageConfig;
@@ -15,14 +14,10 @@ import java.util.HashMap;
 import java.util.Map;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 class QrpayApplicationTests {
-
-    @Autowired
-    MpmQrPublicationService mqs;
 
     @Test
     void contextLoads() {}

@@ -3,7 +3,6 @@ package com.bccard.qrpay.domain.merchant.fixture;
 import com.bccard.qrpay.domain.common.code.*;
 import com.bccard.qrpay.domain.merchant.FinancialInstitutionMerchant;
 import com.bccard.qrpay.domain.merchant.Merchant;
-
 import java.util.UUID;
 
 public class MerchantFixture {

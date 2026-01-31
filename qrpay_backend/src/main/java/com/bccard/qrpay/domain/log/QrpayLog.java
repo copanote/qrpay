@@ -60,17 +60,17 @@ public class QrpayLog extends BaseEntity implements Persistable<Long> {
 
     @Embedded
     @AttributeOverrides({
-            @AttributeOverride(name = "standardHeader", column = @Column(name = "RIX_HDR_VAL", length = 48)),
-            @AttributeOverride(name = "header", column = @Column(name = "CMMN_HDR_VAL", length = 128)),
-            @AttributeOverride(name = "body", column = @Column(name = "CHNL_DATA_1_VAL", length = 4000))
+        @AttributeOverride(name = "standardHeader", column = @Column(name = "RIX_HDR_VAL", length = 48)),
+        @AttributeOverride(name = "header", column = @Column(name = "CMMN_HDR_VAL", length = 128)),
+        @AttributeOverride(name = "body", column = @Column(name = "CHNL_DATA_1_VAL", length = 4000))
     })
     private LogMessage fepFldMessage;
 
     @Embedded
     @AttributeOverrides({
-            @AttributeOverride(name = "standardHeader", column = @Column(name = "FEP_STD_HDR_VAL", length = 4000)),
-            @AttributeOverride(name = "header", column = @Column(name = "FEP_CMMN_HDR_VAL", length = 1000)),
-            @AttributeOverride(name = "body", column = @Column(name = "FEP_CHNL_DATA_1_VAL", length = 4000))
+        @AttributeOverride(name = "standardHeader", column = @Column(name = "FEP_STD_HDR_VAL", length = 4000)),
+        @AttributeOverride(name = "header", column = @Column(name = "FEP_CMMN_HDR_VAL", length = 1000)),
+        @AttributeOverride(name = "body", column = @Column(name = "FEP_CHNL_DATA_1_VAL", length = 4000))
     })
     private LogMessage logMessage;
 
@@ -105,7 +105,8 @@ public class QrpayLog extends BaseEntity implements Persistable<Long> {
                 .build();
     }
 
-    public static QrpayLog restApiLog(Long id, String correlationId, String apiPath, String status, String request, String response) {
+    public static QrpayLog restApiLog(
+            Long id, String correlationId, String apiPath, String status, String request, String response) {
         LogMessage reqLog = LogMessage.create().body(request).build();
         LogMessage resLog = LogMessage.create().body(response).build();
 

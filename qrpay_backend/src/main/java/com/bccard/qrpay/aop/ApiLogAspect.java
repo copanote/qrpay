@@ -5,6 +5,8 @@ import com.bccard.qrpay.domain.log.QrpayLogService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.nio.charset.StandardCharsets;
+import java.util.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -17,10 +19,6 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.util.ContentCachingRequestWrapper;
 import org.springframework.web.util.ContentCachingResponseWrapper;
 import org.springframework.web.util.WebUtils;
-
-import java.nio.charset.StandardCharsets;
-import java.util.*;
-
 
 @Slf4j
 @Aspect
@@ -45,20 +43,21 @@ public class ApiLogAspect {
             long duration = System.currentTimeMillis() - start;
 
             // 2. 요청/응답 정보 추출
-            HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-            HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
+            HttpServletRequest request =
+                    ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+            HttpServletResponse response =
+                    ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
 
-            QrpayLog qrpayLog = QrpayLog.restApiLog(apiLogService.getId(),
+            QrpayLog qrpayLog = QrpayLog.restApiLog(
+                    apiLogService.getId(),
                     MDC.get("correlationId"),
                     request.getRequestURI(),
                     response.getStatus() + "",
                     request.getQueryString() + "|" + extractHeaders(request) + "|" + extractRequestBody(request),
-                    objectMapper.writeValueAsString(result)
-            );
+                    objectMapper.writeValueAsString(result));
 
             // 4. 비동기 저장 호출
             apiLogService.saveApiLog(qrpayLog);
-
         }
     }
 
@@ -83,8 +82,7 @@ public class ApiLogAspect {
 
     private String extractRequestBody(HttpServletRequest request) {
 
-        ContentCachingRequestWrapper wrapper =
-                WebUtils.getNativeRequest(request, ContentCachingRequestWrapper.class);
+        ContentCachingRequestWrapper wrapper = WebUtils.getNativeRequest(request, ContentCachingRequestWrapper.class);
 
         if (wrapper != null) {
             log.info(wrapper.getContentType());
@@ -99,7 +97,6 @@ public class ApiLogAspect {
         ContentCachingResponseWrapper wrapper =
                 WebUtils.getNativeResponse(response, ContentCachingResponseWrapper.class);
 
-
         log.info("response wrapper{}", wrapper.getContentType());
 
         if (wrapper != null) {
@@ -108,6 +105,4 @@ public class ApiLogAspect {
         }
         return "";
     }
-
-
 }

@@ -10,8 +10,12 @@ import com.bccard.qrpay.domain.member.MemberService;
 import com.bccard.qrpay.domain.member.Permission;
 import com.bccard.qrpay.domain.merchant.Merchant;
 import com.bccard.qrpay.domain.merchant.MerchantService;
+import com.bccard.qrpay.domain.merchant.application.port.in.ChangeMerchantNameCommand;
+import com.bccard.qrpay.domain.merchant.application.port.in.ChangeMerchantNameUseCase;
 import com.bccard.qrpay.domain.mpmqr.EmvMpmQrService;
 import com.bccard.qrpay.domain.mpmqr.MpmQrPublication;
+import com.bccard.qrpay.domain.mpmqr.application.port.in.PublishStaticEmvMpmQrCommand;
+import com.bccard.qrpay.domain.mpmqr.application.port.in.PublishStaticEmvMpmQrUseCase;
 import com.bccard.qrpay.domain.mpmqr.dto.PublishBcEmvMpmQrReqDto;
 import com.bccard.qrpay.exception.AuthException;
 import com.bccard.qrpay.exception.MpmQrException;
@@ -20,14 +24,13 @@ import com.bccard.qrpay.utils.ZxingQrcode;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.math.BigDecimal;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import java.math.BigDecimal;
-import java.util.List;
 
 @Tag(name = "MPM가맹점", description = "BC MPM가맹 API")
 @Slf4j
@@ -39,6 +42,8 @@ public class MpmMerchantApiController {
     private final MerchantService merchantService;
     private final MemberService memberService;
     private final EmvMpmQrService emvMpmQrService;
+    private final ChangeMerchantNameUseCase changeMerchantNameUseCase;
+    private final PublishStaticEmvMpmQrUseCase publishStaticEmvMpmQrUseCase;
 
     @RequestMapping(value = "v1/member/{memberId}/employee-cancel11")
     @ResponseBody
@@ -160,16 +165,19 @@ public class MpmMerchantApiController {
     public ResponseEntity<?> changeName(
             @LoginMember Member member, @RequestBody @Validated MerchantNameChangeReqDto req) throws Exception {
 
-        log.info("Member={}", member.getMemberId());
-
         if (member.getRole() != MemberRole.MASTER) {
             throw new AuthException(QrpayErrorCode.INVALID_AUTHORIZATION);
         }
 
-        Merchant merchant = merchantService.updateMerchantName(member.getMerchant(), req.getName());
-        PublishBcEmvMpmQrReqDto reqEmvMpm = PublishBcEmvMpmQrReqDto.staticEmvMpm(member.getMemberId(), merchant, "410");
+        ChangeMerchantNameCommand command =
+                new ChangeMerchantNameCommand(member.getMerchant().getMerchantId(), req.getName());
+        Merchant merchant = changeMerchantNameUseCase.change(command);
 
-        MpmQrPublication staticMpmQr = emvMpmQrService.publishBcEmvMpmQr(reqEmvMpm);
+        PublishStaticEmvMpmQrCommand publishCommand =
+                PublishStaticEmvMpmQrCommand.staticEmvMpm(member.getMemberId(), merchant.getMerchantId(), "410");
+
+        MpmQrPublication staticMpmQr = publishStaticEmvMpmQrUseCase.publishStatic(publishCommand);
+
         MpmQrInfoResDto out = MpmQrInfoResDto.staticMpmQrInfo(
                 merchant.getMerchantName(), ZxingQrcode.base64EncodedQrImageForQrpay(staticMpmQr.getQrData()));
 
@@ -180,11 +188,9 @@ public class MpmMerchantApiController {
             summary = "MPMQR생성",
             description = "jwt로 인증된 사용자의 가맹점의 MPMQR을 생성한다.",
             responses = {
-                    @ApiResponse(responseCode = "200", description = "MPMQR생성 성공"),
-                    @ApiResponse(responseCode = "400", description = "Bad Request")
-            }
-
-    )
+                @ApiResponse(responseCode = "200", description = "MPMQR생성 성공"),
+                @ApiResponse(responseCode = "400", description = "Bad Request")
+            })
     @PostMapping(value = "/v1/merchant/mpmqr")
     @ResponseBody
     public ResponseEntity<?> mpmqr(@LoginMember Member member, @RequestBody @Validated MpmQrInfoReqDto req)

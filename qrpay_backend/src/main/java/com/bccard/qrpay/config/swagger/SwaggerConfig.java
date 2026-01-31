@@ -50,18 +50,16 @@ public class SwaggerConfig {
         return new OpenAPI()
                 .info(apiInfo())
                 .components(new Components()
-                        .addSecuritySchemes(JWT_NAME, new SecurityScheme()
-                                .name(JWT_NAME)
-                                .type(SecurityScheme.Type.HTTP)
-                                .scheme("bearer")
-                                .bearerFormat("JWT")
-                        ));
+                        .addSecuritySchemes(
+                                JWT_NAME,
+                                new SecurityScheme()
+                                        .name(JWT_NAME)
+                                        .type(SecurityScheme.Type.HTTP)
+                                        .scheme("bearer")
+                                        .bearerFormat("JWT")));
     }
 
     private Info apiInfo() {
-        return new Info()
-                .title("QRPAY API")
-                .description("QRPAY API 문서입니다.")
-                .version("1.0.0");
+        return new Info().title("QRPAY API").description("QRPAY API 문서입니다.").version("1.0.0");
     }
 }

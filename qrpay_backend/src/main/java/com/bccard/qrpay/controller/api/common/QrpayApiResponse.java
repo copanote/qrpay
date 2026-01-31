@@ -16,13 +16,16 @@ import lombok.ToString;
 public class QrpayApiResponse<T> {
     @Schema(description = "응답코드", example = "MP0000")
     private String code;
+
     @Schema(description = "응답코드 메시지")
     private String message;
+
     @Schema(description = "jwt인증 memberId")
     private String memberId;
+
     @Schema(description = "jwt인증 loginId")
     private String loginId;
-    
+
     private T data;
 
     public QrpayApiResponse(String code, String message) {

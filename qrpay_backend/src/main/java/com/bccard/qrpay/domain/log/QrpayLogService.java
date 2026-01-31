@@ -49,5 +49,4 @@ public class QrpayLogService {
     public void saveApiLog(QrpayLog qrpayLog) {
         qrpayLogCudRepository.save(qrpayLog);
     }
-
 }

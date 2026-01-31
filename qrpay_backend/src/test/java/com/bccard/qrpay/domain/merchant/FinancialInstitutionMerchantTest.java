@@ -1,13 +1,12 @@
 package com.bccard.qrpay.domain.merchant;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+
 import com.bccard.qrpay.domain.common.code.FinancialInstitution;
 import com.bccard.qrpay.domain.merchant.fixture.MerchantFixture;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
-
 
 public class FinancialInstitutionMerchantTest {
 
@@ -15,7 +14,7 @@ public class FinancialInstitutionMerchantTest {
     @DisplayName("[성공]FinancialInstitutionMerchant 도메인 객체 생성 정상")
     void createFinancialInstitutionMerchantTest() {
         // given
-        //Mock으로 대체하거나 최소 정보만 세팅
+        // Mock으로 대체하거나 최소 정보만 세팅
         Merchant mockMerchant = mock(Merchant.class);
         FinancialInstitution fi = FinancialInstitution.BCCARD; // 예시 Enum 값
         String fiNo = "FI12345678";

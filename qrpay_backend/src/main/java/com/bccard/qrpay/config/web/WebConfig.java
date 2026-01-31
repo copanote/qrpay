@@ -4,6 +4,7 @@ import com.bccard.qrpay.config.web.argumentresolver.LoginMemberArgumentResolver;
 import com.bccard.qrpay.filter.GlobalLoggingPreparationFilter;
 import com.bccard.qrpay.interceptor.LoginRedirectInterceptor;
 import jakarta.servlet.Filter;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -12,8 +13,6 @@ import org.springframework.core.Ordered;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-
-import java.util.List;
 
 @Configuration
 @RequiredArgsConstructor
