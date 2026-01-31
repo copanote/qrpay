@@ -45,19 +45,20 @@ public class ApiLogAspect {
             long duration = System.currentTimeMillis() - start;
 
             // 2. 요청/응답 정보 추출
-            HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
-            HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getResponse();
+            HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+            HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
 
             QrpayLog qrpayLog = QrpayLog.restApiLog(apiLogService.getId(),
                     MDC.get("correlationId"),
                     request.getRequestURI(),
                     response.getStatus() + "",
                     request.getQueryString() + "|" + extractHeaders(request) + "|" + extractRequestBody(request),
-                    extractResponseBody(response)
+                    objectMapper.writeValueAsString(result)
             );
 
             // 4. 비동기 저장 호출
             apiLogService.saveApiLog(qrpayLog);
+
         }
     }
 
@@ -85,9 +86,8 @@ public class ApiLogAspect {
         ContentCachingRequestWrapper wrapper =
                 WebUtils.getNativeRequest(request, ContentCachingRequestWrapper.class);
 
-        log.info(wrapper.getClass().getName());
-
         if (wrapper != null) {
+            log.info(wrapper.getContentType());
             byte[] buf = wrapper.getContentAsByteArray();
             log.info(String.valueOf(buf.length));
             if (buf.length > 0) return new String(buf, StandardCharsets.UTF_8);
@@ -98,10 +98,16 @@ public class ApiLogAspect {
     private String extractResponseBody(HttpServletResponse response) {
         ContentCachingResponseWrapper wrapper =
                 WebUtils.getNativeResponse(response, ContentCachingResponseWrapper.class);
+
+
+        log.info("response wrapper{}", wrapper.getContentType());
+
         if (wrapper != null) {
             byte[] buf = wrapper.getContentAsByteArray();
             if (buf.length > 0) return new String(buf, StandardCharsets.UTF_8);
         }
         return "";
     }
+
+
 }

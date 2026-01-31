@@ -1,6 +1,5 @@
 package com.bccard.qrpay.filter;
 
-import com.bccard.qrpay.domain.log.QrpayLogService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -15,6 +14,10 @@ import org.springframework.web.util.ContentCachingRequestWrapper;
 import org.springframework.web.util.ContentCachingResponseWrapper;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.Enumeration;
+import java.util.List;
 import java.util.UUID;
 
 
@@ -22,17 +25,14 @@ import java.util.UUID;
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class GlobalLoggingPreparationFilter extends OncePerRequestFilter {
-    private final QrpayLogService apiLogService;
     private static final String CORRELATION_ID_HEADER = "X-Correlation-Id";
     private static final String MDC_KEY = "correlationId";
-
-    public GlobalLoggingPreparationFilter(QrpayLogService apiLogService) {
-        this.apiLogService = apiLogService;
-    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
+
+        log.info("GlobalLoggingPreparationFilter Start");
 
         // 1. Correlation ID 생성 및 MDC 설정
         String correlationId = request.getHeader(CORRELATION_ID_HEADER);
@@ -51,9 +51,29 @@ public class GlobalLoggingPreparationFilter extends OncePerRequestFilter {
         } finally {
             // 3. 응답 바디를 실제 응답 스트림에 복사 (필수!)
             responseWrapper.copyBodyToResponse();
-
             MDC.clear();
         }
+    }
+
+
+    private void printHeaders(ContentCachingRequestWrapper contentCachingRequestWrapper) {
+
+        log.info("Method = {}", contentCachingRequestWrapper.getMethod());
+        log.info("requestURI = {}", contentCachingRequestWrapper.getRequestURI());
+        log.info("queryString = {}", contentCachingRequestWrapper.getQueryString());
+
+        List<String> blackList = Arrays.asList("authorization", "cookie", "proxy-authorization");
+        Enumeration<String> headerNames = contentCachingRequestWrapper.getHeaderNames();
+        while (headerNames.hasMoreElements()) {
+            String name = headerNames.nextElement();
+            String value = contentCachingRequestWrapper.getHeader(name);
+            log.info("===== Header = {} : {}", name, value);
+        }
+    }
+
+    private void printBody(ContentCachingResponseWrapper contentCachingResponseWrapper) {
+        String bodyString = new String(contentCachingResponseWrapper.getContentAsByteArray(), StandardCharsets.UTF_8);
+        log.info("===== Body: {}", bodyString);
     }
 
 }

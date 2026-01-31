@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.Ordered;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -38,8 +39,8 @@ public class WebConfig implements WebMvcConfigurer {
     public FilterRegistrationBean<Filter> logFilter() {
         FilterRegistrationBean<Filter> filterRegistrationBean = new FilterRegistrationBean<>();
         filterRegistrationBean.setFilter(globalLoggingPreparationFilter);
-        filterRegistrationBean.setOrder(1);
-        filterRegistrationBean.addUrlPatterns("/*");
+        filterRegistrationBean.setOrder(Ordered.HIGHEST_PRECEDENCE);
+        filterRegistrationBean.addUrlPatterns("/qrpay/api/*", "/auth/*");
         return filterRegistrationBean;
     }
 }
