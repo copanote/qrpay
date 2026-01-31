@@ -1,14 +1,15 @@
 package com.bccard.qrpay.exception;
 
-import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
 
+import java.time.LocalDateTime;
+
 @Getter
 @ToString
 public class ApiError {
-    private int status;
+    private final int status;
     private final String code;
     private final String message;
     private final LocalDateTime timestamp;

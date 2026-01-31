@@ -2,8 +2,6 @@ package com.bccard.qrpay.config.security;
 
 import com.bccard.qrpay.domain.auth.service.CustomUserDetailsService;
 import com.bccard.qrpay.filter.JwtAuthenticationFilter;
-import java.util.Arrays;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -22,6 +20,9 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import java.util.Arrays;
+import java.util.List;
+
 @RequiredArgsConstructor
 @Configuration
 public class SecurityConfig {
@@ -38,34 +39,44 @@ public class SecurityConfig {
                 web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations());
     }
 
+
+    private static final String[] nonAuthenticatedApis = {
+            "/auth/**",
+            "/pages/**",
+            "/qrpay/api/open/**",
+            "/external/**",
+            "/error",
+            "/.well-known/**",
+            "/fonts/**",
+            "/swagger-ui/**",
+            "/swagger-ui.html",
+            "/v3/api-docs/**",
+    };
+
+    private static final String[] hasMasterRoleApis = {
+            "/qrpay/api/v1/merchant/change-tip",
+            "/qrpay/api/v1/merchant/change-vat",
+            "/qrpay/api/v1/merchant/change-name",
+            "/qrpay/api/v1/merchant/info",
+            "/qrpay/api/v1/merchant/employees",
+            "/qrpay/api/v1/merchant/add-employee",
+    };
+
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
                 .cors(httpSecurityCorsConfigurer -> corsConfigurationSource())
                 .sessionManagement(
                         sessionConfigurer -> sessionConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(req -> req.requestMatchers("/auth/**")
-                        .permitAll()
-                        .requestMatchers("/pages/**")
-                        .permitAll()
-                        .requestMatchers("/qrpay/api/open/**")
-                        .permitAll()
-                        .requestMatchers("/external/**")
-                        .permitAll()
-                        .requestMatchers("/error")
-                        .permitAll()
-                        .requestMatchers("/.well-known/**")
-                        .permitAll() // 브라우저 자동호출 차단
-                        .requestMatchers("/fonts/**")
-                        .permitAll()
-                        .requestMatchers("/swagger-ui/**", "/swagger-ui.html")
-                        .permitAll()
-                        .requestMatchers("/v3/api-docs/**")
-                        .permitAll()
-                        .requestMatchers(PathRequest.toStaticResources().atCommonLocations())
-                        .permitAll()
-                        .anyRequest()
-                        .authenticated())
+                .authorizeHttpRequests(req ->
+                        req.requestMatchers(nonAuthenticatedApis)
+                                .permitAll()
+                                .requestMatchers(PathRequest.toStaticResources().atCommonLocations())
+                                .permitAll()
+                                .requestMatchers(hasMasterRoleApis).hasRole("MASTER")
+                                .anyRequest()
+                                .authenticated())
                 .exceptionHandling(h -> h.authenticationEntryPoint(customAuthenticationEntryPoint)
                         .accessDeniedHandler(customAccessDeniedHandler))
                 .authenticationManager(authenticationManager(http));

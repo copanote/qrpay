@@ -1,137 +1,138 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="ko">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
     <title>BC</title>
-    <link rel="stylesheet" href="/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/css/bootstrap.min.css"/>
     <script src="/js/jquery-3.3.1.slim.min.js.js"></script>
     <script src="/js/popper.min.js"></script>
     <script src="/js/bootstrap.min.js"></script>
-    <link href="/css/common.css" rel="stylesheet" />
+    <link href="/css/common.css" rel="stylesheet"/>
     <script src="/js/common.js"></script>
     <th:block th:if="${#arrays.contains(@environment.getActiveProfiles(), 'local')}">
-      <script th:src="@{/js/qrpay_sdk.dev.js}"></script>
+        <script th:src="@{/js/qrpay_sdk.dev.js}"></script>
     </th:block>
 
     <th:block th:if="${#arrays.contains(@environment.getActiveProfiles(), 'dev')}">
-      <script th:src="@{/js/qrpay_sdk.dev.js}"></script>
+        <script th:src="@{/js/qrpay_sdk.dev.js}"></script>
     </th:block>
 
     <th:block th:if="${#arrays.contains(@environment.getActiveProfiles(), 'prod')}">
-      <script th:src="@{/js/qrpay_sdk.prod.js}"></script>
+        <script th:src="@{/js/qrpay_sdk.prod.js}"></script>
     </th:block>
 
     <style>
-      .pecent-input-wrap {
-        padding: 15px;
-        max-width: 400px;
-      }
+        .pecent-input-wrap {
+          padding: 15px;
+          max-width: 400px;
+        }
 
-      .label-title {
-        font-size: 15px;
-        font-weight: bold;
-        color: #333;
-      }
+        .label-title {
+          font-size: 15px;
+          font-weight: bold;
+          color: #333;
+        }
 
-      .input-container {
-        display: flex;
-        align-items: center;
-        border-bottom: 2px solid #ddd;
-        padding: 5px 0;
-        transition: all 0.2s ease;
-      }
+        .input-container {
+          display: flex;
+          align-items: center;
+          border-bottom: 2px solid #ddd;
+          padding: 5px 0;
+          transition: all 0.2s ease;
+        }
 
-      /* 입력창 클릭 시 효과 */
-      .input-container:focus-within {
-        border-bottom-color: #e10011; /* BC Red */
-      }
+        /* 입력창 클릭 시 효과 */
+        .input-container:focus-within {
+          border-bottom-color: #e10011; /* BC Red */
+        }
 
-      .input-percent {
-        border: none;
-        outline: none;
-        font-size: 32px;
-        font-weight: 700;
-        width: 100%;
-        text-align: right;
-        color: #111;
-      }
+        .input-percent {
+          border: none;
+          outline: none;
+          font-size: 32px;
+          font-weight: 700;
+          width: 100%;
+          text-align: right;
+          color: #111;
+        }
 
-      .unit-percent {
-        font-size: 24px;
-        font-weight: 700;
-        margin-left: 5px;
-        color: #111;
-      }
+        .unit-percent {
+          font-size: 24px;
+          font-weight: 700;
+          margin-left: 5px;
+          color: #111;
+        }
 
-      .helper-text {
-        font-size: 13px;
-        color: #888;
-      }
+        .helper-text {
+          font-size: 13px;
+          color: #888;
+        }
 
-      .info-icon {
-        display: inline-block;
-        width: 16px;
-        height: 16px;
-        background: #eee;
-        border-radius: 50%;
-        text-align: center;
-        font-size: 11px;
-        line-height: 16px;
-        margin-right: 4px;
-      }
+        .info-icon {
+          display: inline-block;
+          width: 16px;
+          height: 16px;
+          background: #eee;
+          border-radius: 50%;
+          text-align: center;
+          font-size: 11px;
+          line-height: 16px;
+          margin-right: 4px;
+        }
     </style>
-  </head>
-  <body>
-    <div id="wrap">
-      <!-- header -->
-      <header id="hd">
+</head>
+<body>
+<div id="wrap">
+    <!-- header -->
+    <header id="hd">
         <div class="container">
-          <button type="button" class="icon-back" onclick="goBack()">이전 페이지 이동</button>
-          <h1>봉사료 설정</h1>
-          <a class="icon-home" href="javascript:void(0)" onclick="goHome()">홈으로 이동</a>
+            <button type="button" class="icon-back" onclick="goBack()">이전 페이지 이동</button>
+            <h1>봉사료 설정</h1>
+            <a class="icon-home" href="javascript:void(0)" onclick="goHome()">홈으로 이동</a>
         </div>
-      </header>
+    </header>
 
-      <!-- container -->
-      <div id="ct">
+    <!-- container -->
+    <div id="ct">
         <!-- 페이지 시작 -->
         <div class="cnt-btm-wrp">
-          <div class="container">
-            <ul class="lst-btm-border line-black">
-              <li class="row align-items-center pr15">
-                <div class="col">사용여부</div>
-                <div class="col-xs-auto">
-                  <label class="switch-chk">
-                    <input type="checkbox" name="checkBox" id="switch-tip" th:checked="${tipRate > 0}" />
-                    <i></i>
-                  </label>
+            <div class="container">
+                <ul class="lst-btm-border line-black">
+                    <li class="row align-items-center pr15">
+                        <div class="col">사용여부</div>
+                        <div class="col-xs-auto">
+                            <label class="switch-chk">
+                                <input type="checkbox" name="checkBox" id="switch-tip" th:checked="${tipRate > 0}"/>
+                                <i></i>
+                            </label>
+                        </div>
+                    </li>
+                </ul>
+                <div class="pecent-input-wrap">
+                    <label for="input-tipRate" class="label-title">봉사료율 적용</label>
+
+                    <div class="input-container mt10">
+                        <input class="input-percent" type="tel" id="input-tipRate" name="tipRate"
+                               onkeyup="inputNumberFormat(this)" maxlength="2"/>
+                        <span class="unit-percent">%</span>
+                    </div>
+
+                    <p class="helper-text mt10"><span class="info-icon">!</span> 설정한 봉사료율로 세금이 포함되어 결제됩니다.</p>
                 </div>
-              </li>
-            </ul>
-            <div class="pecent-input-wrap">
-              <label for="input-tipRate" class="label-title">봉사료율 적용</label>
 
-              <div class="input-container mt10">
-                <input class="input-percent" type="tel" id="input-tipRate" name="tipRate" onkeyup="inputNumberFormat(this)" maxlength="2" />
-                <span class="unit-percent">%</span>
-              </div>
-
-              <p class="helper-text mt10"><span class="info-icon">!</span> 설정한 봉사료율로 세금이 포함되어 결제됩니다.</p>
+                <div class="btm-fixed-btn">
+                    <a class="btn btn-primary btn-block" href="javascript:void(0)" id="btnConfirm">확인</a>
+                </div>
             </div>
-
-            <div class="btm-fixed-btn">
-              <a class="btn btn-primary btn-block" href="javascript:void(0)" id="btnConfirm">확인</a>
-            </div>
-          </div>
         </div>
-      </div>
     </div>
-    <div th:replace="~{fragments/modals/common-modal :: passwordContent}"></div>
-    <div th:replace="~{fragments/modals/common-modal :: confirmModal}"></div>
-    <div th:replace="~{fragments/modals/common-modal :: loadingModal}"></div>
-  </body>
-  <script th:inline="javascript">
+</div>
+<div th:replace="~{fragments/modals/common-modal :: passwordContent}"></div>
+<div th:replace="~{fragments/modals/common-modal :: confirmModal}"></div>
+<div th:replace="~{fragments/modals/common-modal :: loadingModal}"></div>
+</body>
+<script th:inline="javascript">
     const tipRate = [[${tipRate}]];
     const vatRate = [[${vatRate}]];
 
@@ -141,7 +142,7 @@
         tipRate: tipRate != null ? tipRate: 0,
         vatRate: vatRate != null ? vatRate: 0,
       },
-      setState(tipRate, vatRate) {
+      setState(tipRate = 0, vatRate = 0) {
         console.log('setState', tipRate, vatRate);
         this.state.tipRate = tipRate;
         this.state.vatRate = vatRate;
@@ -319,19 +320,20 @@
         }
       });
     });
-  </script>
+</script>
 </html>
 
 <div class="modal fade" id="modal1">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-body">
-        <h5 class="h4 text-center">설정을 취소하시겠습니까?</h5>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-md btn-radius0 btn-block" data-dismiss="modal">취소</button>
-        <button type="button" class="btn btn-md btn-radius0 btn-block" data-dismiss="modal" id="btnCacel">확인</button>
-      </div>
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body">
+                <h5 class="h4 text-center">설정을 취소하시겠습니까?</h5>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-md btn-radius0 btn-block" data-dismiss="modal">취소</button>
+                <button type="button" class="btn btn-md btn-radius0 btn-block" data-dismiss="modal" id="btnCacel">확인
+                </button>
+            </div>
+        </div>
     </div>
-  </div>
 </div>

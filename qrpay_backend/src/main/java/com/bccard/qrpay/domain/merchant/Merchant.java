@@ -3,15 +3,17 @@ package com.bccard.qrpay.domain.merchant;
 import com.bccard.qrpay.domain.common.code.*;
 import com.bccard.qrpay.domain.common.converter.*;
 import com.bccard.qrpay.domain.common.entity.BaseEntity;
+import com.bccard.qrpay.exception.MerchantException;
+import com.bccard.qrpay.exception.code.QrpayErrorCode;
 import com.bccard.qrpay.utils.MpmDateTimeUtils;
 import jakarta.persistence.*;
-import java.io.Serial;
-import java.io.Serializable;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.*;
 import org.springframework.data.domain.Persistable;
+
+import java.io.Serial;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -104,11 +106,11 @@ public class Merchant extends BaseEntity implements Persistable<String>, Seriali
     @Convert(converter = AcquisitionMethodConverter.class)
     private AcquisitionMethod acquisitionMethod;
 
-    @Column(name = "VAT_RT", precision = 5, scale = 2)
-    private BigDecimal vatRate;
+    @Column(name = "VAT_RT")
+    private Long vatRate;
 
-    @Column(name = "SVC_FEE_RT", precision = 5, scale = 2)
-    private BigDecimal tipRate;
+    @Column(name = "SVC_FEE_RT")
+    private Long tipRate;
 
     @Singular
     @OneToMany(mappedBy = "merchant", fetch = FetchType.LAZY)
@@ -176,7 +178,7 @@ public class Merchant extends BaseEntity implements Persistable<String>, Seriali
     public void updateMerchantName(String merchantName) {
 
         if (merchantName.length() > MAX_NAME_LENGTH) {
-            throw new IllegalArgumentException("가맹점 이름은 14자리를 넘으면 안됩니다");
+            throw new MerchantException(QrpayErrorCode.MERCHANT_NAME_LENGTH_POLICY_VIOLATION);
         }
 
         if (!this.getMerchantName().equals(merchantName)) {
@@ -184,28 +186,37 @@ public class Merchant extends BaseEntity implements Persistable<String>, Seriali
         }
     }
 
-    public void updateVat(BigDecimal vatRate) {
+    public void updateVat(Long vatRate) {
 
-        if (vatRate == null || vatRate.intValue() < 0) {
-            throw new IllegalStateException("부가세변경은 null 이거나 음수가 될 수 없습니다.");
+        if (vatRate == null) {
+            this.vatRate = null;
+            return;
         }
 
-        BigDecimal t = this.tipRate == null ? BigDecimal.ZERO : this.tipRate;
-        if (t.add(vatRate).compareTo(BigDecimal.valueOf(100)) >= 0) {
-            throw new IllegalStateException("부가세 + 봉사료 합계는 100 미만");
+        if (vatRate > 99 || vatRate < 0) {
+            throw new MerchantException(QrpayErrorCode.MERCHANT_VAT_POLICY_VIOLATION);
+        }
+
+        Long tip = this.tipRate == null ? 0L : this.tipRate;
+        if (tip + vatRate >= 100) {
+            throw new MerchantException(QrpayErrorCode.MERCHANT_VAT_TIP_SUM_POLICY_VIOLATION);
         }
         this.vatRate = vatRate;
     }
 
-    public void updateTip(BigDecimal tipRate) {
-
-        if (tipRate == null || tipRate.intValue() < 0 || tipRate.intValue() >= 100) {
-            throw new IllegalStateException("봉사료변경은 null이거나 음수, 100을 넘을 수 없습니다.");
+    public void updateTip(Long tipRate) {
+        if (tipRate == null) {
+            this.tipRate = null;
+            return;
         }
 
-        BigDecimal v = this.vatRate == null ? BigDecimal.ZERO : this.vatRate;
-        if (tipRate.add(v).compareTo(BigDecimal.valueOf(100)) >= 0) {
-            throw new IllegalStateException("부가세 + 봉사료 합계는 100 미만");
+        if (tipRate > 99 || tipRate < 0) {
+            throw new MerchantException(QrpayErrorCode.MERCHANT_TIP_POLICY_VIOLATION);
+        }
+
+        Long vat = this.vatRate == null ? 0L : this.vatRate;
+        if (vat + tipRate >= 100) {
+            throw new MerchantException(QrpayErrorCode.MERCHANT_VAT_TIP_SUM_POLICY_VIOLATION);
         }
         this.tipRate = tipRate;
     }

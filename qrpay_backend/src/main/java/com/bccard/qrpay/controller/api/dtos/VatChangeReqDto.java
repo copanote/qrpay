@@ -7,5 +7,5 @@ import lombok.ToString;
 @ToString
 public class VatChangeReqDto {
     private boolean enableVat;
-    private int vatRate;
+    private Long vatRate;
 }

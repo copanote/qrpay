@@ -6,12 +6,12 @@ import com.bccard.qrpay.domain.merchant.repository.MerchantQueryRepository;
 import com.bccard.qrpay.domain.merchant.repository.MerchantRepository;
 import com.bccard.qrpay.exception.MerchantException;
 import com.bccard.qrpay.exception.code.QrpayErrorCode;
-import java.math.BigDecimal;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -33,7 +33,7 @@ public class MerchantService {
     }
 
     @Transactional
-    public Merchant updateVat(Merchant merchant, BigDecimal updatedVat) {
+    public Merchant updateVat(Merchant merchant, Long updatedVat) {
 
         Merchant fetchedMerchant = merchantQueryRepository
                 .findById(merchant.getMerchantId())
@@ -44,7 +44,7 @@ public class MerchantService {
     }
 
     @Transactional
-    public Merchant updateTip(Merchant merchant, BigDecimal tip) {
+    public Merchant updateTip(Merchant merchant, Long tip) {
 
         Merchant fetchedMerchant = merchantQueryRepository
                 .findById(merchant.getMerchantId())

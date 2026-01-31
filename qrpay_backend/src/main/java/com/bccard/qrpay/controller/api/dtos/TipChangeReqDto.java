@@ -7,5 +7,5 @@ import lombok.ToString;
 @ToString
 public class TipChangeReqDto {
     private boolean enableTip;
-    private int tipRate;
+    private Long tipRate;
 }

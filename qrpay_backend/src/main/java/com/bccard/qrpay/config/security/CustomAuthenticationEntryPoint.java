@@ -6,12 +6,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
+
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 @Slf4j
 @Component
@@ -31,12 +32,16 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
 
         QrpayErrorCode ec = QrpayErrorCode.AUTHENTICATE_REQUIRED;
 
-        ApiError apiError =
-                ApiError.builder().code(ec.getCode()).message(ec.getMessage()).build();
+        ApiError apiError = ApiError.builder()
+                .status(ec.getStatus())
+                .code(ec.getCode())
+                .message(ec.getMessage())
+                .build();
 
         String json = objectMapper.writeValueAsString(apiError);
         response.setStatus(ec.getStatus());
         response.setCharacterEncoding(StandardCharsets.UTF_8.toString());
+        response.setContentType("application/json");
         response.getWriter().write(json);
     }
 }

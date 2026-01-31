@@ -24,7 +24,7 @@ public enum QrpayErrorCode implements ErrorCode {
     UNMATCHED_AUTHENTICATE(403, "AU0003", "인증정보와 요청정보가 일치하지 않습니다"),
     INVALID_CREDENTIAL(403, "AU0004", "비밀번호가 올바르지 않습니다. 오류 횟수 5회 이상 시, 접속이 제한됩니다."),
     ACCOUNT_LOCKED_POLICY(403, "AU0005", "비밀번호 오류 횟수 5회 이상으로 접속이 제한됩니다. 비밀번호를 재성정해주세요."),
-    INVALID_AUTHORIZATION(403, "AU0006", "접근권한이 없습니다"),
+    INVALID_AUTHORIZATION(403, "AU0006", "접근권한이 없습니다(가맹점주 권한 필요)"),
     NOT_FOUND_REFRESH_TOKEN(401, "AU0007", "리프레시토큰없음(인증필요)"),
     INVALID_REFRESH_TOKEN(401, "AU0008", "리프레시토큰인증실패(인증필요)"),
 
@@ -46,6 +46,9 @@ public enum QrpayErrorCode implements ErrorCode {
     MERCHANT_CANCELED(409, "MC0002", "탈회한 가맹점"),
     MERCHANT_IS_NOT_ACTIVE(409, "MC0003", "활성화 가맹점 아님"),
     MERCHANT_NAME_LENGTH_POLICY_VIOLATION(409, "MC0004", "가맹점이름은 14자리 이하로 변경 가능합니다."),
+    MERCHANT_VAT_POLICY_VIOLATION(400, "MC0005", "부가세율은 음수이거나 100을 넘길 수 없습니다."),
+    MERCHANT_TIP_POLICY_VIOLATION(400, "MC0006", "봉사료율은 음수이거나 100을 넘길 수 없습니다."),
+    MERCHANT_VAT_TIP_SUM_POLICY_VIOLATION(409, "MC0007", "부가세율 보사료율 합은 100을 넘길 수 없습니다."),
 
     // TRANSACTION: TX
     INVALID_SEARCH_CONDITION(400, "TX0001", "조회 조건이 잘 못 되었습니다."),

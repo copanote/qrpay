@@ -1,15 +1,16 @@
 package com.bccard.qrpay.domain.merchant;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-
 import com.bccard.qrpay.domain.common.code.*;
 import com.bccard.qrpay.domain.merchant.fixture.MerchantFixture;
-import java.math.BigDecimal;
-import java.util.UUID;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
+import java.math.BigDecimal;
+import java.util.UUID;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class MerchantTest {
 
@@ -72,7 +73,7 @@ public class MerchantTest {
         Merchant merchant = MerchantFixture.createMerchant();
 
         // when
-        merchant.updateTip(BigDecimal.valueOf(15));
+        merchant.updateTip(15L);
 
         // then
         assertThat(merchant.getTipRate()).isEqualTo(BigDecimal.valueOf(15));
@@ -83,14 +84,14 @@ public class MerchantTest {
     void updateTip_fail() {
         // Given
         Merchant merchant = MerchantFixture.createMerchant();
-        merchant.updateVat(BigDecimal.valueOf(50));
+        merchant.updateVat(50L);
         // When Then
         SoftAssertions.assertSoftly(softly -> {
-            softly.assertThatThrownBy(() -> merchant.updateTip(BigDecimal.valueOf(50)))
+            softly.assertThatThrownBy(() -> merchant.updateTip(50L))
                     .isInstanceOf(IllegalStateException.class);
-            softly.assertThatThrownBy(() -> merchant.updateTip(BigDecimal.valueOf(-1)))
+            softly.assertThatThrownBy(() -> merchant.updateTip(-1L))
                     .isInstanceOf(IllegalStateException.class);
-            softly.assertThatThrownBy(() -> merchant.updateTip(BigDecimal.valueOf(101)))
+            softly.assertThatThrownBy(() -> merchant.updateTip(101L))
                     .isInstanceOf(IllegalStateException.class);
         });
     }
@@ -102,7 +103,7 @@ public class MerchantTest {
         Merchant merchant = MerchantFixture.createMerchant();
 
         // when
-        merchant.updateVat(BigDecimal.valueOf(15));
+        merchant.updateVat(15L);
 
         // then
         assertThat(merchant.getVatRate()).isEqualTo(BigDecimal.valueOf(15));
@@ -113,14 +114,14 @@ public class MerchantTest {
     void updateVat_fail() {
         // Given
         Merchant merchant = MerchantFixture.createMerchant();
-        merchant.updateTip(BigDecimal.valueOf(50));
+        merchant.updateTip(50L);
         // When Then
         SoftAssertions.assertSoftly(softly -> {
-            softly.assertThatThrownBy(() -> merchant.updateVat(BigDecimal.valueOf(50)))
+            softly.assertThatThrownBy(() -> merchant.updateVat(50L))
                     .isInstanceOf(IllegalStateException.class);
-            softly.assertThatThrownBy(() -> merchant.updateVat(BigDecimal.valueOf(-1)))
+            softly.assertThatThrownBy(() -> merchant.updateVat(-1L))
                     .isInstanceOf(IllegalStateException.class);
-            softly.assertThatThrownBy(() -> merchant.updateVat(BigDecimal.valueOf(101)))
+            softly.assertThatThrownBy(() -> merchant.updateVat(101L))
                     .isInstanceOf(IllegalStateException.class);
         });
     }
@@ -139,5 +140,6 @@ public class MerchantTest {
 
     @Test
     @DisplayName("[실패] 가맹점상태 CANCEL 변경 실패")
-    void changeStatusToCancel_fail() {}
+    void changeStatusToCancel_fail() {
+    }
 }

@@ -7,8 +7,8 @@ import com.bccard.qrpay.domain.common.code.QrKitShippingStatus;
 import com.bccard.qrpay.domain.member.Member;
 import com.bccard.qrpay.domain.merchant.Merchant;
 import com.bccard.qrpay.domain.merchant.MerchantService;
-import com.bccard.qrpay.domain.merchant.application.port.in.ChangeMerchantNameCommand;
-import com.bccard.qrpay.domain.merchant.application.port.in.ChangeMerchantNameUseCase;
+import com.bccard.qrpay.domain.merchant.application.port.in.MerchantNameChangeCommand;
+import com.bccard.qrpay.domain.merchant.application.port.in.MerchantNameChangeUseCase;
 import com.bccard.qrpay.domain.mpmqr.EmvMpmQrService;
 import com.bccard.qrpay.domain.mpmqr.MpmQrPublication;
 import com.bccard.qrpay.domain.mpmqr.dto.PublishBcEmvMpmQrReqDto;
@@ -18,10 +18,11 @@ import com.bccard.qrpay.domain.qrkit.repository.MpmQrKitRepository;
 import com.bccard.qrpay.exception.MemberException;
 import com.bccard.qrpay.exception.MerchantException;
 import com.bccard.qrpay.exception.code.QrpayErrorCode;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -31,7 +32,7 @@ public class QrKitService {
     private final MpmQrKitRepository mpmQrKitCUDRepository;
     private final MerchantService merchantService;
     private final EmvMpmQrService emvMpmQrService;
-    private final ChangeMerchantNameUseCase changeMerchantNameUseCase;
+    private final MerchantNameChangeUseCase merchantNameChangeUseCase;
 
     public MpmQrKitApplication apply(MpmQrKitApplyReqDto reqDto) {
 
@@ -52,11 +53,11 @@ public class QrKitService {
 
         if (!reqDto.getReqMerchantName().equals(merchant.getMerchantName())) {
 
-            ChangeMerchantNameCommand command = ChangeMerchantNameCommand.builder()
+            MerchantNameChangeCommand command = MerchantNameChangeCommand.builder()
                     .merchantId(member.getMerchant().getMerchantId())
                     .toUpdateName(reqDto.getReqMerchantName())
                     .build();
-            merchant = changeMerchantNameUseCase.change(command);
+            merchant = merchantNameChangeUseCase.change(command);
         }
 
         PublishBcEmvMpmQrReqDto emvmpmQrReq =
