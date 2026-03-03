@@ -154,6 +154,12 @@
         </dependency>
 
         <dependency>
+            <groupId>com.eatthepath</groupId>
+            <artifactId>pushy</artifactId>
+            <version>0.15.4</version>
+        </dependency>
+
+        <dependency>
             <groupId>com.qrpay.emvmpm</groupId>
             <artifactId>emvmpm</artifactId>
             <version>1.0</version>

@@ -2,11 +2,25 @@ package com.bccard.qrpay.utils.security;
 
 import com.bccard.qrpay.exception.QrpayCustomException;
 import com.bccard.qrpay.exception.code.QrpayErrorCode;
+
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.util.Base64;
 
 public class HashCipher {
+
+    public static byte[] sha256(byte[] data) {
+
+        MessageDigest md;
+        try {
+            md = MessageDigest.getInstance("SHA-256");
+            md.update(data);
+        } catch (Exception e) {
+            throw new QrpayCustomException(QrpayErrorCode.CIPHER_HASH_ERROR);
+        }
+        return md.digest();
+    }
+
     public static byte[] sha256(String data) {
 
         MessageDigest md;
