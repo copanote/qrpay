@@ -1,0 +1,417 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+    
+	<!-- ============================== -->
+	<!--  Common Font Style             -->
+	<!-- ============================== -->
+	
+	<!-- ============= black ============== -->
+	<style name="black_font_style" parent="@android:style/TextAppearance">
+	    <item name="android:shadowColor">@color/gray_500</item>
+		<item name="android:shadowRadius">0.5</item>
+		<item name="android:textColor">@color/black</item>
+	</style>
+	
+	<style name="black_11_font_style" parent="@style/black_font_style">
+		<item name="android:textSize">11sp</item>
+	</style>
+		
+	<style name="black_13_font_style" parent="@style/black_font_style">
+		<item name="android:textSize">13sp</item>
+	</style>
+	
+	<style name="black_15_font_style" parent="@style/black_font_style">
+		<item name="android:textSize">15sp</item>
+	</style>
+	
+	<style name="black_17_font_style" parent="@style/black_font_style">
+		<item name="android:textSize">17sp</item>
+	</style>
+	
+	<style name="black_19_font_style" parent="@style/black_font_style">
+		<item name="android:textSize">19sp</item>
+	</style>				
+	
+	<style name="black_21_font_style" parent="@style/black_font_style">
+		<item name="android:textSize">21sp</item>
+	</style>
+	
+	<style name="black_23_font_style" parent="@style/black_font_style">
+		<item name="android:textSize">23sp</item>
+	</style>
+	
+	
+	<!-- ============= white ============== -->
+	<style name="white_font_style" parent="@android:style/TextAppearance">
+	    <item name="android:shadowColor">@color/gray_50</item>
+		<item name="android:shadowRadius">0.5</item>
+		<item name="android:textColor">@color/white</item>
+	</style>
+	
+	<style name="white_11_font_style" parent="@style/white_font_style">
+		<item name="android:textSize">11sp</item>
+	</style>
+		
+	<style name="white_13_font_style" parent="@style/white_font_style">
+		<item name="android:textSize">13sp</item>
+	</style>
+	
+	<style name="white_15_font_style" parent="@style/white_font_style">
+		<item name="android:textSize">15sp</item>
+	</style>
+	
+	<style name="white_17_font_style" parent="@style/white_font_style">
+		<item name="android:textSize">17sp</item>
+	</style>
+	
+	<style name="white_19_font_style" parent="@style/white_font_style">
+		<item name="android:textSize">19sp</item>
+	</style>				
+	
+	<style name="white_21_font_style" parent="@style/white_font_style">
+		<item name="android:textSize">21sp</item>
+	</style>
+	
+	<style name="white_23_font_style" parent="@style/white_font_style">
+		<item name="android:textSize">23sp</item>
+	</style>
+		
+	<style name="white_25_font_style" parent="@style/white_font_style">
+		<item name="android:textSize">25sp</item>
+	</style>
+	
+	<style name="white_27_font_style" parent="@style/white_font_style">
+		<item name="android:textSize">27sp</item>
+	</style>
+	
+	<style name="white_29_font_style" parent="@style/white_font_style">
+		<item name="android:textSize">29sp</item>
+	</style>
+		
+	<!-- ============= dark_gray ============== -->
+	<style name="dark_gray_font_style" parent="@android:style/TextAppearance">
+	    <item name="android:shadowColor">@color/gray_300</item>
+		<item name="android:shadowRadius">0.5</item>
+		<item name="android:textColor">@color/gray_800</item>
+	</style>
+	
+	<style name="dark_gray_11_font_style" parent="@style/dark_gray_font_style">
+		<item name="android:textSize">11sp</item>
+	</style>
+		
+	<style name="dark_gray_13_font_style" parent="@style/dark_gray_font_style">
+		<item name="android:textSize">13sp</item>
+	</style>
+	
+	<style name="dark_gray_14_font_style" parent="@style/dark_gray_font_style">
+		<item name="android:textSize">14sp</item>
+	</style>
+	
+	<style name="dark_gray_15_font_style" parent="@style/dark_gray_font_style">
+		<item name="android:textSize">15sp</item>
+	</style>
+	
+	<style name="dark_gray_17_font_style" parent="@style/dark_gray_font_style">
+		<item name="android:textSize">17sp</item>
+	</style>
+	
+	<style name="dark_gray_19_font_style" parent="@style/dark_gray_font_style">
+		<item name="android:textSize">19sp</item>
+	</style>				
+	
+	<style name="dark_gray_21_font_style" parent="@style/dark_gray_font_style">
+		<item name="android:textSize">21sp</item>
+	</style>
+	
+	<style name="dark_gray_23_font_style" parent="@style/dark_gray_font_style">
+		<item name="android:textSize">23sp</item>
+	</style>
+	
+	<!-- ============= gray ============== -->
+	<style name="gray_font_style" parent="@android:style/TextAppearance">
+	    <item name="android:shadowColor">@color/gray_200</item>
+		<item name="android:shadowRadius">0.5</item>
+		<item name="android:textColor">@color/gray_600</item>
+	</style>
+	
+	<style name="gray_11_font_style" parent="@style/gray_font_style">
+		<item name="android:textSize">11sp</item>
+	</style>
+		
+	<style name="gray_13_font_style" parent="@style/gray_font_style">
+		<item name="android:textSize">13sp</item>
+	</style>
+	
+	<style name="gray_15_font_style" parent="@style/gray_font_style">
+		<item name="android:textSize">15sp</item>
+	</style>
+	
+	<style name="gray_17_font_style" parent="@style/gray_font_style">
+		<item name="android:textSize">17sp</item>
+	</style>
+	
+	<style name="gray_19_font_style" parent="@style/gray_font_style">
+		<item name="android:textSize">19sp</item>
+	</style>				
+	
+	<style name="gray_21_font_style" parent="@style/gray_font_style">
+		<item name="android:textSize">21sp</item>
+	</style>
+	
+	<style name="gray_23_font_style" parent="@style/gray_font_style">
+		<item name="android:textSize">23sp</item>
+	</style>
+	
+	<!-- ============= light_gray ============== -->
+	<style name="light_gray_font_style" parent="@android:style/TextAppearance">
+	    <item name="android:shadowColor">@color/gray_100</item>
+		<item name="android:shadowRadius">0.5</item>
+		<item name="android:textColor">@color/gray_400</item>
+	</style>
+	
+	<style name="light_gray_11_font_style" parent="@style/light_gray_font_style">
+		<item name="android:textSize">11sp</item>
+	</style>
+		
+	<style name="light_gray_13_font_style" parent="@style/light_gray_font_style">
+		<item name="android:textSize">13sp</item>
+	</style>
+	
+	<style name="light_gray_15_font_style" parent="@style/light_gray_font_style">
+		<item name="android:textSize">15sp</item>
+	</style>
+	
+	<style name="light_gray_17_font_style" parent="@style/light_gray_font_style">
+		<item name="android:textSize">17sp</item>
+	</style>
+	
+	<style name="light_gray_19_font_style" parent="@style/light_gray_font_style">
+		<item name="android:textSize">19sp</item>
+	</style>				
+	
+	<style name="light_gray_21_font_style" parent="@style/light_gray_font_style">
+		<item name="android:textSize">21sp</item>
+	</style>
+	
+	<style name="light_gray_23_font_style" parent="@style/light_gray_font_style">
+		<item name="android:textSize">23sp</item>
+	</style>
+		
+	
+	<!-- ============= orange ============== -->
+	<style name="orange_font_style" parent="@android:style/TextAppearance">
+	    <item name="android:shadowColor">@color/orange_300</item>
+		<item name="android:shadowRadius">0.5</item>
+		<item name="android:textColor">@color/orange_800</item>
+	</style>
+	
+	<style name="orange_11_font_style" parent="@style/orange_font_style">
+		<item name="android:textSize">11sp</item>
+	</style>
+		
+	<style name="orange_13_font_style" parent="@style/orange_font_style">
+		<item name="android:textSize">13sp</item>
+	</style>
+	
+	<style name="orange_15_font_style" parent="@style/orange_font_style">
+		<item name="android:textSize">15sp</item>
+	</style>
+	
+	<style name="orange_17_font_style" parent="@style/orange_font_style">
+		<item name="android:textSize">17sp</item>
+	</style>
+	
+	<style name="orange_19_font_style" parent="@style/orange_font_style">
+		<item name="android:textSize">19sp</item>
+	</style>				
+	
+	<style name="orange_21_font_style" parent="@style/orange_font_style">
+		<item name="android:textSize">21sp</item>
+	</style>
+	
+	<style name="orange_23_font_style" parent="@style/orange_font_style">
+		<item name="android:textSize">23sp</item>
+	</style>	
+	
+	
+	<!-- ============= deep orange ============== -->
+	<style name="deep_orange_font_style" parent="@android:style/TextAppearance">
+	    <item name="android:shadowColor">@color/deep_orange_300</item>
+		<item name="android:shadowRadius">0.5</item>
+		<item name="android:textColor">@color/deep_orange_800</item>
+	</style>
+	
+	<style name="deeporange_11_font_style" parent="@style/deep_orange_font_style">
+		<item name="android:textSize">11sp</item>
+	</style>
+		
+	<style name="deeporange_13_font_style" parent="@style/deep_orange_font_style">
+		<item name="android:textSize">13sp</item>
+	</style>
+	
+	<style name="deeporange_15_font_style" parent="@style/deep_orange_font_style">
+		<item name="android:textSize">15sp</item>
+	</style>
+	
+	<style name="deeporange_17_font_style" parent="@style/deep_orange_font_style">
+		<item name="android:textSize">17sp</item>
+	</style>
+	
+	<style name="deeporange_19_font_style" parent="@style/deep_orange_font_style">
+		<item name="android:textSize">19sp</item>
+	</style>				
+	
+	<style name="deeporange_21_font_style" parent="@style/deep_orange_font_style">
+		<item name="android:textSize">21sp</item>
+	</style>
+	
+	<style name="deeporange_23_font_style" parent="@style/deep_orange_font_style">
+		<item name="android:textSize">23sp</item>
+	</style>	
+		
+	<!-- ============= green  ============== -->
+	<style name="green_font_style" parent="@android:style/TextAppearance">
+	    <item name="android:shadowColor">@color/green_300</item>
+		<item name="android:shadowRadius">0.5</item>
+		<item name="android:textColor">@color/green_800</item>
+	</style>
+	
+	<style name="green_11_font_style" parent="@style/green_font_style">
+		<item name="android:textSize">11sp</item>
+	</style>
+		
+	<style name="green_13_font_style" parent="@style/green_font_style">
+		<item name="android:textSize">13sp</item>
+	</style>
+	
+	<style name="green_15_font_style" parent="@style/green_font_style">
+		<item name="android:textSize">15sp</item>
+	</style>
+	
+	<style name="green_17_font_style" parent="@style/green_font_style">
+		<item name="android:textSize">17sp</item>
+	</style>
+	
+	<style name="green_19_font_style" parent="@style/green_font_style">
+		<item name="android:textSize">19sp</item>
+	</style>				
+	
+	<style name="green_21_font_style" parent="@style/green_font_style">
+		<item name="android:textSize">21sp</item>
+	</style>
+	
+	<style name="green_23_font_style" parent="@style/green_font_style">
+		<item name="android:textSize">23sp</item>
+	</style>	
+	
+	<!-- ============= blue ============== -->
+	<style name="blue_font_style" parent="@android:style/TextAppearance">
+	    <item name="android:shadowColor">@color/blue_300</item>
+		<item name="android:shadowRadius">0.5</item>
+		<item name="android:textColor">@color/blue_800</item>
+	</style>
+	
+	<style name="blue_11_font_style" parent="@style/blue_font_style">
+		<item name="android:textSize">11sp</item>
+	</style>
+		
+	<style name="blue_13_font_style" parent="@style/blue_font_style">
+		<item name="android:textSize">13sp</item>
+	</style>
+	
+	<style name="blue_15_font_style" parent="@style/blue_font_style">
+		<item name="android:textSize">15sp</item>
+	</style>
+	
+	<style name="blue_17_font_style" parent="@style/blue_font_style">
+		<item name="android:textSize">17sp</item>
+	</style>
+	
+	<style name="blue_19_font_style" parent="@style/blue_font_style">
+		<item name="android:textSize">19sp</item>
+	</style>				
+	
+	<style name="blue_21_font_style" parent="@style/blue_font_style">
+		<item name="android:textSize">21sp</item>
+	</style>
+	
+	<style name="blue_23_font_style" parent="@style/blue_font_style">
+		<item name="android:textSize">23sp</item>
+	</style>	
+	
+	<!-- ============= light blue ============== -->
+	<style name="light_blue_font_style" parent="@android:style/TextAppearance">
+	    <item name="android:shadowColor">@color/light_blue_200</item>
+		<item name="android:shadowRadius">1</item>
+		<item name="android:textColor">@color/light_blue_500</item>
+	</style>
+	
+	<style name="light_blue_11_font_style" parent="@style/light_blue_font_style">
+		<item name="android:textSize">11sp</item>
+	</style>
+		
+	<style name="light_blue_13_font_style" parent="@style/light_blue_font_style">
+		<item name="android:textSize">13sp</item>
+	</style>
+	
+	<style name="light_blue_14_font_style" parent="@style/light_blue_font_style">
+		<item name="android:textSize">14sp</item>
+	</style>
+	
+	<style name="light_blue_15_font_style" parent="@style/light_blue_font_style">
+		<item name="android:textSize">15sp</item>
+	</style>
+	
+	<style name="light_blue_17_font_style" parent="@style/light_blue_font_style">
+		<item name="android:textSize">17sp</item>
+	</style>
+	
+	<style name="light_blue_19_font_style" parent="@style/light_blue_font_style">
+		<item name="android:textSize">19sp</item>
+	</style>				
+	
+	<style name="light_blue_21_font_style" parent="@style/light_blue_font_style">
+		<item name="android:textSize">21sp</item>
+	</style>
+	
+	<style name="light_blue_23_font_style" parent="@style/light_blue_font_style">
+		<item name="android:textSize">23sp</item>
+	</style>
+		
+	<!-- ============= red ============== -->
+	<style name="red_font_style" parent="@android:style/TextAppearance">
+	    <item name="android:shadowColor">@color/red_300</item>
+		<item name="android:shadowRadius">0.5</item>
+		<item name="android:textColor">@color/red_800</item>
+	</style>
+	
+	<style name="red_11_font_style" parent="@style/red_font_style">
+		<item name="android:textSize">11sp</item>
+	</style>
+		
+	<style name="red_13_font_style" parent="@style/red_font_style">
+		<item name="android:textSize">13sp</item>
+	</style>
+	
+	<style name="red_15_font_style" parent="@style/red_font_style">
+		<item name="android:textSize">15sp</item>
+	</style>
+	
+	<style name="red_17_font_style" parent="@style/red_font_style">
+		<item name="android:textSize">17sp</item>
+	</style>
+	
+	<style name="red_19_font_style" parent="@style/red_font_style">
+		<item name="android:textSize">19sp</item>
+	</style>				
+	
+	<style name="red_21_font_style" parent="@style/red_font_style">
+		<item name="android:textSize">21sp</item>
+	</style>
+	
+	<style name="red_23_font_style" parent="@style/red_font_style">
+		<item name="android:textSize">23sp</item>
+	</style>
+				
+	<!-- ============================== -->
+</resources>

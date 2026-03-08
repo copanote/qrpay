@@ -1,0 +1,331 @@
+{
+  "targets": {
+    // Path to APK file which we want to protect
+    "input": "../app/build/outputs/apk/real/release/QRPayforShop-1.2.8-real-release.apk",
+    // Path to output directory
+    "output": "output/"
+  },
+  "globalConfiguration": {
+    "seed": 12345,
+    "charsetType": "ascii",
+    //These classes will be excluded from all the guards
+    "exclude": [
+      {
+        "type": "class",
+        "name": "*"
+      },
+      {
+        "type" : "class",
+        "name" : "com.google.*"
+      },
+      {
+        "type" : "class",
+        "name" : "android.*"
+      },
+      {
+        "type" : "class",
+        "name" : "com.nshc.*"
+      },
+      {
+        "type" : "class",
+        "name" : "com.bumptech.*"
+      }
+    ],
+    //Following includes will override exclude range so methods will be protected
+    "include": [
+      {
+        "type": "class",
+        "name": "com.bccard.*"
+      },
+      {
+        "type": "method",
+        "name": "com.bccard.*"
+      },
+      {
+        "type": "field",
+        "name": "com.bccard.*"
+      }
+    ],
+    "verbosityLevel": {
+      "global": 1
+    },
+
+    // renaming, controlFlowFlattening, inlining, stringEncryption suffer from reflection. Singatures of methods defined in proguard.txt file will be untouched
+    "keepSignatures": "proguard.txt"
+    //"mainDexList" : "/Users/administrator/Documents/repo/git/Fintech/Android_QR_CODE_MPM/app/build/intermediates/legacy_multidex_main_dex_list/realRelease/mainDexList.txt"
+  },
+  "guardConfiguration": {
+    // Code obfuscation guards
+
+    // Following 4 guards suffer from reflection calls, however in this particular application
+    // all the reflection calls are automatically resolved so there's no need to exclude anything
+    "renaming": {
+      "disable": false,
+      "renameInResources" : false,
+      "renameInNativeLibraries" : false
+    },
+    "controlFlowFlattening": {
+      "disable": false,
+      "exclude" : [
+        {
+          "type" : "method",
+          "name" : "com.bccard.mpm.network.*"
+        },
+        {
+          "type" : "method",
+          "name" : "com.bccard.mpm.IntroActivity"
+        },
+        {
+          "type" : "method",
+          "name" : "com.bccard.mpm.ui.qrreader.*"
+        }
+      ]
+    },
+    "staticMemberShuffling": {
+      "disable": true
+    },
+    "inlining": {
+      "disable": true
+    },
+    "stringEncryption": {
+      "disable": false,
+      "exclude" : [
+        {
+          "type" : "class",
+          "name" : "com.bccard.mpm.network.ServerConnecter"
+        }
+      ]
+    },
+    "operatorRemoval": {
+      "disable": true
+    },
+    "debugInfoStrip": {
+      "disable": false
+    },
+    "logStrip": {
+      "disable": false
+    },
+    "deadCodeInjection": {
+      "disable": true,
+      "targets": [
+        {
+          "type": "method",
+          "name": "com.snatik.matches.common.Music.*"
+        }
+      ]
+    },
+    "callHiding": {
+      "disable": false,
+      "targets": [
+        {
+          "type" : "method",
+          "name" : "*.fake"
+        }
+      ]
+    },
+    // All the runtime guards might have multiple instances
+    "debuggerDetection": [
+      {
+        "disable": false,
+        "debug" : false,
+        "name": "Debugger detection instance 1",
+        "invocationLocations": [
+          {
+            "type": "method",
+            "name": "com.bccard.mpm.common.BaseActivity*.onCreate"
+          }
+        ],
+        "tamperAction": {
+          "type": "method",
+          "name": "com.bccard.mpm.common.MpmApplication.fake"
+        },
+        "nonTamperAction": {
+          "type": "method",
+          "name": "com.bccard.mpm.common.MpmApplication.nonFake"
+        }
+      }
+    ],
+    "rootDetection": [
+      {
+        "disable": false,
+        //Debug mode for runtime guards allows them to print debug messages into logcat
+        "debug" : false,
+        "name": "Root detection instance 1",
+        "invocationLocations": [
+          {
+            "type": "method",
+            "name": "com.bccard.mpm.IntroActivity.onCreate"
+          }
+        ],
+        "tamperAction": {
+          "type": "method",
+          "name": "com.bccard.mpm.common.MpmApplication.fake"
+        },
+        "nonTamperAction": {
+          "type": "method",
+          "name": "com.bccard.mpm.common.MpmApplication.nonFake"
+        }
+      }
+    ],
+    "hookDetection": [
+      {
+        "disable": false,
+        "debug" : false,
+        "detectHookTarget" : true,
+        "name": "Hook detection instance 1",
+        "invocationLocations": [
+          {
+            "type": "method",
+            "name": "com.bccard.mpm.IntroActivity.onCreate"
+          }
+        ],
+        "tamperAction": {
+          "type": "method",
+          "name": "com.bccard.mpm.common.MpmApplication.fake"
+        },
+        "nonTamperAction": {
+          "type": "method",
+          "name": "com.bccard.mpm.common.MpmApplication.nonFake"
+        }
+      }
+    ],
+    "signatureCheck": [
+      {
+        "disable": false,
+        "debug" : false,
+        "name": "Signature check instance 1",
+        //Signature could be extracted from signed apk, keystore file or google play console
+        "signaturePublicKeySHA256": [ "4e2a2f5cf50b996fc9691a4a7277336523aeb69e83db8fd219c235ee3f849248" ,"86FDCBABBE64F24C5CACC10AEE110D6E55899E43F23421F66184F3C89C57045A"],
+        "invocationLocations": [
+          {
+            "type": "auto"
+          }
+        ],
+        "tamperAction": {
+          "type": "fail"
+        },
+        "nonTamperAction": {
+          "type": "doNothing"
+        }
+      }
+    ],
+    "emulatorDetection": [
+      {
+        "disable": false,
+        "debug" : false,
+        "name": "Emulator detection instance 1",
+        "invocationLocations": [
+          {
+            "type": "auto"
+          }
+        ],
+        "tamperAction": {
+          "type": "fail"
+        },
+        "nonTamperAction": {
+          "type": "doNothing"
+        }
+      }
+    ],
+    "resourceEncryption": {
+      "disable": true,
+      "debug" : false,
+      "files": [
+        "assets/ending.txt"
+      ]
+    },
+
+    "checksum" : [
+      {
+      "disable": false,
+      "debug" : false,
+      "name" : "checksum1",
+      "invocationLocations": [
+        {
+          "type" : "method",
+          "name" : "com.bccard.mpm.IntroActivity.checksum1"
+        }
+      ],
+      "tamperAction" : {
+        "type" : "method",
+        "name" : "com.bccard.mpm.common.MpmApplication.fake"
+      },
+      "nonTamperAction" : {
+        "type" : "method",
+        "name" : "com.bccard.mpm.common.MpmApplication.nonFake"
+      }
+    },
+    {
+      "disable": false,
+      "debug" : false,
+      "name" : "checksum2",
+      "invocationLocations": [
+        {
+          "type" : "method",
+          "name" : "com.bccard.mpm.IntroActivity.onDestroy"
+        }
+      ],
+      "tamperAction" : {
+        "type" : "method",
+        "name" : "com.bccard.mpm.common.MpmApplication.fake"
+      },
+      "nonTamperAction" : {
+        "type" : "method",
+        "name" : "com.bccard.mpm.common.MpmApplication.nonFake"
+      }
+    }
+  ],
+    "dynamicInstrumentationDetection": [
+      {
+        "name" : "Dynamic instrumentation detection instance 1",
+        "disable": true,
+        "debug" : false,
+        "frida" : {
+        },
+        "invocationLocations": [
+          {
+            "type": "auto"
+          }
+        ],
+        "tamperAction": {
+          "type": "fail"
+        },
+        "nonTamperAction": {
+          "type": "doNothing"
+        }
+      }
+    ],
+    "resourceVerification": [
+      {
+        "name": "Resource verification instance 1",
+        "disable": false,
+        "debug": false,
+        "invocationLocations": [
+          {
+            "type": "method",
+            "name": "com.bccard.mpm.IntroActivity.onCreate"
+          }
+        ],
+        "tamperAction": {
+          "type": "method",
+          "name": "com.bccard.mpm.common.MpmApplication.fake"
+        },
+        "nonTamperAction": {
+          "type": "method",
+          "name": "com.bccard.mpm.common.MpmApplication.nonFake"
+        },
+        "files": [
+          "base/lib"
+        ]
+      }
+    ],
+    "classEncryption": {
+      "disable": true,
+      "debug": true,
+      "targets": [
+        // MainActivity and inner classes
+        "com.snatik.matches.MainActivity*"
+      ]
+    }
+  }
+}

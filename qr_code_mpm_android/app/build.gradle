@@ -1,0 +1,275 @@
+
+plugins {
+    id 'com.android.application'
+
+    // Add the Google services Gradle plugin
+    id 'com.google.gms.google-services'
+}
+// Droid-X
+// 아래의 repositories를 추가 합니다. dirs의 값이 aar 파일이 있는 위치여야 합니다.
+// gradle build tool 버전 7.0 미만의 경우 아래의 repositories를 추가 합니다. dirs의 값이 aar 파일이 있는 위치여야 합니 다.
+// 해당 버전 이상에서는 지워주세요.
+//repositories {
+//   flatDir {
+//       dirs 'libs'
+//    }
+//}
+
+android {
+    //프로젝트에서 사용할 키 설정
+    signingConfigs {
+        debug {
+            keyAlias 'bc_qrcode'
+            keyPassword 'bccard1587'
+            storeFile file('../BC_QR_KeyStore.jks')
+            // Windows 경로 storeFile file('C:/Develop/android_studio/mpm/BC_QR_KeyStore.jks')
+            storePassword 'bccard1587'
+        }
+
+        release {
+            keyAlias 'bc_qrcode'
+            keyPassword 'bccard1587'
+            storeFile file('../BC_QR_KeyStore.jks')
+            // Windows 경로 storeFile file('C:/Develop/android_studio/mpm/BC_QR_KeyStore.jks')
+            storePassword 'bccard1587'
+        }
+    }
+    compileSdk 35 //2025.11.1 안드로이드 35 타겟팅 필수
+    flavorDimensions "default"
+    defaultConfig {
+        applicationId "com.bccard.mpm"
+        minSdkVersion 21
+        targetSdkVersion 35
+        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
+//        multiDexEnabled true
+
+        // Droid-X
+        // DroidX는 native-lib을 전부 제공하므로 다른 라이브러리와 동기화를 위해 CPU 아키텍쳐 중 필요하지 않는 것은 반드시
+        // 삭제해 주셔야 됩니다.
+        ndk {
+            abiFilters "armeabi", "armeabi-v7a", "arm64-v8a"
+
+            /* nFilter 에서 공통으로 지원되는 아키텍쳐만 남기고 주석처리 , "mips", "mips64", "x86_64", "x86"*/
+        }
+    }
+    productFlavors {
+        dev {
+            versionCode 42 //배포시마다 +1 안드로이드 35타겟팅 버전
+            versionName "1.2.8" //안드로이드 35타겟팅 버전
+            manifestPlaceholders = [appName: "@string/app_name_dev"]
+            buildConfigField 'boolean', 'SERVER_DEV', "true"
+            buildConfigField 'String', 'baseUrl', '"https://isrnd3.bccard.com:20101"'
+
+            // applicationIdSuffix '.dev'   //Droid-X 구동안되서 사용보류
+            setProperty("archivesBaseName", "dev_QRPayforShop-$versionName")
+        }
+        real {
+            versionCode 42 //배포시마다 +1 안드로이드 35타겟팅 버전
+            versionName "1.2.8" //안드로이드 35타겟팅 버전
+            manifestPlaceholders = [appName: "@string/app_name"]
+            buildConfigField 'boolean', 'SERVER_DEV', "false"
+            buildConfigField 'String', 'baseUrl', '"https://qr.bcqrcpay.com"'
+
+            setProperty("archivesBaseName", "QRPayforShop-$versionName")
+        }
+    }
+    buildTypes {
+        debug {
+            buildConfigField 'boolean', 'DEBUG_MODE', "true"
+            signingConfig signingConfigs.debug
+        }
+        release {
+            buildConfigField 'boolean', 'DEBUG_MODE', "false"
+            signingConfig signingConfigs.release
+        }
+    }
+    sourceSets { main { res.srcDirs = ['src/main/res', 'src/main/res/values-v21'] } }
+    namespace 'com.bccard.mpm'
+}
+
+    dependencies {
+        implementation fileTree(include: ['*.jar', '*.aar'], dir: 'libs')
+        testImplementation 'junit:junit:4.12'
+//    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+//    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0'
+        implementation 'androidx.appcompat:appcompat:1.0.0'
+        implementation 'com.google.android.material:material:1.0.0'
+        implementation 'androidx.cardview:cardview:1.0.0'
+        implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+        implementation 'androidx.vectordrawable:vectordrawable:1.0.0'
+        implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+        // JSON Parsing
+        implementation 'com.google.code.gson:gson:2.8.2'
+        // Image loader
+        implementation 'com.github.bumptech.glide:glide:3.7.0'
+//    implementation 'androidx.multidex:multidex:2.0.1'
+        //FCM
+        // Import the Firebase BoM
+        implementation platform('com.google.firebase:firebase-bom:31.4.0')
+        // When using the BoM, you don't specify versions in Firebase library dependencies
+
+        // Add the dependency for the Firebase SDK for Google Analytics
+        implementation 'com.google.firebase:firebase-analytics'
+        // TODO: Add the dependencies for any other Firebase products you want to use
+        // See https://firebase.google.com/docs/android/setup#available-libraries
+        // For example, add the dependencies for Firebase Authentication and Cloud Firestore
+        implementation 'com.google.firebase:firebase-auth'
+        implementation 'com.google.firebase:firebase-firestore'
+        implementation 'com.google.firebase:firebase-messaging'
+//    implementation 'com.google.firebase:firebase-core:11.8.0'
+//    implementation 'com.google.firebase:firebase-messaging:11.8.0'
+
+        //nFilter
+        implementation project(path: ':NFilterKeyPad')
+
+        // Droid-X
+        // 아래와 같은 내용을 추가합니다. name값은 제공된 aar파일의 명을 적어줍니다.
+        implementation files('libs/droidx_addon_library_3.1.36200200.380.1811.aar')
+        implementation files('libs/droidx3_lib_3.1.36200200.380.1811.aar')
+        // QR Reader
+        implementation 'com.journeyapps:zxing-android-embedded:3.5.0'
+
+
+    }
+
+// FCM
+apply plugin: 'com.google.gms.google-services'
+
+// When using Gradle plugin 2.2+, use the following:
+// tasks.whenTaskAdded { task ->
+//     if (task.name == 'assembleDevDebug') {
+//        task.dependsOn 'runAPKProtectionDebug'
+//     }
+// }
+//
+//tasks.whenTaskAdded { task ->
+//    if (task.name == 'assembleDevRelease') {
+//        task.dependsOn 'runAPKProtectionDevRelease'
+//    }
+//}
+//
+// tasks.whenTaskAdded { task ->
+//     if (task.name == 'assembleRealRelease') {
+//        task.dependsOn 'runAPKProtectionRelease'
+//     }
+// }
+//
+//
+//// Windows def PATH_TO_GUARDIT_FOR_JAVA = "C:\\GuardIT_for_Java_5.7.1"
+//// Windows def PATH_TO_GUARDSPEC = "guardspecs\\guardspec.gsml"
+//// Windows def PATH_TO_SDK = "C:\\android-sdk-windows"
+//def PATH_TO_GUARDIT_FOR_JAVA = "/Applications/GuardIT_for_Java_6.2.2"
+//def PATH_TO_GUARDSPEC = "guardspecs/guardspec.gsml"
+//def PATH_TO_SDK = "/Users/administrator/Library/Android/sdk"
+//
+//// Windows def keystore = "C:\\Develop\\android_studio\\mpm\\BC_QR_KeyStore.jks"
+//def keystore = "/Users/administrator/Documents/repo/git/Fintech/Android_QR_CODE_MPM/BC_QR_KeyStore.jks"
+//def alias = "bc_qrcode"
+//def password = "bccard1587"
+//
+//// Run G4J via APKProtection for Debug Builds
+//task runAPKProtectionDebug(type: Exec) {
+//
+//    def output_dir = "outputs/apk/protected/debug"
+//
+//    // Delete protection artifacts before rerunning protection
+//    doFirst {
+//        delete fileTree(dir: "build/${output_dir}",
+//                includes: ['**/*.log', '**/*.csv', '**/*.apk', '**/*.fin'])
+//    }
+//
+//    if (System.properties['os.name'].toLowerCase().contains('windows')) {
+//        executable 'cmd'
+//        args '/c', "${PATH_TO_GUARDIT_FOR_JAVA}/bin/guardit4japk.bat"
+//    } else {
+//        executable "${PATH_TO_GUARDIT_FOR_JAVA}/bin/guardit4japk.sh"
+//    }
+//
+//    args '-v',
+//            '-i', 'build/outputs/apk/dev/debug/QRPayforShop-1.0.9-dev-debug.apk',
+//            '-g', "${PATH_TO_GUARDSPEC}",
+//            '-o', "build/${output_dir}",
+//            '-s', "${PATH_TO_SDK}"
+//
+//}
+//
+////
+//// ACTION REQUIRED:
+////
+//// Update the following variables for release builds
+////
+//
+//// Run G4J via APKProtection for Release Builds
+//task runAPKProtectionRelease(type: Exec) {
+//
+//    def output_dir = "outputs/apk/protected/release"
+//
+//    // Delete protection artifacts before rerunning protection
+//    doFirst {
+//        delete fileTree(dir: "build/${output_dir}",
+//                includes: ['**/*.log', '**/*.csv', '**/*.apk', '**/*.fin'])
+//    }
+//
+//    if (System.properties['os.name'].toLowerCase().contains('windows')) {
+//        executable 'cmd'
+//        args '/c', "${PATH_TO_GUARDIT_FOR_JAVA}/bin/guardit4japk.bat"
+//    } else {
+//        executable "${PATH_TO_GUARDIT_FOR_JAVA}/bin/guardit4japk.sh"
+//    }
+//
+//
+//    args '-i', 'build/outputs/apk/real/release/QRPayforShop-1.0.9-real-release.apk',
+//            '-g', "${PATH_TO_GUARDSPEC}",
+//            '-o', "build/${output_dir}",
+//            '-s', "${PATH_TO_SDK}",
+//            '-k', "${keystore}",
+//            '-a', "${alias}",
+//            '-p', "${password}",
+//            '-w', "${password}"
+//
+//}
+//
+//// Run G4J via APKProtection for Debug Builds
+//task runAPKProtectionDevRelease(type: Exec) {
+//
+//    def output_dir = "outputs/apk/protected/release"
+//
+//    // Delete protection artifacts before rerunning protection
+//    doFirst {
+//        delete fileTree(dir: "build/${output_dir}",
+//                includes: ['**/*.log', '**/*.csv', '**/*.apk', '**/*.fin'])
+//    }
+//
+//    if (System.properties['os.name'].toLowerCase().contains('windows')) {
+//        executable 'cmd'
+//        args '/c', "${PATH_TO_GUARDIT_FOR_JAVA}/bin/guardit4japk.bat"
+//    } else {
+//        executable "${PATH_TO_GUARDIT_FOR_JAVA}/bin/guardit4japk.sh"
+//    }
+//
+//    args '-v',
+//            '-i', 'build/outputs/apk/dev/release/QRPayforShop-1.0.9-dev-release.apk',
+//            '-g', "${PATH_TO_GUARDSPEC}",
+//            '-o', "build/${output_dir}",
+//            '-s', "${PATH_TO_SDK}",
+//            '--buildtools', "28.0.3"
+//
+//}
+
+//task runScriptTask(type: Exec) {
+//    println 'shell script run!'
+//    workingDir "/Users/administrator/Documents/ArxanBuild/"
+//    commandLine 'arxan_build.sh'
+//    args "QRPayforShop-1.0.8-dev-debug"
+//
+//}
+//
+//task copyFromBuild(type: Copy) {
+//    from "build/outputs/apk/real/release"
+//    into "/Users/administrator/Documents/ArxanBuild/originAPK"
+//
+//    rename '-1.0.8-dev-release', ''
+//}
+//
+//build.dependsOn copyFromBuild
+//build.dependsOn runScriptTask

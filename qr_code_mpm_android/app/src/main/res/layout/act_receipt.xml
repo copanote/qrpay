@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <View
+        android:id="@+id/bg_up"
+        android:layout_width="match_parent"
+        android:layout_height="5dp"
+        android:background="@drawable/receipt_bg" />
+
+    <LinearLayout
+        android:id="@+id/ll_main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/bg_up"
+        android:background="@color/white"
+        android:orientation="vertical"
+        android:paddingLeft="22.5dp"
+        android:paddingTop="25dp"
+        android:paddingRight="22.5dp"
+        android:paddingBottom="25dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_mer_nm"
+                style="@style/tv_receipt_header"
+                android:layout_width="match_parent"
+                android:textSize="19.5sp" />
+
+            <TextView
+                android:id="@+id/tv_auth_aton"
+                style="@style/tv_receipt_info_title"
+                android:layout_width="match_parent"
+                android:layout_marginTop="10dp"
+                android:textSize="15sp" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp">
+
+                <TextView
+                    android:id="@+id/tv_trns_amt"
+                    style="@style/tv_receipt_header"
+                    android:textSize="21sp"
+                    android:textStyle="normal" />
+
+                <TextView
+                    style="@style/tv_receipt_info"
+                    android:layout_width="wrap_content"
+                    android:layout_alignBottom="@+id/tv_trns_amt"
+                    android:layout_marginLeft="5dp"
+                    android:layout_toRightOf="@+id/tv_trns_amt"
+                    android:text="@string/receipt_won"
+                    android:textSize="15sp"
+                    android:textStyle="normal" />
+
+                <TextView
+                    android:id="@+id/tv_trns_stat"
+                    style="@style/tv_receipt_header"
+                    android:layout_alignParentRight="true"
+                    android:background="@drawable/round_rectangle_bg"
+                    android:gravity="center"
+                    android:paddingLeft="6dp"
+                    android:paddingTop="2dp"
+                    android:paddingRight="6dp"
+                    android:paddingBottom="2dp"
+                    android:textSize="13.5sp"
+                    android:textStyle="normal" />
+            </RelativeLayout>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginTop="15dp"
+            android:background="#000000" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="7.5dp"
+            android:paddingRight="7.5dp">
+
+            <LinearLayout style="@style/ll_receipt_info_layout">
+
+                <TextView
+                    style="@style/tv_receipt_info_title"
+                    android:text="@string/receipt_svc_clss_nm_title" />
+
+                <TextView
+                    android:id="@+id/tv_svc_clss_nm"
+                    style="@style/tv_receipt_info" />
+            </LinearLayout>
+
+            <LinearLayout style="@style/ll_receipt_info_layout">
+
+                <TextView
+                    style="@style/tv_receipt_info_title"
+                    android:text="@string/receipt_auth_aton" />
+
+                <TextView
+                    android:id="@+id/tv_auth_aton2"
+                    style="@style/tv_receipt_info" />
+            </LinearLayout>
+
+            <LinearLayout style="@style/ll_receipt_info_layout">
+
+                <TextView
+                    style="@style/tv_receipt_info_title"
+                    android:text="@string/receipt_card_co_auth_no_title" />
+
+                <TextView
+                    android:id="@+id/tv_card_co_auth_no"
+                    style="@style/tv_receipt_info" />
+            </LinearLayout>
+
+            <LinearLayout style="@style/ll_receipt_info_layout">
+
+                <TextView
+                    style="@style/tv_receipt_info_title"
+                    android:text="@string/receipt_mpan_no_title" />
+
+                <TextView
+                    android:id="@+id/tv_mpan_no"
+                    style="@style/tv_receipt_info" />
+            </LinearLayout>
+
+            <LinearLayout style="@style/ll_receipt_info_layout">
+
+                <TextView
+                    style="@style/tv_receipt_info_title"
+                    android:text="@string/receipt_ins_trm_title" />
+
+                <TextView
+                    android:id="@+id/tv_ins_trm"
+                    style="@style/tv_receipt_info" />
+            </LinearLayout>
+
+            <LinearLayout style="@style/ll_receipt_info_layout">
+
+                <TextView
+                    style="@style/tv_receipt_info_title"
+                    android:text="@string/receipt_trns_uniq_no_title" />
+
+                <TextView
+                    android:id="@+id/tv_trns_uniq_no"
+                    style="@style/tv_receipt_info" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_receipt_affi_co_trns_uniq_no"
+                style="@style/ll_receipt_info_layout">
+
+                <TextView
+                    style="@style/tv_receipt_info_title"
+                    android:text="@string/receipt_affi_co_trns_uniq_no_title" />
+
+                <Button
+                    android:id="@+id/btn_affi_co_trns_uniq_no_help"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginLeft="7.5dp"
+                    android:background="@drawable/icon_help" />
+
+                <TextView
+                    android:id="@+id/tv_affi_co_trns_uniq_no"
+                    style="@style/tv_receipt_info" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_receipt_dc_bef_amt"
+                style="@style/ll_receipt_info_layout">
+
+                <TextView
+                    style="@style/tv_receipt_info_title"
+                    android:text="@string/receipt_dc_bef_amt_title" />
+
+                <TextView
+                    android:id="@+id/tv_dc_bef_amt"
+                    style="@style/tv_receipt_info" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_receipt_dc_amt"
+                style="@style/ll_receipt_info_layout">
+
+                <TextView
+                    style="@style/tv_receipt_info_title"
+                    android:text="@string/receipt_dc_amt_title" />
+
+                <TextView
+                    android:id="@+id/tv_dc_amt"
+                    style="@style/tv_receipt_info" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_receipt_dc_aftr_amt"
+                style="@style/ll_receipt_info_layout">
+
+                <TextView
+                    style="@style/tv_receipt_info_title"
+                    android:text="@string/receipt_dc_aftr_amt_title" />
+
+                <TextView
+                    android:id="@+id/tv_dc_aftr_amt"
+                    style="@style/tv_receipt_info" />
+            </LinearLayout>
+
+            <!--<LinearLayout style="@style/ll_receipt_info_layout">-->
+
+                <!--<TextView-->
+                    <!--style="@style/tv_receipt_info_title"-->
+                    <!--android:text="@string/receipt_auth_stat" />-->
+
+                <!--<TextView-->
+                    <!--android:id="@+id/tv_trns_stat2"-->
+                    <!--style="@style/tv_receipt_info" />-->
+            <!--</LinearLayout>-->
+        </LinearLayout>
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginTop="15dp"
+            android:background="#CCCCCC" />
+    </LinearLayout>
+
+    <View
+        android:id="@+id/bg_down"
+        android:layout_width="match_parent"
+        android:layout_height="5dp"
+        android:layout_below="@+id/ll_main"
+        android:background="@drawable/receipt_bg"
+        android:rotationX="180" />
+
+    <Button
+        android:id="@+id/btn_close"
+        android:layout_width="21dp"
+        android:layout_height="21dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="25dp"
+        android:layout_marginRight="22.5dp"
+        android:background="@drawable/icon_x" />
+
+
+</RelativeLayout>

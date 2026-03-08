@@ -1,0 +1,115 @@
+<resources>
+
+    <!-- ============================== -->
+    <!--  Theme Style                   -->
+    <!-- ============================== -->
+    <style name="AppTheme" parent="LightBlueTheme"></style>
+
+    <style name="AppTheme.NoTitleBar" parent="LightBlueTheme">
+        <!--<item name="windowNoTitle">true</item>-->
+        <item name="actionBarTheme">@style/AppTheme.ActionBarTheme</item>
+        <item name="colorControlNormal">@android:color/black</item>
+
+    </style>
+
+    <style name="AppTheme.ActionBarTheme" parent="@style/ThemeOverlay.AppCompat.ActionBar">
+        <item name="colorControlNormal">@android:color/black</item>
+        <item name="android:background">@android:color/white</item>
+    </style>
+
+    <style name="dlg_alert_style" parent="@android:style/Theme.Dialog">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:backgroundDimEnabled">false</item>
+    </style>
+
+    <style name="AppTheme.Translucent">
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:colorBackgroundCacheHint">@null</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowAnimationStyle">@android:style/Animation</item>
+        <item name="android:background">#2D000000</item>
+    </style>
+
+    <!-- push popup theme -->
+    <style name="push_popup_theme" parent="android:Theme.Light">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
+
+    <!-- ============================== -->
+    <!--  Common Popup Style            -->
+    <!-- ============================== -->
+    <style name="popup_content_text_style" parent="@android:style/TextAppearance">
+        <item name="android:shadowColor">@color/gray_500</item>
+        <item name="android:shadowRadius">0.5</item>
+        <item name="android:textColor">#222222</item>
+        <item name="android:textSize">22dp</item>
+    </style>
+
+    <style name="popup_title_text_style" parent="@style/white_font_style">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="edit_text_black_underlined_style">
+        <!-- Used for the bottom line when not selected / focused -->
+        <item name="colorControlNormal">#000000</item>
+        <item name="colorControlHighlight">#000000</item>
+
+        <!-- colorControlActivated & colorControlHighlight use the colorAccent color by default -->
+    </style>
+
+    <style name="dialog_activity_style" parent="@style/Theme.AppCompat.Dialog.Alert">
+        <item name="actionBarTheme">@style/AppTheme.ActionBarTheme</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowFullscreen">false</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
+
+    <style name="ll_receipt_info_layout">
+        <!--<item name="android:layout_marginTop">10dp</item>-->
+        <!--<item name="android:layout_marginBottom">10dp</item>-->
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:layout_marginTop">15dp</item>
+    </style>
+
+    <style name="tv_receipt_textview">
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:lineSpacingExtra">0dp</item>
+    </style>
+
+    <style name="tv_receipt_info_title" parent="@style/tv_receipt_textview">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">#666666</item>
+        <item name="android:textSize">10.5sp</item>
+    </style>
+
+    <style name="tv_receipt_info" parent="@style/tv_receipt_textview">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">#000000</item>
+        <item name="android:textSize">10.5sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:gravity">right</item>
+    </style>
+
+    <style name="tv_receipt_header" parent="@style/tv_receipt_textview">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">#000000</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:gravity">center_vertical</item>
+    </style>
+
+    <style name="no_dim_dialog" parent="dialog_activity_style">
+        <item name="android:backgroundDimEnabled">false</item>
+    </style>
+</resources>

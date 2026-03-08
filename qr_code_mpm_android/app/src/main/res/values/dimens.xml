@@ -1,0 +1,21 @@
+<resources>
+    
+    
+    <!-- ======================== Alert Dialog ================================ -->
+    <dimen name="com_alert_popup_title_height">40dp</dimen>
+    <dimen name="com_alert_popup_content_height">60dp</dimen>
+    <dimen name="com_alert_popup_left_margin">16dp</dimen>
+    <dimen name="com_alert_popup_bottom_btn_height">40dp</dimen>
+
+    <dimen name="com_alert_popup_content_top_margin">16dp</dimen>
+    <dimen name="com_alert_popup_content_bottom_margin">16dp</dimen>
+    <dimen name="com_alert_popup_content_left_margin">16dp</dimen>
+    <dimen name="com_alert_popup_content_right_margin">16dp</dimen>
+    <dimen name="com_alert_popup_button_width">100dp</dimen>
+    <dimen name="com_alert_popup_button_height">38dp</dimen>
+    <dimen name="com_alert_popup_content_text_spacing">10dp</dimen>
+
+    <dimen name="popup_share_outer_padding">15dp</dimen>
+    <dimen name="popup_share_header_margin">10dp</dimen>
+
+</resources>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#FFFFFF</color>
+    <color name="colorQrInfoBox">#F2F2F2</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="colorTextGray">#4B4B4B</color>
+    <color name="colorTextBlack">#000000</color>
+    <color name="colorTextPressed">#FF4223</color>
+    <color name="colorTextWhiteGray">#777777</color>
+    <color name="colorEtHint">#505050</color>
+    <color name="colorTransparanet">#00000000</color>
+</resources>

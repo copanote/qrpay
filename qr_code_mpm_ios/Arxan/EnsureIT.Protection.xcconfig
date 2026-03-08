@@ -1,0 +1,13 @@
+// Copyright (C) Arxan Technologies Inc. 2001-2019.
+// All rights Reserved.
+
+//------------------------------------------------------------------------------
+// Update "/opt/EnsureIT" in lines below to the current location of your EnsureIT
+// installation
+// For more information on how to use this file, please reference the EnsureIT
+// Developer's Guide
+//------------------------------------------------------------------------------
+
+ENSUREIT_DIR=/Applications/EnsureIT-15.0.0.19778ad-macosx-arm64-ios-arm.app/Contents/EnsureIT
+
+#include "/Applications/EnsureIT-15.0.0.19778ad-macosx-arm64-ios-arm.app/Contents/EnsureIT/XcodeIntegration/EnsureIT.Definitions.xcconfig"

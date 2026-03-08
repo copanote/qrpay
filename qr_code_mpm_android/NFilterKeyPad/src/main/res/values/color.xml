@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <drawable name="drawable_white">#FFFFFF</drawable>
+    <drawable name="drawable_light_grey">#C1C3C8</drawable>
+    <drawable name="drawable_func_bg">#ECEEF1</drawable>
+    <drawable name="drawable_light_red">#F44949</drawable>
+</resources>

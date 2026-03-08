@@ -1,0 +1,4 @@
+//Rename for the SimpleSimonAppDelegate
+//Do not rename the class,SimpleSimonAppDelegate
+property,SimpleSimonAppDelegate,window
+property,SimpleSimonAppDelegate,myViewController

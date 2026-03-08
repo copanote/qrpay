@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<guardspec version="1.1">
+    <target>
+        <pair>
+          <input></input>
+          <output></output>
+
+          <!-- only protect what we care about -->
+            <exclude>
+                <class name="*"/>
+            </exclude>
+
+            <include>
+                <class name="com.bccard.*"/>
+            </include>
+
+        </pair>
+        <type>standalone</type>
+    </target>
+    <seed>1111</seed>
+    <guards>
+        <renaming disable="false">
+            <exclude>
+                <class name="*" extends="android.app.*Activity*" errorcheck="false"/>
+                <class name="*" extends="android.app.*Application*" errorcheck="false"/>
+                <class name="*" extends="extends android.app.*Service*" errorcheck="false"/>
+                <class name="*" extends="extends android.content.*BroadcastReceiver*" errorcheck="false"/>
+                <class name="*" extends="extends android.content.*ContentProvider*" errorcheck="false"/>
+                <class name="*" extends="extends android.app.backup.*BackupAgentHelper*" errorcheck="false"/>
+                <class name="*" extends="extends android.preference.*Preference*" errorcheck="false"/>
+                <class name="com.android.vending.licensing.ILicensingService*" errorcheck="false"/>
+                <class name="*" implements="java.io.Serializable*" errorcheck="false"/>
+            </exclude>
+            <include>
+                <class name="*" extends="android.app.*Activity*">
+                    <method name="*" access="private" errorcheck="false"/>
+                    <method name="*" access="protected" errorcheck="false"/>
+                    <field name="*" access="private" errorcheck="false"/>
+                    <field name="*" access="protected" errorcheck="false"/>
+                </class>
+            </include>
+            <exclude>
+                <class name="com.bccard.mpm.network.bean.*"/>
+                <class name="com.bccard.mpm.ui.main.WebInterface*"/>
+                <class name="com.bccard.mpm.ui.qrshare.QrShareWebInterface*"/>
+
+            </exclude>
+        </renaming>
+
+        <debuginfo>strip</debuginfo>
+
+        <controlflow level="4" disable="false"/>
+
+        <stringencryption disable="false">
+            <include>
+                <class name="*"/>
+
+            </include>
+
+            <exclude>
+                 <class name="com.bccard.mpm.network.ServerConnecter"/>
+            </exclude>
+        </stringencryption>
+
+        <callhiding disable="false">
+            <hide>
+                <methods>
+                    <guard name="*"/>
+                </methods>
+            </hide>
+        </callhiding>
+
+        <classencryption disable="true" debug="false">
+            <exclude>
+                <class name="*"/>
+            </exclude>
+            <include>
+                <class name="com.example.simplesimon.SimpleSimon"/>
+            </include>
+        </classencryption>
+
+
+
+        <resourceverification name="rvg1" disable="false" debug="false">
+            <location>
+                <class name="com.bccard.mpm.IntroActivity">
+                    <method name="onCreate"/>
+                </class>
+            </location>
+            <action>
+                <tamper>
+                    <class name="com.bccard.mpm.common.MpmApplication">
+                        <method name="fake"/>
+                    </class>
+                </tamper>
+                <nonTamper>
+                    <class name="com.bccard.mpm.common.MpmApplication">
+                        <method name="nonFake"/>
+                    </class>
+                </nonTamper>
+            </action>
+            <range>
+                <path>lib/arm64-v8a/libBengine.so</path>
+                <path>lib/arm64-v8a/libNSaferJNI.so</path>
+                <path>lib/armeabi-v7a/libBengine.so</path>
+                <path>lib/armeabi-v7a/libNSaferJNI.so</path>
+                <path>lib/armeabi/libBengine.so</path>
+                <path>lib/armeabi/libNSaferJNI.so</path>
+                <path>lib/x86/libBengine.so</path>
+                <path>lib/x86_64/libBengine.so</path>
+            </range>
+        </resourceverification>
+
+        <resourceencryption disable="true" debug="false">
+            <range>
+                <path>assets/ending.txt</path>
+            </range>
+        </resourceencryption>
+
+        <rootdetection name="rdg1" disable="false" debug="false">
+            <location>
+                <class name="com.bccard.mpm.IntroActivity">
+                    <method name="onCreate"/>
+                </class>
+            </location>
+            <action>
+                <tamper>
+                    <class name="com.bccard.mpm.common.MpmApplication">
+                        <method name="fake"/>
+                    </class>
+                </tamper>
+                <nonTamper>
+                    <class name="com.bccard.mpm.common.MpmApplication">
+                        <method name="nonFake"/>
+                    </class>
+                </nonTamper>
+            </action>
+            <algorithm>
+                <root/>
+                <!--
+                <rootManagementApps/>
+                <rootRequiringApps/>
+                -->
+            </algorithm>
+        </rootdetection>
+
+        <debuggerdetection name="ddg1" disable="false" debug="false">
+            <location>
+                <class name="*" extends="com.bccard.mpm.common.BaseActivity*">
+                    <method name="onCreate"/>
+                </class>
+            </location>
+            <action>
+                <tamper>
+                    <class name="com.bccard.mpm.common.MpmApplication">
+                        <method name="fake"/>
+                    </class>
+                </tamper>
+                <nonTamper>
+                    <class name="com.bccard.mpm.common.MpmApplication">
+                        <method name="nonFake"/>
+                    </class>
+                </nonTamper>
+            </action>
+        </debuggerdetection>
+
+        <hookdetection name="hdg1" disable="false" debug="false">
+            <location>
+                <class name="com.bccard.mpm.IntroActivity">
+                    <method name="onCreate"/>
+                </class>
+            </location>
+            <algorithm>
+                <hookTarget/>
+            </algorithm>
+            <action>
+                <tamper>
+                    <class name="com.bccard.mpm.common.MpmApplication">
+                        <method name="fake"/>
+                    </class>
+                </tamper>
+                <nonTamper>
+                    <class name="com.bccard.mpm.common.MpmApplication">
+                        <method name="nonFake"/>
+                    </class>
+                </nonTamper>
+            </action>
+        </hookdetection>
+
+        <checksum name="chk_whole_image" disable="false" debug="false">
+            <location>
+                <class name="com.bccard.mpm.IntroActivity">
+                    <method name="onCreate"/>
+                </class>
+            </location>
+            <action>
+                <tamper>
+                    <class name="com.bccard.mpm.common.MpmApplication">
+                        <method name="fake"/>
+                    </class>
+                </tamper>
+                <nonTamper>
+                    <class name="com.bccard.mpm.common.MpmApplication">
+                        <method name="nonFake"/>
+                    </class>
+                </nonTamper>
+            </action>
+            <range>
+                <class name="com.bccard.*"/>
+            </range>
+        </checksum>
+
+        <checksum name="chk2" disable="false" debug="false">
+            <location>
+                <class name="com.bccard.mpm.IntroActivity">
+                    <method name="onDestroy"/>
+                </class>
+            </location>
+            <action>
+                <tamper>
+                    <class name="com.bccard.mpm.common.MpmApplication">
+                        <method name="fake"/>
+                    </class>
+                </tamper>
+                <nonTamper>
+                    <class name="com.bccard.mpm.common.MpmApplication">
+                        <method name="nonFake"/>
+                    </class>
+                </nonTamper>
+            </action>
+            <range>
+                <guard name="*"/>
+            </range>
+        </checksum>
+
+    </guards>
+</guardspec>

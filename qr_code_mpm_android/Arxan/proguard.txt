@@ -1,0 +1,109 @@
+-keep public class * implements butterknife.Unbinder { public <init>(**, android.view.View); }
+-keep class butterknife.* 
+-keepclasseswithmembernames class * { @butterknife.* <methods>; }
+-keepclasseswithmembernames class * { @butterknife.* <fields>; }
+-keep class android.support.v7.** implements android.view.** { *; }
+-keep class android.support.v4.** implements android.view.** { *; }
+-keep class android.support.v7.** implements android.widget.** { *; }
+-keep class android.support.v4.** implements android.widget.** { *; }
+
+-keep class android.app.** { *; }
+-keep class android.content.** { *; }
+-keep class com.android.vending.** { *; }
+-keep class android.preference.** { *; }
+
+-keep class com.bccard.mpm.network.bean.** { *; }
+-keep class com.bccard.mpm.ui.main.WebInterface { *; }
+-keep class com.bccard.mpm.ui.qrshare.QrShareWebInterface* { *; }
+
+-keep class *.R { *; }
+-keep class *R$* { *; }
+-keepclassmembers class *.R$*{
+  <fields>;
+}
+
+# ---------------- Reflection found by Reflection Debugger ----------------
+-keep class android.support.v7.app.AlertDialog$Builder {
+  *;
+}
+-keep class com.bccard.mpm.common.MpmApplication {
+  *;
+}
+-keep class com.bccard.mpm.network.bean.BeanResAppIntro {
+  *;
+}
+-keep class com.bccard.mpm.network.bean.BeanResponseResultData {
+  *;
+}
+-keep class com.bccard.mpm.ui.main.ChromeClient {
+  *;
+}
+-keep class com.bccard.mpm.ui.main.MainActivity {
+  *;
+}
+-keep class com.google.android.gms.measurement.AppMeasurement {
+  *;
+}
+-keep class com.google.firebase.iid.FirebaseInstanceId {
+  *;
+}
+-keep class com.nshc.nfilter.util.SecurityHelper {
+  *;
+}
+-keep class net.nshc.d3o.li.y {
+  *;
+}
+-keep class net.nshc.droidx3.common.Policy {
+  *;
+}
+-keep class net.nshc.droidx3.library.commonlibrary.DroidXLibraryService {
+  *;
+}
+-keep class net.nshc.droidx3.receiver.PackageInstallReceiver {
+  *;
+}
+-keep class net.nshc.droidx3.receiver.SDCardMountedReceiver {
+  *;
+}
+-keep class net.nshc.droidx3.addon.** {
+  *;
+}
+# ------------------------ End of reflection list -------------------------
+
+# ---------------- Reflection found by Reflection Debugger ----------------
+-keep class net.nshc.d3o.li.h
+ {
+  *;
+}
+-keep class net.nshc.droidx3.library.com.bccard.mpm.DroidXLibraryService
+ {
+  *;
+}
+-keep class android.support.v7.app.AppCompatViewInflater {
+  *;
+}
+-keep class com.bccard.mpm.IntroActivity {
+  *;
+}
+-keep class com.bccard.mpm.ui.main.MainActivity$3 {
+  *;
+}
+-keep class com.bccard.mpm.network.*$*{
+  *;
+}
+-keepclassmembers class com.bccard.mpm.network.*{
+  *;
+}
+-keep class com.nshc.nfilter.NFilter {
+  *;
+}
+-keep class com.nshc.nfilter.aa {
+  *;
+}
+-keep class com.nshc.nfilter.l {
+  *;
+}
+-keep class com.nshc.nfilter.util.NFilterUtils {
+  *;
+}
+# ------------------------ End of reflection list -------------------------

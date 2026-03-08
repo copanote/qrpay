@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "783697902185",
+    "firebase_url": "https://bc-mpm.firebaseio.com",
+    "project_id": "bc-mpm",
+    "storage_bucket": "bc-mpm.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:783697902185:android:d42f8378ac76b49a",
+        "android_client_info": {
+          "package_name": "com.bccard.mpm"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "783697902185-gdg645r7m7np4o1dsbk5u8ek37p3vj6i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyADAxy1BoW-eewTlJ-7VU8lZ33720vZ4fo"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
