@@ -43,7 +43,7 @@ public class ServerInfo {
 
 	public final static String SERVER_URL= BuildConfig.SERVER_DEV ? "https://isrnd3.bccard.com" : "https://qr.bcqrcpay.com";
 	public final static String SERVER_PORT = BuildConfig.SERVER_DEV ? ":20101" : "";
-	public final static String SERVER_CONTEXT = BuildConfig.SERVER_DEV ? "/qrpay" : "/app/qrpay/";
+	public final static String SERVER_CONTEXT = BuildConfig.SERVER_DEV ? "/qrpay/" : "/app/qrpay/";
 
 /////////////////////////////////////////////////////////////////
 // Http Connecter 코드

@@ -111,7 +111,7 @@ public class IntroActivity extends BaseActivity {
 //        LogHelper.w("====================================================");
 
         if (Constant.DETECT_FINISH_APP) {
-            reqFakeLog();
+//            reqFakeLog();
         } else {
             initControl();
 
@@ -136,7 +136,9 @@ public class IntroActivity extends BaseActivity {
             if (isPermissionAgreed) {
                 if (UtilHelper.isConntectNetWork(mContext)) {
                     initDroidX();
-                    reqAppVersionCheck();
+                    moveMainActivity();
+
+//                    reqAppVersionCheck();
                 } else {
                     tvIntroInfo.setText(getString(R.string.msg_not_connect_network));
                     networkErrorActivity(getString(R.string.msg_not_connect_network));
@@ -196,7 +198,9 @@ public class IntroActivity extends BaseActivity {
             if (resultCode == RESULT_OK) {
                 if (UtilHelper.isConntectNetWork(mContext)) {
                     initDroidX();
-                    reqAppVersionCheck();
+                    //TODO
+//                    reqAppVersionCheck();
+                    moveMainActivity();
                 } else {
                     tvIntroInfo.setText(getString(R.string.msg_not_connect_network));
                     networkErrorActivity(getString(R.string.msg_not_connect_network));
@@ -288,7 +292,8 @@ public class IntroActivity extends BaseActivity {
 
         // Service 호출
         ServerConnecter conn = new ServerConnecter(mContext, mServerCallbackListener);
-        conn.requestHttpPost(ServerInfo.IF_RESID_APP_INTRO, ServerInfo.IF_SERID_APP_INTRO, jsonData);
+        //TODO AppIntro
+        //conn.requestHttpPost(ServerInfo.IF_RESID_APP_INTRO, ServerInfo.IF_SERID_APP_INTRO, jsonData);
     }
 
     /**
@@ -350,7 +355,7 @@ public class IntroActivity extends BaseActivity {
 
         // Service 호출
         ServerConnecter conn = new ServerConnecter(mContext, mServerCallbackListener);
-        conn.requestHttpPost(ServerInfo.IF_RESID_FAKE_LOG, ServerInfo.IF_SERID_FAKE_LOG, jsonData);
+        //conn.requestHttpPost(ServerInfo.IF_RESID_FAKE_LOG, ServerInfo.IF_SERID_FAKE_LOG, jsonData);
     }
 
     /**

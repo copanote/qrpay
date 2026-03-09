@@ -256,7 +256,7 @@ public class MainActivity extends BaseActivity {
         if (url.contains(Constant.DOMAIN)) {
 
             // 바닥 URL 일 경우 앱 종료
-            if (url.contains(Constant.MAIN_URL) || url.contains(Constant.SUB_MAIN_URL) || url.contains(Constant.API_URL)) {
+            if (url.contains(Constant.MAIN_URL)  || url.contains(Constant.LOGIN_URL) || url.contains(Constant.API_URL)) {
                 finishActivity();
             } else {
                 executeJavascript("back()");
@@ -765,7 +765,7 @@ public class MainActivity extends BaseActivity {
 //        }
         // Service 호출
         ServerConnecter conn = new ServerConnecter(mContext, mServerCallbackListener);
-        conn.requestHttpPost(ServerInfo.IF_RESID_APP_DEVICE_UPDATE, ServerInfo.IF_SERID_APP_DEVICE_UPDATE, jsonData);
+        //conn.requestHttpPost(ServerInfo.IF_RESID_APP_DEVICE_UPDATE, ServerInfo.IF_SERID_APP_DEVICE_UPDATE, jsonData);
     }
 
     /**

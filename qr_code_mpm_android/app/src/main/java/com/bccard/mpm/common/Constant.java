@@ -34,10 +34,10 @@ public class Constant {
 	public final static String WEB_VIEW_BASE_URL = ServerInfo.SERVER_URL + ServerInfo.SERVER_PORT + ServerInfo.SERVER_CONTEXT;
 //	public final static String MAIN_URL = ServerInfo.SERVER_URL + ServerInfo.SERVER_PORT + "/app/mpm/Main.do";		//파일럿버전
 
-	public final static String NEW_MAIN_URL = ServerInfo.SERVER_URL + ServerInfo.SERVER_PORT + ServerInfo.SERVER_CONTEXT + "pages/home/mpmqr";
-	public final static String NEW_LOGIN_ID = ServerInfo.SERVER_URL + ServerInfo.SERVER_PORT + "/pages/login";
+	public final static String MAIN_URL = ServerInfo.SERVER_URL + ServerInfo.SERVER_PORT + ServerInfo.SERVER_CONTEXT + "pages/home/mpmqr";
+	public final static String LOGIN_URL = ServerInfo.SERVER_URL + ServerInfo.SERVER_PORT + ServerInfo.SERVER_CONTEXT + "pages/login";
 
-	public final static String MAIN_URL = ServerInfo.SERVER_URL + ServerInfo.SERVER_PORT + ServerInfo.SERVER_CONTEXT + "Main.do";			//메인
+	public final static String OLD_MAIN_URL = ServerInfo.SERVER_URL + ServerInfo.SERVER_PORT + ServerInfo.SERVER_CONTEXT + "Main.do";			//메인
 	public final static String SUB_MAIN_URL = ServerInfo.SERVER_URL + ServerInfo.SERVER_PORT + ServerInfo.SERVER_CONTEXT + "SubMain.do";	//서브메인
 	public final static String API_URL = "/OauthLogin.api";
 
