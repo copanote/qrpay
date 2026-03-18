@@ -523,7 +523,7 @@ public class MainActivity extends BaseActivity {
         mWvWebView.getSettings().setSupportMultipleWindows(true);
 
 //        mWvWebView.getSettings().setDatabaseEnabled(false);
-//        mWvWebView.getSettings().setDomStorageEnabled(false);
+        mWvWebView.getSettings().setDomStorageEnabled(true);
 
         mWvWebView.addJavascriptInterface(mWebInterface, mKeyword);
         mWvWebView.setWebChromeClient(mChromeClient);
