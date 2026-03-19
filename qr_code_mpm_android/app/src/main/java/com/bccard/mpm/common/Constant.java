@@ -29,6 +29,9 @@ public class Constant {
 	public final static boolean DROID_X_RUN = true;
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+
+	public final static String UASTRING = "/Qrpay_Android/";
 
 	public final static String DOMAIN = BuildConfig.SERVER_DEV ? "isrnd3.bccard.com" : "qr.bcqrcpay.com" ;
 	public final static String WEB_VIEW_BASE_URL = ServerInfo.SERVER_URL + ServerInfo.SERVER_PORT + ServerInfo.SERVER_CONTEXT;

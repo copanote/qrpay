@@ -527,10 +527,13 @@ public class MainActivity extends BaseActivity {
 
         mWvWebView.addJavascriptInterface(mWebInterface, mKeyword);
         mWvWebView.setWebChromeClient(mChromeClient);
+
+        String userAgentString = mWvWebView.getSettings().getUserAgentString();
+        mWvWebView.getSettings().setUserAgentString(userAgentString + " " + Constant.UASTRING +  UtilHelper.getVersionCode(mContext));
+
 //        CookieManager.getInstance().removeSessionCookie();
 //        CookieManager.getInstance().removeAllCookie();
     }
-
     //////////////////////////////////////////////////////////////////////////////////////////
     // Handler
 
